@@ -1,0 +1,16 @@
+rule_id,rule_name,severity,condition_field,operator,threshold,route,explanation
+R001,Missing roof age,medium,roof_age,is_missing,,Request Info,Roof age is required before pre-pricing validation can complete.
+R002,Property unmatched,medium,property_match_status,equals,Unmatched,Request Info,The submitted address could not be matched to a property record.
+R003,Partial property match,low,property_match_status,equals,Partial Match,Refer to Underwriter,Partial property match should be manually reviewed before relying on external data.
+R004,Old roof,high,roof_age,greater_than,25,Refer to Underwriter,Roof age above appetite threshold creates wind/hail/water concern.
+R005,Severe wildfire,high,wildfire_score,greater_equal,85,Refer to Underwriter,High wildfire exposure should not proceed automatically.
+R006,High wind hail,high,wind_hail_score,greater_equal,80,Refer to Underwriter,High wind/hail risk needs underwriter review.
+R007,Special flood hazard,medium,flood_zone,in_list,"AE|A|VE|V",Refer to Underwriter,Flood exposure should be flagged because standard homeowners coverage typically excludes flood.
+R008,Multiple claims,high,prior_claim_count_5y,greater_equal,3,Refer to Underwriter,Multiple recent claims indicate higher claim frequency.
+R009,Open claims,high,open_claims,greater_than,0,Refer to Underwriter,Open claims require manual review.
+R010,Large total claims,medium,claim_total_paid_5y,greater_equal,25000,Refer to Underwriter,High claim severity in the last five years needs review.
+R011,Low coverage to RCV,medium,coverage_to_rc_ratio,less_than,0.8,Request Info,Requested Coverage A appears below 80 percent of estimated replacement cost.
+R012,Square footage mismatch,medium,sqft_variance_pct,greater_than,0.15,Request Info,Reported square footage differs materially from public/property data.
+R013,Non-owner occupancy,medium,occupancy,not_equals,Owner-occupied,Refer to Underwriter,POC is scoped to owner-occupied homeowners risks.
+R014,Liability exposure trampoline,low,trampoline,equals,Yes,Refer to Underwriter,Trampoline liability exposure needs rules/state review.
+R015,Dog disclosed,low,dog_declared,equals,Yes,Refer to Underwriter,Dog information should be manually reviewed under state/carrier rules.
