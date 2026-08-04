@@ -1,7 +1,7 @@
-"""Configuration for HomeGuard UW Validator demo."""
+"""Configuration for POC Azure UW demo."""
 from __future__ import annotations
 
-APP_TITLE = "HomeGuard UW Validator"
+APP_TITLE = "Fractal UW Assisstant Azure"
 APP_SUBTITLE = "Personal Homeowners Pre-Pricing Underwriting Validation POC"
 
 REQUIRED_FIELDS = [
