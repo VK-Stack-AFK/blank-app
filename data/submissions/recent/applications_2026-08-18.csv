@@ -1,0 +1,2 @@
+app_id,applicant_name,applicant_email,state,address,city,zip_code,occupancy,year_built,roof_age,roof_material,roof_condition_ai,requested_dwelling_limit,estimated_replacement_cost,prior_claim_count_5y,water_claim_count_5y,claim_total_paid_5y,open_claims,wildfire_score,wind_hail_score,flood_zone,external_consumer_data_used,ai_governance_docs_ready,submission_date,routed_status
+APP-20260818165847,Test1,varunkand@gmail.com,CT,12 longmeadow dr,southington,06067,Owner-occupied,2000,5,Architectural Shingle,Good,500000,500000,1,0,10000,0,50,50,X,No,Yes,2026-08-18 16:58:47,A

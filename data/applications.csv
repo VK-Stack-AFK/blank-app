@@ -1,13 +1,1001 @@
-app_id,applicant_name,state,address,city,zip_code,occupancy,prior_insurance,property_match_status,year_built,roof_age,roof_material,roof_condition_ai,roof_condition_confidence,square_feet_reported,square_feet_public,construction_type,electrical_age,plumbing_age,heating_age,protection_class,distance_fire_station_miles,distance_hydrant_ft,prior_claim_count_5y,water_claim_count_5y,claim_total_paid_5y,open_claims,wildfire_score,flood_zone,wind_hail_score,coastal_distance_miles,pool,trampoline,dog_declared,credit_score_used,social_media_used,device_data_used,biometric_used,external_consumer_data_used,ai_governance_docs_ready,requested_dwelling_limit,estimated_replacement_cost
-APP-1001,Maya Rivera,NY,100 Main St,Albany,12207,Owner-occupied,Yes,Matched,1998,12,Architectural Shingle,Good,0.91,2100,2160,Frame,12,10,8,3,1.2,450,0,0,0,0,18,X,32,185,No,No,No,No,No,No,No,Yes,Yes,475000,490000
-APP-1002,Daniel Kim,MD,50 Oak Dr,Rockville,20850,Owner-occupied,Yes,Matched,1970,28,3-tab Shingle,Poor,0.88,1600,1940,Frame,34,30,25,4,2.8,980,2,1,18500,0,22,X,71,145,No,No,No,Yes,No,No,No,Yes,Yes,385000,465000
-APP-1003,Elena Cruz,CA,8 Canyon Rd,Pasadena,91103,Owner-occupied,Yes,Matched,1985,,Tile,Unknown,0.42,2400,2430,Stucco,15,16,11,5,4.5,1200,1,0,8500,0,88,X,46,22,Yes,No,No,No,No,Yes,No,Yes,No,720000,760000
-APP-1004,Thomas Allen,CO,77 Ridge View,Lakewood,80228,Owner-occupied,No,Matched,2002,9,Impact-resistant Shingle,Fair,0.74,2800,2800,Frame,9,9,7,3,1.7,620,0,0,0,0,63,X,82,900,No,No,No,No,No,No,No,Yes,No,680000,710000
-APP-1005,Aisha Patel,IL,402 Pine Ave,Naperville,60540,Owner-occupied,Yes,Partial Match,2014,5,Architectural Shingle,Good,0.95,2200,1980,Brick Veneer,5,5,4,2,0.7,330,0,0,0,0,10,X,40,775,No,No,No,No,No,No,No,No,Yes,520000,515000
-APP-1006,Noah Brooks,FL,15 Ocean Breeze,Naples,34102,Owner-occupied,Yes,Matched,1995,19,Metal,Fair,0.69,3000,2985,Masonry,18,18,16,4,3.2,1500,1,0,12500,0,12,AE,91,1.1,Yes,No,No,No,No,No,No,Yes,Yes,950000,1025000
-APP-1007,Sofia Nguyen,NJ,9 Willow Ln,Princeton,08540,Seasonal,Yes,Matched,1965,31,3-tab Shingle,Poor,0.82,1850,1845,Frame,40,38,30,5,5.5,2100,3,2,42000,1,20,X,55,45,No,No,No,No,No,No,No,Yes,Yes,430000,510000
-APP-1008,Marcus Hill,TX,811 Prairie Trail,Plano,75024,Owner-occupied,Yes,Unmatched,2010,11,Architectural Shingle,Unknown,0.38,2600,,Brick,12,12,10,2,1.1,400,0,0,0,0,35,X,86,330,No,Yes,No,No,No,No,No,Yes,Yes,600000,620000
-APP-1009,Grace Martin,WA,140 Cedar St,Spokane,99201,Owner-occupied,Yes,Matched,1978,26,Wood Shake,Fair,0.67,1750,1720,Frame,28,26,20,4,2.4,750,1,1,9600,0,71,X,44,300,No,No,No,No,No,No,No,Yes,No,390000,450000
-APP-1010,Owen Bennett,MA,22 Harbor Rd,Salem,01970,Owner-occupied,Yes,Matched,1920,18,Slate,Good,0.93,2000,2050,Masonry,55,40,22,3,1.9,500,0,0,0,0,15,VE,68,0.4,No,No,Yes,No,No,No,No,Yes,Yes,640000,780000
-APP-1011,Lily Chen,NC,601 Dogwood Ct,Raleigh,27601,Owner-occupied,Yes,Matched,2008,7,Architectural Shingle,Good,0.9,2350,2375,Frame,7,7,6,2,0.9,350,0,0,0,0,24,X,49,140,No,No,No,No,No,No,No,Yes,Yes,505000,500000
-APP-1012,Ben Carter,CA,44 Sierra Path,Sonoma,95476,Owner-occupied,Yes,Matched,1990,24,Wood Shake,Poor,0.84,2750,2780,Frame,24,22,15,6,7.8,2800,2,0,24000,0,94,X,42,38,No,No,No,No,Yes,No,No,Yes,No,875000,930000
+app_id,applicant_name,applicant_email,state,address,city,zip_code,occupancy,year_built,roof_age,roof_material,roof_condition_ai,requested_dwelling_limit,estimated_replacement_cost,prior_claim_count_5y,water_claim_count_5y,claim_total_paid_5y,open_claims,loss_ratio,wildfire_score,wind_hail_score,flood_zone,external_consumer_data_used,ai_governance_docs_ready
+APP-00522,Donna Ortiz,applicantAPP-00522@example.com,KS,7594 Ash St,City,13517,Owner-occupied,2000,7,3-tab Shingle,Good,450035,500039,0,0,0,0,0.0,19,35,X,No,Yes
+APP-00738,Jennifer Murphy,applicantAPP-00738@example.com,TN,7028 Ash St,City,90951,Owner-occupied,2006,21,3-tab Shingle,Fair,550000,650000,2,0,251362,0,0.4664292725832101,39,50,X,No,Yes
+APP-00741,Daniel Brown,applicantAPP-00741@example.com,MI,2978 Oak St,City,10070,Owner-occupied,2000,24,3-tab Shingle,Fair,550000,650000,2,0,173858,0,0.325337345361934,43,42,X,No,Yes
+APP-00661,Joseph Reeves,applicantAPP-00661@example.com,IN,5395 Willow St,City,49677,Owner-occupied,2021,9,Metal,Good,431865,479850,0,0,0,0,0.0,16,30,X,No,Yes
+APP-00412,Anthony Morales,applicantAPP-00412@example.com,VA,1406 Maple St,City,17148,Owner-occupied,2007,14,Wood Shake,Good,457164,507961,0,0,0,0,0.0,21,24,X,No,Yes
+APP-00679,James Brown,applicantAPP-00679@example.com,WA,6184 Lane St,City,36442,Owner-occupied,2007,15,Metal,Good,466680,518534,0,0,0,0,0.0,11,39,X,No,Yes
+APP-00627,Gary Evans,applicantAPP-00627@example.com,MI,8200 Birch St,City,28660,Owner-occupied,2011,8,Wood Shake,Good,470435,522706,0,0,0,0,0.0,24,22,X,No,Yes
+APP-00514,Steven Scott,applicantAPP-00514@example.com,TX,2664 Creek St,City,49526,Owner-occupied,2003,9,Architectural Shingle,Good,448607,498453,0,0,0,0,0.0,25,61,X,No,Yes
+APP-00860,Michelle Phillips,applicantAPP-00860@example.com,CA,6061 Garden St,City,95118,Owner-occupied,2002,23,Metal,Fair,550000,650000,2,0,266898,0,0.5244090775125257,49,40,X,No,Yes
+APP-00137,Kenneth Jones,applicantAPP-00137@example.com,MO,2054 Apple St,City,94192,Owner-occupied,2002,6,Tile,Good,412755,458617,0,0,0,0,0.0,23,46,X,No,Yes
+APP-00812,Christopher Morgan,applicantAPP-00812@example.com,TX,3741 Lake St,City,75948,Owner-occupied,1994,22,Architectural Shingle,Fair,550000,650000,2,0,158193,0,0.3004986370587062,21,50,X,No,Yes
+APP-00077,Christopher Reeves,applicantAPP-00077@example.com,PA,8956 Cedar St,City,19681,Owner-occupied,2014,12,Metal,Good,480249,533611,0,0,0,0,0.0,24,48,X,No,Yes
+APP-00637,Sandra Edwards,applicantAPP-00637@example.com,MT,850 Boulevard St,City,52336,Owner-occupied,2013,5,Tile,Good,486747,540831,0,0,0,0,0.0,10,50,X,No,Yes
+APP-00974,Cynthia Rogers,applicantAPP-00974@example.com,FL,7984 Lane St,City,48155,Owner-occupied,1989,10,Wood Shake,Good,400000,700000,4,0,464304,0,1.0196192107516964,29,78,X,No,Yes
+APP-00939,Kevin Moore,applicantAPP-00939@example.com,CA,8071 Park St,City,33138,Owner-occupied,1996,9,Wood Shake,Good,400000,700000,5,0,473663,0,1.049650089305896,63,49,X,No,Yes
+APP-00900,Betty Peterson,applicantAPP-00900@example.com,CA,6192 Garden St,City,87121,Owner-occupied,2000,22,Asphalt,Fair,550000,650000,2,0,221769,0,0.43373557598278895,41,28,X,No,Yes
+APP-00281,Laura Morgan,applicantAPP-00281@example.com,TX,6132 Creek St,City,94848,Owner-occupied,2019,9,Wood Shake,Good,430740,478601,0,0,0,0,0.0,18,50,X,No,Yes
+APP-00884,Ashley Perez,applicantAPP-00884@example.com,CA,1552 Oak St,City,91916,Owner-occupied,2009,22,3-tab Shingle,Fair,550000,650000,2,0,181460,0,0.3832385409648758,55,27,X,No,Yes
+APP-00762,Sarah Jones,applicantAPP-00762@example.com,ID,205 Valley St,City,64590,Owner-occupied,1995,20,Tile,Fair,550000,650000,2,0,291632,0,0.6286608578683923,34,37,X,No,Yes
+APP-00320,Mark Williams,applicantAPP-00320@example.com,FL,7021 Willow St,City,82954,Owner-occupied,2008,8,3-tab Shingle,Good,439702,488558,0,0,0,0,0.0,7,40,X,No,Yes
+APP-00550,Joseph Allen,applicantAPP-00550@example.com,PA,1235 Avenue St,City,80232,Owner-occupied,2006,15,Metal,Good,429289,476988,0,0,0,0,0.0,21,33,X,No,Yes
+APP-00175,Emily Lee,applicantAPP-00175@example.com,NY,6822 Mountain St,City,29558,Owner-occupied,2009,7,Tile,Good,478845,532050,0,0,0,0,0.0,22,45,X,No,Yes
+APP-00372,Donna Torres,applicantAPP-00372@example.com,AR,4223 Walnut St,City,12599,Owner-occupied,2013,5,Architectural Shingle,Good,430416,478241,0,0,0,0,0.0,21,31,X,No,Yes
+APP-00528,Laura Gonzalez,applicantAPP-00528@example.com,GA,9154 Hill St,City,78898,Owner-occupied,2017,10,Asphalt,Good,462200,513556,0,0,0,0,0.0,26,27,X,No,Yes
+APP-00211,Sandra Lopez,applicantAPP-00211@example.com,NC,7974 Park St,City,80435,Owner-occupied,2022,7,Asphalt,Good,449036,498929,0,0,0,0,0.0,28,32,X,No,Yes
+APP-00236,Kenneth Hernandez,applicantAPP-00236@example.com,OK,6025 Cedar St,City,43438,Owner-occupied,2003,14,Wood Shake,Good,479025,532251,0,0,0,0,0.0,25,47,X,No,Yes
+APP-00102,David Murphy,applicantAPP-00102@example.com,NY,4187 Cherry St,City,53007,Owner-occupied,2003,5,Architectural Shingle,Good,431012,478903,0,0,0,0,0.0,16,44,X,No,Yes
+APP-00987,Deborah Stewart,applicantAPP-00987@example.com,OH,9078 Avenue St,City,39355,Owner-occupied,2004,8,Metal,Good,400000,700000,5,0,454462,0,0.8641851355334341,73,61,X,No,Yes
+APP-00903,Edward Wright,applicantAPP-00903@example.com,CO,3252 Valley St,City,28290,Owner-occupied,1983,6,Asphalt,Good,400000,700000,4,0,475268,0,0.9395953517245197,59,69,X,No,Yes
+APP-00948,David Cook,applicantAPP-00948@example.com,TX,1115 Boulevard St,City,51151,Owner-occupied,1998,14,Tile,Good,400000,700000,3,0,441982,0,0.8440553738152665,47,79,X,No,Yes
+APP-00347,Frank Phillips,applicantAPP-00347@example.com,NY,2980 Hill St,City,96461,Owner-occupied,2016,8,Metal,Good,457989,508877,0,0,0,0,0.0,29,24,X,No,Yes
+APP-00140,Michelle Martinez,applicantAPP-00140@example.com,WA,2805 Garden St,City,91851,Owner-occupied,2019,9,Metal,Good,419765,466406,0,0,0,0,0.0,28,50,X,No,Yes
+APP-00622,Michelle Williams,applicantAPP-00622@example.com,FL,8053 Boulevard St,City,13049,Owner-occupied,2010,8,Tile,Good,488237,542486,0,0,0,0,0.0,7,60,X,No,Yes
+APP-00500,Jessica Phillips,applicantAPP-00500@example.com,WI,7758 Avenue St,City,70655,Owner-occupied,2008,15,Architectural Shingle,Good,477138,530154,0,0,0,0,0.0,25,47,X,No,Yes
+APP-00371,Gary Peterson,applicantAPP-00371@example.com,CA,782 Beach St,City,22972,Owner-occupied,2022,12,3-tab Shingle,Good,420862,467625,0,0,0,0,0.0,30,31,X,No,Yes
+APP-00199,Kenneth Rogers,applicantAPP-00199@example.com,TX,3972 Apple St,City,59290,Owner-occupied,2008,8,Tile,Good,461505,512784,0,0,0,0,0.0,24,73,X,No,Yes
+APP-00688,George Thomas,applicantAPP-00688@example.com,GA,3645 Hill St,City,60002,Owner-occupied,2016,5,Metal,Good,432014,480016,0,0,0,0,0.0,11,49,X,No,Yes
+APP-00585,Melissa Morris,applicantAPP-00585@example.com,NY,2541 River St,City,79111,Owner-occupied,2020,11,Asphalt,Good,479398,532665,0,0,0,0,0.0,17,40,X,No,Yes
+APP-00902,Paul Reeves,applicantAPP-00902@example.com,AR,6573 Cherry St,City,15259,Owner-occupied,1989,14,Wood Shake,Good,400000,700000,4,0,573225,0,1.0860627395552491,69,60,X,No,Yes
+APP-00060,Kevin Young,applicantAPP-00060@example.com,IL,4772 Oak St,City,40340,Owner-occupied,2009,6,Asphalt,Good,423526,470585,0,0,0,0,0.0,24,42,X,No,Yes
+APP-00329,Andrew Miller,applicantAPP-00329@example.com,MA,4749 Street St,City,99899,Owner-occupied,2009,13,Wood Shake,Good,405695,450773,0,0,0,0,0.0,12,31,X,No,Yes
+APP-00097,Linda Murphy,applicantAPP-00097@example.com,MS,4565 Valley St,City,39643,Owner-occupied,2013,14,Wood Shake,Good,464856,516507,0,0,0,0,0.0,27,31,X,No,Yes
+APP-00313,Laura Stewart,applicantAPP-00313@example.com,AR,8976 Boulevard St,City,51144,Owner-occupied,2022,10,Asphalt,Good,439701,488557,0,0,0,0,0.0,26,29,X,No,Yes
+APP-00975,William Cook,applicantAPP-00975@example.com,AZ,4591 Avenue St,City,46158,Owner-occupied,1991,6,Asphalt,Good,400000,700000,3,0,594885,0,1.0897066016013541,51,70,X,No,Yes
+APP-00300,Ashley Moore,applicantAPP-00300@example.com,CA,6320 Court St,City,72684,Owner-occupied,2013,9,Asphalt,Good,491475,546084,0,0,0,0,0.0,12,26,X,No,Yes
+APP-00278,Donna Thompson,applicantAPP-00278@example.com,NY,5641 Cedar St,City,43903,Owner-occupied,2022,15,Architectural Shingle,Good,408604,454005,0,0,0,0,0.0,25,38,X,No,Yes
+APP-00925,Betty Johnson,applicantAPP-00925@example.com,MA,9853 Street St,City,95736,Owner-occupied,1999,14,Wood Shake,Good,400000,700000,5,0,475598,0,1.03266949226146,71,52,X,No,Yes
+APP-00602,Steven Murphy,applicantAPP-00602@example.com,GA,8289 River St,City,23014,Owner-occupied,2004,13,Asphalt,Good,417434,463816,0,0,0,0,0.0,19,42,X,No,Yes
+APP-00440,Sharon Evans,applicantAPP-00440@example.com,CA,3479 Main St,City,93967,Owner-occupied,2006,6,Asphalt,Good,491994,546661,0,0,0,0,0.0,16,40,X,No,Yes
+APP-00838,Donald Campbell,applicantAPP-00838@example.com,IN,1321 Creek St,City,72753,Owner-occupied,1998,25,Asphalt,Fair,550000,650000,2,0,338668,0,0.6165828578502948,41,37,X,No,Yes
+APP-00571,Christopher Taylor,applicantAPP-00571@example.com,MO,3859 Hill St,City,69110,Owner-occupied,2007,8,Metal,Good,438380,487089,0,0,0,0,0.0,14,20,X,No,Yes
+APP-00880,Sarah Lee,applicantAPP-00880@example.com,FL,7560 Court St,City,73307,Seasonal,2007,25,Asphalt,Fair,550000,650000,2,0,265112,0,0.5016538120936429,16,62,X,No,Yes
+APP-00262,Mary Lee,applicantAPP-00262@example.com,WI,4279 Maple St,City,19725,Owner-occupied,2010,13,3-tab Shingle,Good,449277,499197,0,0,0,0,0.0,11,29,X,No,Yes
+APP-00579,William Perez,applicantAPP-00579@example.com,MN,426 Cherry St,City,99300,Owner-occupied,2021,14,Architectural Shingle,Good,430055,477839,0,0,0,0,0.0,25,41,X,No,Yes
+APP-00024,Nancy Parker,applicantAPP-00024@example.com,IN,8667 Main St,City,97538,Owner-occupied,2017,7,Metal,Good,446170,495745,0,0,0,0,0.0,27,42,X,No,Yes
+APP-00031,Charles Williams,applicantAPP-00031@example.com,NM,1777 Hill St,City,66959,Owner-occupied,2011,13,Asphalt,Good,452147,502386,0,0,0,0,0.0,15,38,X,No,Yes
+APP-00618,Lisa Rogers,applicantAPP-00618@example.com,GA,6182 River St,City,89391,Owner-occupied,2004,13,3-tab Shingle,Good,446128,495698,0,0,0,0,0.0,28,34,X,No,Yes
+APP-00011,Brian Martin,applicantAPP-00011@example.com,AR,8318 Hill St,City,36071,Owner-occupied,2004,12,Metal,Good,405382,450425,0,0,0,0,0.0,13,47,X,No,Yes
+APP-00222,James Ramirez,applicantAPP-00222@example.com,NE,3315 Court St,City,27290,Owner-occupied,2020,5,Metal,Good,416745,463051,0,0,0,0,0.0,24,34,X,No,Yes
+APP-00821,Ashley Johnson,applicantAPP-00821@example.com,SD,9158 Main St,City,65170,Owner-occupied,1994,24,Wood Shake,Fair,550000,650000,2,0,244413,0,0.45179590410753795,43,48,X,No,Yes
+APP-00297,James Collins,applicantAPP-00297@example.com,PA,1459 Maple St,City,85255,Owner-occupied,2021,11,Tile,Good,439840,488712,0,0,0,0,0.0,17,20,X,No,Yes
+APP-00055,Christopher Miller,applicantAPP-00055@example.com,NJ,3181 Cherry St,City,39816,Owner-occupied,2011,7,3-tab Shingle,Good,427594,475105,0,0,0,0,0.0,26,39,X,No,Yes
+APP-00543,Mary Murphy,applicantAPP-00543@example.com,FL,518 Mountain St,City,25615,Owner-occupied,2012,9,Tile,Good,483102,536781,0,0,0,0,0.0,13,52,X,No,Yes
+APP-00210,Melissa Rodriguez,applicantAPP-00210@example.com,CA,5132 Maple St,City,41270,Owner-occupied,2009,6,Architectural Shingle,Good,446042,495603,0,0,0,0,0.0,21,29,X,No,Yes
+APP-00605,Sharon Wright,applicantAPP-00605@example.com,CA,1141 Elm St,City,54342,Owner-occupied,2010,11,Tile,Good,453283,503648,0,0,0,0,0.0,24,31,X,No,Yes
+APP-00693,Lisa Rodriguez,applicantAPP-00693@example.com,MO,7689 Birch St,City,30280,Owner-occupied,2006,11,Architectural Shingle,Good,459693,510771,0,0,0,0,0.0,25,22,X,No,Yes
+APP-00663,Thomas Wright,applicantAPP-00663@example.com,NJ,9618 Street St,City,82432,Owner-occupied,2014,15,Asphalt,Good,465473,517193,0,0,0,0,0.0,16,35,X,No,Yes
+APP-00867,Stephanie Wilson,applicantAPP-00867@example.com,CA,53 Mountain St,City,18816,Owner-occupied,2007,23,Wood Shake,Fair,550000,650000,2,0,203099,0,0.3955151361719944,55,34,X,No,Yes
+APP-00071,Daniel Gonzalez,applicantAPP-00071@example.com,PA,3913 Valley St,City,60196,Owner-occupied,2007,12,Tile,Good,468532,520592,0,0,0,0,0.0,24,49,X,No,Yes
+APP-00544,Deborah Hernandez,applicantAPP-00544@example.com,NY,8053 Mountain St,City,27627,Owner-occupied,2009,10,Asphalt,Good,449394,499327,0,0,0,0,0.0,19,48,X,No,Yes
+APP-00108,Brian Martin,applicantAPP-00108@example.com,PA,4501 Valley St,City,17362,Owner-occupied,2011,15,Wood Shake,Good,478671,531857,0,0,0,0,0.0,25,34,X,No,Yes
+APP-00494,Barbara Reeves,applicantAPP-00494@example.com,CT,7773 River St,City,33111,Owner-occupied,2005,13,Asphalt,Good,430866,478740,0,0,0,0,0.0,13,45,X,No,Yes
+APP-00591,James Gonzalez,applicantAPP-00591@example.com,CA,1834 Avenue St,City,12082,Owner-occupied,2022,14,3-tab Shingle,Good,447552,497281,0,0,0,0,0.0,32,36,X,No,Yes
+APP-00742,Linda Miller,applicantAPP-00742@example.com,GA,224 Garden St,City,82321,Owner-occupied,2000,22,Metal,Fair,550000,650000,2,0,305012,0,0.6266670227912912,40,44,X,No,Yes
+APP-00293,Deborah Edwards,applicantAPP-00293@example.com,TN,613 Beach St,City,93928,Owner-occupied,2008,8,Wood Shake,Good,490779,545311,0,0,0,0,0.0,13,31,X,No,Yes
+APP-00290,Betty Smith,applicantAPP-00290@example.com,NJ,5280 Lane St,City,79603,Owner-occupied,2006,11,Architectural Shingle,Good,452585,502873,0,0,0,0,0.0,16,43,X,No,Yes
+APP-00653,Sharon White,applicantAPP-00653@example.com,NJ,2808 Lake St,City,91684,Owner-occupied,2013,11,Asphalt,Good,482251,535835,0,0,0,0,0.0,17,31,X,No,Yes
+APP-00040,Joshua Garcia,applicantAPP-00040@example.com,MD,2268 Pine St,City,40311,Owner-occupied,2012,8,Asphalt,Good,437392,485992,0,0,0,0,0.0,20,48,X,No,Yes
+APP-00590,Edward Sanchez,applicantAPP-00590@example.com,CA,9862 Drive St,City,73795,Owner-occupied,2009,13,Wood Shake,Good,407113,452348,0,0,0,0,0.0,10,27,X,No,Yes
+APP-00308,William Murphy,applicantAPP-00308@example.com,IL,3634 Main St,City,54742,Owner-occupied,2011,10,Asphalt,Good,471078,523420,0,0,0,0,0.0,24,23,X,No,Yes
+APP-00680,George Jones,applicantAPP-00680@example.com,TX,3614 Maple St,City,97046,Owner-occupied,2005,8,Asphalt,Good,428590,476212,0,0,0,0,0.0,15,60,X,No,Yes
+APP-00067,David Jackson,applicantAPP-00067@example.com,CA,7179 Court St,City,73532,Owner-occupied,2003,10,Architectural Shingle,Good,478448,531609,0,0,0,0,0.0,34,30,X,No,Yes
+APP-00276,David Cook,applicantAPP-00276@example.com,MN,8590 Valley St,City,13794,Owner-occupied,2005,10,3-tab Shingle,Good,411630,457367,0,0,0,0,0.0,26,32,X,No,Yes
+APP-00068,Jennifer Anderson,applicantAPP-00068@example.com,SD,1859 Forest St,City,25396,Owner-occupied,2020,15,3-tab Shingle,Good,476825,529806,0,0,0,0,0.0,27,33,X,No,Yes
+APP-00319,Anthony Phillips,applicantAPP-00319@example.com,CA,8956 Drive St,City,89087,Owner-occupied,2006,9,Asphalt,Good,428957,476619,0,0,0,0,0.0,29,39,X,No,Yes
+APP-00549,Mark Lee,applicantAPP-00549@example.com,MO,9381 Maple St,City,74010,Owner-occupied,2003,13,Asphalt,Good,454682,505203,0,0,0,0,0.0,22,38,X,No,Yes
+APP-00999,Frank Cook,applicantAPP-00999@example.com,VA,4706 Lane St,City,99660,Owner-occupied,1978,11,Wood Shake,Good,400000,700000,3,0,417675,0,0.8121453821414544,59,65,X,No,Yes
+APP-00715,Amanda Smith,applicantAPP-00715@example.com,IL,5935 Drive St,City,85455,Owner-occupied,1994,25,Tile,Fair,550000,650000,2,0,193754,0,0.3685995788063898,36,58,X,No,Yes
+APP-00754,Sarah Brown,applicantAPP-00754@example.com,IL,8906 Court St,City,45056,Seasonal,2007,22,Architectural Shingle,Fair,550000,650000,2,0,191377,0,0.4150120571805281,45,39,X,No,Yes
+APP-00328,Margaret Ramirez,applicantAPP-00328@example.com,NM,5184 Main St,City,61052,Owner-occupied,2021,7,Architectural Shingle,Good,434716,483018,0,0,0,0,0.0,24,40,X,No,Yes
+APP-00383,Karen Clark,applicantAPP-00383@example.com,NY,3081 Boulevard St,City,18973,Owner-occupied,2005,6,3-tab Shingle,Good,454808,505343,0,0,0,0,0.0,27,45,X,No,Yes
+APP-00452,Ryan Gutierrez,applicantAPP-00452@example.com,NC,7673 Maple St,City,69714,Owner-occupied,2009,9,Asphalt,Good,444203,493559,0,0,0,0,0.0,14,22,X,No,Yes
+APP-00523,Susan Allen,applicantAPP-00523@example.com,WA,4010 Main St,City,25644,Owner-occupied,2008,9,Tile,Good,440408,489343,0,0,0,0,0.0,19,33,X,No,Yes
+APP-00219,Brian Rogers,applicantAPP-00219@example.com,NY,1526 Beach St,City,77582,Owner-occupied,2008,12,Asphalt,Good,421770,468634,0,0,0,0,0.0,24,22,X,No,Yes
+APP-00788,Charles Collins,applicantAPP-00788@example.com,LA,848 Willow St,City,20874,Owner-occupied,2010,25,Architectural Shingle,Fair,550000,650000,2,0,197985,0,0.3984090602669543,42,59,X,No,Yes
+APP-00437,Emily Wilson,applicantAPP-00437@example.com,CA,3426 Hill St,City,17626,Owner-occupied,2003,13,Wood Shake,Good,412658,458509,0,0,0,0,0.0,19,30,X,No,Yes
+APP-00765,Patricia Gutierrez,applicantAPP-00765@example.com,AZ,6087 Park St,City,65603,Owner-occupied,1998,21,Architectural Shingle,Fair,550000,650000,2,0,288838,0,0.6092638959493922,42,40,X,No,Yes
+APP-00089,Sharon Lopez,applicantAPP-00089@example.com,TX,1802 Garden St,City,13379,Owner-occupied,2004,10,Architectural Shingle,Good,422406,469340,0,0,0,0,0.0,19,54,X,No,Yes
+APP-00064,Karen Lopez,applicantAPP-00064@example.com,IN,9591 Mountain St,City,93202,Owner-occupied,2015,14,Architectural Shingle,Good,409745,455273,0,0,0,0,0.0,24,49,X,No,Yes
+APP-00827,Donald Ortega,applicantAPP-00827@example.com,IL,6961 Pine St,City,13666,Owner-occupied,2004,22,Architectural Shingle,Fair,550000,650000,2,0,187467,0,0.3487790584098457,33,49,X,No,Yes
+APP-00717,Mark Moore,applicantAPP-00717@example.com,TX,7293 Walnut St,City,11520,Owner-occupied,1993,20,Architectural Shingle,Fair,550000,650000,2,0,248448,0,0.5159136073958249,32,52,X,No,Yes
+APP-00352,Mark Edwards,applicantAPP-00352@example.com,TX,3366 Court St,City,51405,Owner-occupied,2013,9,Metal,Good,427297,474775,0,0,0,0,0.0,31,53,X,No,Yes
+APP-00937,Thomas Thomas,applicantAPP-00937@example.com,AR,9596 Lane St,City,86188,Owner-occupied,2005,14,Tile,Good,400000,700000,4,0,490616,0,0.9392512271512479,51,56,X,No,Yes
+APP-00257,David Hernandez,applicantAPP-00257@example.com,VA,7158 Street St,City,93789,Owner-occupied,2015,6,Asphalt,Good,449070,498967,0,0,0,0,0.0,19,30,X,No,Yes
+APP-00636,Charles Peterson,applicantAPP-00636@example.com,MD,3735 Lake St,City,45956,Owner-occupied,2006,8,Asphalt,Good,482837,536486,0,0,0,0,0.0,12,24,X,No,Yes
+APP-00645,Andrew Taylor,applicantAPP-00645@example.com,CA,5823 Mountain St,City,73097,Owner-occupied,2019,8,Tile,Good,417740,464156,0,0,0,0,0.0,13,15,X,No,Yes
+APP-00555,Charles Reeves,applicantAPP-00555@example.com,TX,9851 Ash St,City,63197,Owner-occupied,2007,11,Architectural Shingle,Good,453395,503773,0,0,0,0,0.0,23,59,X,No,Yes
+APP-00960,Brian White,applicantAPP-00960@example.com,OR,4345 Hill St,City,52083,Owner-occupied,1976,7,Architectural Shingle,Good,400000,700000,5,0,423481,0,0.9013283217088334,59,62,X,No,Yes
+APP-00169,Christopher Clark,applicantAPP-00169@example.com,AZ,2949 Lane St,City,27750,Owner-occupied,2020,6,Asphalt,Good,410342,455936,0,0,0,0,0.0,25,21,X,No,Yes
+APP-00918,Daniel Anderson,applicantAPP-00918@example.com,VA,1045 Hill St,City,47726,Owner-occupied,2013,15,Tile,Good,400000,700000,3,0,458817,0,0.9440407066463106,50,72,X,No,Yes
+APP-00529,David Johnson,applicantAPP-00529@example.com,CA,7857 Walnut St,City,50838,Owner-occupied,2022,13,Metal,Good,487842,542047,0,0,0,0,0.0,34,40,X,No,Yes
+APP-00824,Edward Gonzalez,applicantAPP-00824@example.com,LA,1880 Elm St,City,10004,Owner-occupied,2009,25,Architectural Shingle,Fair,550000,650000,2,0,198963,0,0.42524546997294166,45,54,X,No,Yes
+APP-00986,Daniel Scott,applicantAPP-00986@example.com,MN,5851 Elm St,City,27628,Owner-occupied,1995,14,Asphalt,Good,400000,700000,4,0,576624,0,1.0834418421126801,61,57,X,No,Yes
+APP-00817,Jessica Jackson,applicantAPP-00817@example.com,NJ,9717 Maple St,City,16972,Owner-occupied,1999,24,Architectural Shingle,Fair,550000,650000,2,0,203747,0,0.37936556110621833,44,36,X,No,Yes
+APP-00087,Gary Ortega,applicantAPP-00087@example.com,OK,7451 Elm St,City,96870,Owner-occupied,2006,10,Asphalt,Good,469227,521364,0,0,0,0,0.0,13,50,X,No,Yes
+APP-00433,George Young,applicantAPP-00433@example.com,NV,7435 Mountain St,City,67917,Owner-occupied,2002,12,Wood Shake,Good,463822,515358,0,0,0,0,0.0,16,38,X,No,Yes
+APP-00185,Emily Morales,applicantAPP-00185@example.com,FL,4502 Creek St,City,47576,Owner-occupied,2000,12,Wood Shake,Good,482771,536413,0,0,0,0,0.0,5,52,X,No,Yes
+APP-00979,Ronald Robinson,applicantAPP-00979@example.com,MN,4154 Walnut St,City,99523,Owner-occupied,1997,5,Metal,Good,400000,700000,3,0,466825,0,0.8903640608192132,75,50,X,No,Yes
+APP-00535,Sandra Wilson,applicantAPP-00535@example.com,PA,8426 Ash St,City,63422,Owner-occupied,2003,12,Metal,Good,448229,498033,0,0,0,0,0.0,21,32,X,No,Yes
+APP-00295,Emily Moore,applicantAPP-00295@example.com,CA,9923 Court St,City,27978,Owner-occupied,2013,7,Architectural Shingle,Good,429240,476934,0,0,0,0,0.0,32,36,X,No,Yes
+APP-00893,Patricia Lee,applicantAPP-00893@example.com,TX,1598 Boulevard St,City,81314,Owner-occupied,1996,21,Asphalt,Fair,550000,650000,2,0,210323,0,0.38485875416747484,21,64,X,No,Yes
+APP-00426,Robert Thomas,applicantAPP-00426@example.com,NC,8499 Creek St,City,61853,Owner-occupied,2001,14,Wood Shake,Good,475047,527831,0,0,0,0,0.0,24,46,X,No,Yes
+APP-00714,Daniel Murphy,applicantAPP-00714@example.com,MA,9510 Boulevard St,City,17094,Seasonal,1999,25,Tile,Fair,550000,650000,2,0,251288,0,0.5069837164306481,33,39,X,No,Yes
+APP-00261,Ronald Clark,applicantAPP-00261@example.com,NV,2726 Mountain St,City,74629,Owner-occupied,2012,6,Metal,Good,446344,495938,0,0,0,0,0.0,22,34,X,No,Yes
+APP-00238,Betty Davis,applicantAPP-00238@example.com,AR,8226 Garden St,City,16903,Owner-occupied,2005,15,3-tab Shingle,Good,454470,504967,0,0,0,0,0.0,12,38,X,No,Yes
+APP-00560,Betty Stewart,applicantAPP-00560@example.com,NV,1851 Apple St,City,81531,Owner-occupied,2013,7,Tile,Good,430256,478063,0,0,0,0,0.0,25,37,X,No,Yes
+APP-00584,Sandra Garcia,applicantAPP-00584@example.com,IL,6923 Street St,City,58265,Owner-occupied,2019,10,3-tab Shingle,Good,465474,517194,0,0,0,0,0.0,28,39,X,No,Yes
+APP-00446,Paul Morales,applicantAPP-00446@example.com,VA,8580 Cherry St,City,52904,Owner-occupied,2004,12,Architectural Shingle,Good,464688,516321,0,0,0,0,0.0,20,49,X,No,Yes
+APP-00868,Paul Wright,applicantAPP-00868@example.com,CO,2951 Cherry St,City,40394,Owner-occupied,2005,21,Tile,Fair,550000,650000,2,0,152177,0,0.32149278010753257,50,46,X,No,Yes
+APP-00801,Frank Williams,applicantAPP-00801@example.com,OH,1816 Oak St,City,49883,Owner-occupied,1998,25,Metal,Fair,550000,650000,2,0,211465,0,0.41700436793169066,31,43,X,No,Yes
+APP-00600,Robert Cook,applicantAPP-00600@example.com,AZ,9127 Willow St,City,29815,Owner-occupied,2022,6,Wood Shake,Good,477850,530945,0,0,0,0,0.0,21,44,X,No,Yes
+APP-00850,Thomas Evans,applicantAPP-00850@example.com,NJ,2859 Pine St,City,90995,Seasonal,1991,22,3-tab Shingle,Fair,550000,650000,2,0,239003,0,0.457615565626801,45,39,X,No,Yes
+APP-00266,Kimberly Collins,applicantAPP-00266@example.com,OR,4342 Elm St,City,94130,Owner-occupied,2017,8,Tile,Good,425151,472391,0,0,0,0,0.0,22,35,X,No,Yes
+APP-00996,Donna Morgan,applicantAPP-00996@example.com,CA,6371 Street St,City,68711,Owner-occupied,1982,7,Asphalt,Good,400000,700000,5,0,458246,0,0.8847148133346462,63,50,X,No,Yes
+APP-00530,David Peterson,applicantAPP-00530@example.com,TX,2333 Court St,City,39697,Owner-occupied,2009,7,3-tab Shingle,Good,457132,507925,0,0,0,0,0.0,24,50,X,No,Yes
+APP-00056,Edward Rodriguez,applicantAPP-00056@example.com,UT,8043 Maple St,City,11607,Owner-occupied,2018,9,Metal,Good,406668,451854,0,0,0,0,0.0,27,29,X,No,Yes
+APP-00121,Laura Rodriguez,applicantAPP-00121@example.com,TN,7686 Forest St,City,90654,Owner-occupied,2000,6,Architectural Shingle,Good,489309,543677,0,0,0,0,0.0,25,42,X,No,Yes
+APP-00216,Deborah Parker,applicantAPP-00216@example.com,FL,7016 Cedar St,City,90760,Owner-occupied,2004,10,3-tab Shingle,Good,415260,461401,0,0,0,0,0.0,12,41,X,No,Yes
+APP-00026,David Evans,applicantAPP-00026@example.com,RI,4292 Cedar St,City,67912,Owner-occupied,2017,12,Asphalt,Good,434622,482914,0,0,0,0,0.0,20,44,X,No,Yes
+APP-00073,Frank Taylor,applicantAPP-00073@example.com,AL,5547 Hill St,City,62098,Owner-occupied,2020,6,Architectural Shingle,Good,467043,518937,0,0,0,0,0.0,12,35,X,No,Yes
+APP-00045,Matthew Anderson,applicantAPP-00045@example.com,FL,1125 Lane St,City,95426,Owner-occupied,2001,9,Architectural Shingle,Good,493710,548567,0,0,0,0,0.0,7,50,X,No,Yes
+APP-00248,Amanda Lewis,applicantAPP-00248@example.com,WA,2111 Elm St,City,53456,Owner-occupied,2003,15,Architectural Shingle,Good,479352,532614,0,0,0,0,0.0,16,48,X,No,Yes
+APP-00722,Ryan Williams,applicantAPP-00722@example.com,CO,3885 Oak St,City,34651,Owner-occupied,1999,25,3-tab Shingle,Fair,550000,650000,2,0,189156,0,0.3721228527136663,33,56,X,No,Yes
+APP-00282,Cynthia Moore,applicantAPP-00282@example.com,IL,4279 Park St,City,95389,Owner-occupied,2009,9,3-tab Shingle,Good,440208,489121,0,0,0,0,0.0,30,30,X,No,Yes
+APP-00894,George Brown,applicantAPP-00894@example.com,LA,1065 Birch St,City,75735,Owner-occupied,1998,24,Architectural Shingle,Fair,550000,650000,2,0,222861,0,0.4928535886860466,43,56,X,No,Yes
+APP-00915,Ronald Garcia,applicantAPP-00915@example.com,NC,5535 Park St,City,49581,Owner-occupied,2002,13,Tile,Good,400000,700000,5,0,418721,0,0.8208847545017007,62,66,X,No,Yes
+APP-00811,Mary Lopez,applicantAPP-00811@example.com,WI,4323 Elm St,City,32377,Seasonal,1990,22,Wood Shake,Fair,550000,650000,2,0,181415,0,0.3951509791920332,43,45,X,No,Yes
+APP-00245,Linda Garcia,applicantAPP-00245@example.com,AL,2583 Street St,City,99922,Owner-occupied,2009,6,Asphalt,Good,468219,520244,0,0,0,0,0.0,18,47,X,No,Yes
+APP-00823,Andrew Ortiz,applicantAPP-00823@example.com,IL,869 Court St,City,36878,Seasonal,1994,25,Wood Shake,Fair,550000,650000,2,0,303915,0,0.6155739199124992,48,56,X,No,Yes
+APP-00322,Susan Wright,applicantAPP-00322@example.com,OH,1118 Street St,City,76209,Owner-occupied,2005,9,Tile,Good,462867,514297,0,0,0,0,0.0,17,50,X,No,Yes
+APP-00644,Melissa Rogers,applicantAPP-00644@example.com,IL,426 Forest St,City,77792,Owner-occupied,2010,5,Wood Shake,Good,458486,509429,0,0,0,0,0.0,20,40,X,No,Yes
+APP-00159,Patricia Cook,applicantAPP-00159@example.com,FL,1466 Park St,City,85252,Owner-occupied,2007,15,Wood Shake,Good,461115,512350,0,0,0,0,0.0,11,59,X,No,Yes
+APP-00978,Cynthia Wright,applicantAPP-00978@example.com,CA,611 Beach St,City,92328,Owner-occupied,2002,14,Asphalt,Good,400000,700000,5,0,592660,0,1.091515185001013,73,47,X,No,Yes
+APP-00430,Betty Garcia,applicantAPP-00430@example.com,CA,8583 Court St,City,60343,Owner-occupied,2016,15,Wood Shake,Good,488927,543253,0,0,0,0,0.0,35,20,X,No,Yes
+APP-00942,Barbara Lee,applicantAPP-00942@example.com,NC,2563 Birch St,City,61935,Owner-occupied,1985,9,3-tab Shingle,Good,400000,700000,5,0,475911,0,0.9711934240358184,68,71,X,No,Yes
+APP-00463,Sandra Rodriguez,applicantAPP-00463@example.com,PA,1388 Pine St,City,94180,Owner-occupied,2013,15,Tile,Good,419809,466455,0,0,0,0,0.0,25,41,X,No,Yes
+APP-00310,Anthony Clark,applicantAPP-00310@example.com,GA,762 Park St,City,98098,Owner-occupied,2018,8,Architectural Shingle,Good,419243,465826,0,0,0,0,0.0,20,23,X,No,Yes
+APP-00698,Mark Phillips,applicantAPP-00698@example.com,NJ,5046 Drive St,City,63950,Owner-occupied,2002,8,Architectural Shingle,Good,454892,505436,0,0,0,0,0.0,27,41,X,No,Yes
+APP-00061,Linda Scott,applicantAPP-00061@example.com,KY,3684 Park St,City,29528,Owner-occupied,2008,9,3-tab Shingle,Good,487926,542141,0,0,0,0,0.0,16,33,X,No,Yes
+APP-00885,Ronald Martin,applicantAPP-00885@example.com,SC,6018 Hill St,City,62857,Owner-occupied,2007,20,Wood Shake,Fair,550000,650000,2,0,306600,0,0.5747966839518116,43,53,X,No,Yes
+APP-00596,Ronald Gonzalez,applicantAPP-00596@example.com,MI,7689 Walnut St,City,67424,Owner-occupied,2007,12,Wood Shake,Good,418794,465327,0,0,0,0,0.0,15,29,X,No,Yes
+APP-00768,Mark Young,applicantAPP-00768@example.com,TX,9607 Boulevard St,City,14903,Owner-occupied,1995,25,3-tab Shingle,Fair,550000,650000,2,0,165619,0,0.35466276639484684,24,50,X,No,Yes
+APP-00650,Margaret Lopez,applicantAPP-00650@example.com,MN,111 Walnut St,City,11296,Owner-occupied,2002,8,Metal,Good,460034,511149,0,0,0,0,0.0,22,26,X,No,Yes
+APP-00651,Anthony White,applicantAPP-00651@example.com,CA,720 Main St,City,36099,Owner-occupied,2006,5,Metal,Good,470433,522704,0,0,0,0,0.0,13,19,X,No,Yes
+APP-00866,James Thomas,applicantAPP-00866@example.com,NC,2243 Valley St,City,59310,Owner-occupied,1996,25,Metal,Fair,550000,650000,2,0,250115,0,0.5496706788827915,50,55,X,No,Yes
+APP-00669,Linda Rodriguez,applicantAPP-00669@example.com,CO,8790 Mountain St,City,72685,Owner-occupied,2002,6,Tile,Good,458633,509593,0,0,0,0,0.0,22,25,X,No,Yes
+APP-00299,Gary Rodriguez,applicantAPP-00299@example.com,NY,2794 Apple St,City,56861,Owner-occupied,2014,5,Wood Shake,Good,439276,488085,0,0,0,0,0.0,11,20,X,No,Yes
+APP-00690,Joseph Thomas,applicantAPP-00690@example.com,CO,6948 Cedar St,City,89410,Owner-occupied,2007,8,Metal,Good,432875,480973,0,0,0,0,0.0,15,43,X,No,Yes
+APP-00315,George Morris,applicantAPP-00315@example.com,TX,6840 Garden St,City,79979,Owner-occupied,2009,10,Tile,Good,488796,543107,0,0,0,0,0.0,30,68,X,No,Yes
+APP-00311,Sandra Morgan,applicantAPP-00311@example.com,MD,9587 River St,City,76628,Owner-occupied,2005,12,Asphalt,Good,458955,509950,0,0,0,0,0.0,11,37,X,No,Yes
+APP-00362,Frank Anderson,applicantAPP-00362@example.com,NY,3768 Street St,City,51383,Owner-occupied,2013,15,Metal,Good,459348,510387,0,0,0,0,0.0,22,40,X,No,Yes
+APP-00480,Carol Edwards,applicantAPP-00480@example.com,MS,1741 Forest St,City,43947,Owner-occupied,2003,8,Architectural Shingle,Good,476993,529993,0,0,0,0,0.0,23,26,X,No,Yes
+APP-00111,Emily Wright,applicantAPP-00111@example.com,GA,9992 Cedar St,City,57696,Owner-occupied,2011,10,Metal,Good,489263,543626,0,0,0,0,0.0,24,34,X,No,Yes
+APP-00990,Matthew Phillips,applicantAPP-00990@example.com,TN,1961 Lane St,City,19307,Owner-occupied,2014,8,Architectural Shingle,Good,400000,700000,5,0,519991,0,1.006606940287817,72,74,X,No,Yes
+APP-00487,Carol Williams,applicantAPP-00487@example.com,AZ,3977 Court St,City,95037,Owner-occupied,2004,14,Architectural Shingle,Good,432483,480537,0,0,0,0,0.0,25,49,X,No,Yes
+APP-00364,Stephanie Thomas,applicantAPP-00364@example.com,NC,4349 Birch St,City,40042,Owner-occupied,2006,10,3-tab Shingle,Good,446704,496338,0,0,0,0,0.0,16,27,X,No,Yes
+APP-00255,Thomas Johnson,applicantAPP-00255@example.com,CA,8626 River St,City,10089,Owner-occupied,2010,12,Wood Shake,Good,468951,521057,0,0,0,0,0.0,19,20,X,No,Yes
+APP-00260,Lisa Lewis,applicantAPP-00260@example.com,CA,187 Willow St,City,37483,Owner-occupied,2007,6,Asphalt,Good,433074,481194,0,0,0,0,0.0,21,25,X,No,Yes
+APP-00803,Christopher Morris,applicantAPP-00803@example.com,NH,1357 Walnut St,City,83205,Owner-occupied,2010,24,Asphalt,Fair,550000,650000,2,0,283008,0,0.5383000091299187,38,59,X,No,Yes
+APP-00678,Robert Reeves,applicantAPP-00678@example.com,LA,8722 Birch St,City,67941,Owner-occupied,2022,15,Architectural Shingle,Good,406322,451469,0,0,0,0,0.0,16,42,X,No,Yes
+APP-00495,Sharon Murphy,applicantAPP-00495@example.com,MI,7425 Oak St,City,23686,Owner-occupied,2001,5,Wood Shake,Good,411372,457081,0,0,0,0,0.0,20,39,X,No,Yes
+APP-00671,Lisa Peterson,applicantAPP-00671@example.com,CO,8044 Forest St,City,70646,Owner-occupied,2018,8,Architectural Shingle,Good,405877,450975,0,0,0,0,0.0,17,36,X,No,Yes
+APP-00378,Richard Johnson,applicantAPP-00378@example.com,AR,576 Garden St,City,56771,Owner-occupied,2010,8,Tile,Good,434183,482426,0,0,0,0,0.0,26,46,X,No,Yes
+APP-00527,Matthew Ortega,applicantAPP-00527@example.com,MA,2355 Main St,City,27950,Owner-occupied,2016,10,Metal,Good,485802,539780,0,0,0,0,0.0,27,38,X,No,Yes
+APP-00846,Anthony Johnson,applicantAPP-00846@example.com,MA,5587 Drive St,City,91465,Owner-occupied,2003,20,Asphalt,Fair,550000,650000,2,0,155204,0,0.3167454428199414,48,41,X,No,Yes
+APP-00138,Rebecca Rodriguez,applicantAPP-00138@example.com,OH,7089 Lake St,City,17263,Owner-occupied,2003,12,Wood Shake,Good,485228,539143,0,0,0,0,0.0,28,25,X,No,Yes
+APP-00356,Michael Taylor,applicantAPP-00356@example.com,NY,3634 Walnut St,City,20490,Owner-occupied,2019,7,Architectural Shingle,Good,450900,501000,0,0,0,0,0.0,23,22,X,No,Yes
+APP-00366,Anthony Peterson,applicantAPP-00366@example.com,KY,2102 Oak St,City,78909,Owner-occupied,2013,10,Tile,Good,463078,514532,0,0,0,0,0.0,22,27,X,No,Yes
+APP-00943,Betty Martinez,applicantAPP-00943@example.com,NY,5018 Apple St,City,56390,Owner-occupied,1995,14,Tile,Good,400000,700000,5,0,461851,0,0.9814192670980355,65,59,X,No,Yes
+APP-00750,Daniel Moore,applicantAPP-00750@example.com,NY,3342 Valley St,City,92549,Owner-occupied,1994,22,Tile,Fair,550000,650000,2,0,328441,0,0.6310881645389634,44,42,X,No,Yes
+APP-00949,Stephanie Johnson,applicantAPP-00949@example.com,TX,2299 Maple St,City,94179,Owner-occupied,2001,8,Tile,Good,400000,700000,3,0,516455,0,1.0494727794045628,36,78,X,No,Yes
+APP-00830,Daniel Phillips,applicantAPP-00830@example.com,ME,9515 Walnut St,City,86610,Seasonal,2002,20,Architectural Shingle,Fair,550000,650000,2,0,252724,0,0.4922507571994819,34,57,X,No,Yes
+APP-00657,Frank Phillips,applicantAPP-00657@example.com,GA,600 Birch St,City,38773,Owner-occupied,2006,10,Tile,Good,466987,518875,0,0,0,0,0.0,22,40,X,No,Yes
+APP-00200,Deborah Wilson,applicantAPP-00200@example.com,PA,7184 Street St,City,48185,Owner-occupied,2022,10,Architectural Shingle,Good,418434,464927,0,0,0,0,0.0,24,50,X,No,Yes
+APP-00214,Andrew Davis,applicantAPP-00214@example.com,FL,9384 Maple St,City,45112,Owner-occupied,2017,9,Metal,Good,431523,479470,0,0,0,0,0.0,10,59,X,No,Yes
+APP-00409,Andrew Ramirez,applicantAPP-00409@example.com,TX,2137 Lane St,City,27677,Owner-occupied,2015,10,Wood Shake,Good,414737,460819,0,0,0,0,0.0,27,58,X,No,Yes
+APP-00333,Michael Jackson,applicantAPP-00333@example.com,AL,1104 Willow St,City,22871,Owner-occupied,2006,7,Asphalt,Good,484151,537946,0,0,0,0,0.0,30,37,X,No,Yes
+APP-00209,Brian Lee,applicantAPP-00209@example.com,AL,9781 Beach St,City,90125,Owner-occupied,2012,13,Wood Shake,Good,427054,474505,0,0,0,0,0.0,25,36,X,No,Yes
+APP-00614,Steven Stewart,applicantAPP-00614@example.com,CA,8021 Drive St,City,64646,Owner-occupied,2005,14,3-tab Shingle,Good,470938,523265,0,0,0,0,0.0,26,39,X,No,Yes
+APP-00079,Kevin Ortiz,applicantAPP-00079@example.com,IN,8139 Avenue St,City,47512,Owner-occupied,2007,9,Wood Shake,Good,487489,541655,0,0,0,0,0.0,11,49,X,No,Yes
+APP-00030,Lisa Moore,applicantAPP-00030@example.com,AZ,1138 Lane St,City,46585,Owner-occupied,2011,8,Asphalt,Good,459298,510332,0,0,0,0,0.0,16,32,X,No,Yes
+APP-00536,Ronald Williams,applicantAPP-00536@example.com,VA,1348 Apple St,City,74711,Owner-occupied,2003,6,Tile,Good,459959,511066,0,0,0,0,0.0,19,37,X,No,Yes
+APP-00696,George Edwards,applicantAPP-00696@example.com,NM,2423 Willow St,City,89355,Owner-occupied,2014,11,Asphalt,Good,491781,546424,0,0,0,0,0.0,10,42,X,No,Yes
+APP-00558,Stephanie King,applicantAPP-00558@example.com,AZ,1977 Lake St,City,97060,Owner-occupied,2018,11,Wood Shake,Good,447872,497636,0,0,0,0,0.0,13,38,X,No,Yes
+APP-00837,Charles Gonzalez,applicantAPP-00837@example.com,TX,5482 Lane St,City,17784,Owner-occupied,1996,20,Wood Shake,Fair,550000,650000,2,0,191492,0,0.35368148866417326,20,51,X,No,Yes
+APP-00597,Donald Morgan,applicantAPP-00597@example.com,NY,5903 Street St,City,71908,Owner-occupied,2005,8,Wood Shake,Good,474322,527025,0,0,0,0,0.0,22,50,X,No,Yes
+APP-00166,Kenneth Davis,applicantAPP-00166@example.com,TX,1012 Avenue St,City,81781,Owner-occupied,2016,15,3-tab Shingle,Good,430764,478627,0,0,0,0,0.0,29,66,X,No,Yes
+APP-00919,Daniel Thompson,applicantAPP-00919@example.com,PA,7281 Pine St,City,70548,Owner-occupied,2006,14,3-tab Shingle,Good,400000,700000,4,0,582596,0,1.0926406601650414,60,60,X,No,Yes
+APP-00496,Steven Phillips,applicantAPP-00496@example.com,IN,9499 Apple St,City,64927,Owner-occupied,2006,7,Asphalt,Good,423643,470715,0,0,0,0,0.0,17,43,X,No,Yes
+APP-00825,Nancy Sanchez,applicantAPP-00825@example.com,NC,7926 Cedar St,City,40792,Seasonal,1998,24,Wood Shake,Fair,550000,650000,2,0,198274,0,0.41101490253958844,31,38,X,No,Yes
+APP-00066,Cynthia Scott,applicantAPP-00066@example.com,NC,7570 Mountain St,City,17104,Owner-occupied,2006,12,Wood Shake,Good,415387,461542,0,0,0,0,0.0,10,41,X,No,Yes
+APP-00142,Ashley Jones,applicantAPP-00142@example.com,FL,982 Cedar St,City,67619,Owner-occupied,2013,15,Tile,Good,469358,521509,0,0,0,0,0.0,14,50,X,No,Yes
+APP-00926,Michael Johnson,applicantAPP-00926@example.com,AR,3392 Valley St,City,70447,Owner-occupied,2004,13,3-tab Shingle,Good,400000,700000,3,0,496922,0,1.0546957245220225,54,59,X,No,Yes
+APP-00828,Ashley Moore,applicantAPP-00828@example.com,IL,150 Cedar St,City,56890,Seasonal,2006,24,3-tab Shingle,Fair,550000,650000,2,0,287617,0,0.637104491365485,44,58,X,No,Yes
+APP-00656,Andrew White,applicantAPP-00656@example.com,CA,8169 Lake St,City,70852,Owner-occupied,2005,6,Metal,Good,460521,511691,0,0,0,0,0.0,35,36,X,No,Yes
+APP-00332,Richard Lopez,applicantAPP-00332@example.com,PA,3618 Hill St,City,43127,Owner-occupied,2006,6,Architectural Shingle,Good,440942,489936,0,0,0,0,0.0,26,24,X,No,Yes
+APP-00665,Sandra Reeves,applicantAPP-00665@example.com,CA,6609 Lane St,City,80464,Owner-occupied,2009,7,Metal,Good,441045,490051,0,0,0,0,0.0,33,15,X,No,Yes
+APP-00250,Donna Young,applicantAPP-00250@example.com,TX,1000 Elm St,City,46670,Owner-occupied,2012,9,3-tab Shingle,Good,457613,508459,0,0,0,0,0.0,24,65,X,No,Yes
+APP-00908,Susan Ramirez,applicantAPP-00908@example.com,IL,2470 Cherry St,City,50775,Owner-occupied,1999,8,Asphalt,Good,400000,700000,3,0,461698,0,0.8955810439373925,62,70,X,No,Yes
+APP-00709,Mark Morris,applicantAPP-00709@example.com,FL,6253 Park St,City,94161,Seasonal,2003,21,3-tab Shingle,Fair,550000,650000,2,0,288876,0,0.5419405673120216,17,63,X,No,Yes
+APP-00306,Amanda Johnson,applicantAPP-00306@example.com,WA,1682 Beach St,City,64046,Owner-occupied,2001,12,Wood Shake,Good,472597,525108,0,0,0,0,0.0,25,43,X,No,Yes
+APP-00735,Laura Lewis,applicantAPP-00735@example.com,IN,2652 Pine St,City,56365,Seasonal,2003,23,Architectural Shingle,Fair,550000,650000,2,0,228173,0,0.4572046302956953,44,56,X,No,Yes
+APP-00976,Thomas Phillips,applicantAPP-00976@example.com,FL,7107 Garden St,City,44832,Owner-occupied,1981,13,Asphalt,Good,400000,700000,4,0,469865,0,0.9304202153254535,15,68,X,No,Yes
+APP-00050,Daniel Peterson,applicantAPP-00050@example.com,CO,4023 Avenue St,City,21359,Owner-occupied,2008,13,Tile,Good,481730,535256,0,0,0,0,0.0,28,28,X,No,Yes
+APP-00897,Daniel Clark,applicantAPP-00897@example.com,GA,3703 Avenue St,City,34673,Owner-occupied,1996,25,3-tab Shingle,Fair,550000,650000,2,0,177308,0,0.37324385427937506,34,53,X,No,Yes
+APP-00003,Jennifer Harris,applicantAPP-00003@example.com,OR,1585 Walnut St,City,55082,Owner-occupied,2019,7,Metal,Good,487355,541506,0,0,0,0,0.0,20,23,X,No,Yes
+APP-00545,Paul Young,applicantAPP-00545@example.com,NV,9212 Boulevard St,City,30487,Owner-occupied,2016,11,Architectural Shingle,Good,462501,513891,0,0,0,0,0.0,27,38,X,No,Yes
+APP-00351,Thomas Peterson,applicantAPP-00351@example.com,MO,1374 Cherry St,City,88419,Owner-occupied,2017,10,Tile,Good,474486,527207,0,0,0,0,0.0,25,44,X,No,Yes
+APP-00905,Paul Torres,applicantAPP-00905@example.com,MA,6457 Court St,City,37851,Owner-occupied,2005,8,Asphalt,Good,400000,700000,3,0,429411,0,0.8465988064327243,61,53,X,No,Yes
+APP-00537,Christopher Peterson,applicantAPP-00537@example.com,TX,7012 Birch St,City,19123,Owner-occupied,2015,9,Asphalt,Good,458902,509892,0,0,0,0,0.0,29,57,X,No,Yes
+APP-00345,David Peterson,applicantAPP-00345@example.com,LA,9706 Cedar St,City,27658,Owner-occupied,2020,12,Wood Shake,Good,461507,512786,0,0,0,0,0.0,17,21,X,No,Yes
+APP-00995,Linda Gutierrez,applicantAPP-00995@example.com,IN,5107 Cherry St,City,24126,Owner-occupied,1997,7,Asphalt,Good,400000,700000,5,0,445613,0,0.8929368670372434,67,75,X,No,Yes
+APP-00482,Gary Morales,applicantAPP-00482@example.com,OH,1149 Creek St,City,39602,Owner-occupied,2000,7,Tile,Good,487581,541757,0,0,0,0,0.0,23,32,X,No,Yes
+APP-00576,Barbara Torres,applicantAPP-00576@example.com,VA,7209 Oak St,City,34762,Owner-occupied,2004,9,Architectural Shingle,Good,477304,530338,0,0,0,0,0.0,25,44,X,No,Yes
+APP-00034,Stephanie Lopez,applicantAPP-00034@example.com,VA,9325 Cherry St,City,63225,Owner-occupied,2017,10,Architectural Shingle,Good,452468,502743,0,0,0,0,0.0,22,41,X,No,Yes
+APP-00032,Deborah Ramirez,applicantAPP-00032@example.com,CO,28 Lake St,City,80575,Owner-occupied,2021,10,Asphalt,Good,456479,507199,0,0,0,0,0.0,18,21,X,No,Yes
+APP-00232,Jessica Gutierrez,applicantAPP-00232@example.com,MO,2546 Creek St,City,52827,Owner-occupied,2012,13,Wood Shake,Good,468423,520471,0,0,0,0,0.0,26,49,X,No,Yes
+APP-00964,Barbara Phillips,applicantAPP-00964@example.com,KY,561 Drive St,City,60466,Owner-occupied,2015,9,Architectural Shingle,Good,400000,700000,3,0,515481,0,0.9446476545119354,61,71,X,No,Yes
+APP-00193,Mark Morris,applicantAPP-00193@example.com,TX,2528 Drive St,City,61068,Owner-occupied,2010,6,Metal,Good,477974,531083,0,0,0,0,0.0,17,52,X,No,Yes
+APP-00334,Carol Jones,applicantAPP-00334@example.com,CA,3171 Apple St,City,73682,Owner-occupied,2014,14,Metal,Good,462471,513857,0,0,0,0,0.0,20,26,X,No,Yes
+APP-00004,Brian Parker,applicantAPP-00004@example.com,NJ,5926 Valley St,City,35203,Owner-occupied,2022,5,Architectural Shingle,Good,491082,545647,0,0,0,0,0.0,19,46,X,No,Yes
+APP-00205,Ashley Rogers,applicantAPP-00205@example.com,NM,3390 Lake St,City,73298,Owner-occupied,2011,6,Tile,Good,439849,488722,0,0,0,0,0.0,19,30,X,No,Yes
+APP-00515,Lisa Edwards,applicantAPP-00515@example.com,AZ,4843 River St,City,47988,Owner-occupied,2018,11,Asphalt,Good,463913,515459,0,0,0,0,0.0,27,36,X,No,Yes
+APP-00800,William Johnson,applicantAPP-00800@example.com,UT,3671 Oak St,City,11362,Owner-occupied,1993,22,Metal,Fair,550000,650000,2,0,171416,0,0.3232690501604879,41,54,X,No,Yes
+APP-00307,Ashley Perez,applicantAPP-00307@example.com,MO,5954 Avenue St,City,17113,Owner-occupied,2007,13,Tile,Good,405019,450022,0,0,0,0,0.0,30,41,X,No,Yes
+APP-00110,Kevin Young,applicantAPP-00110@example.com,CA,8215 Pine St,City,18109,Owner-occupied,2014,12,Architectural Shingle,Good,473457,526064,0,0,0,0,0.0,27,40,X,No,Yes
+APP-00431,George Martinez,applicantAPP-00431@example.com,CA,2657 Boulevard St,City,28953,Owner-occupied,2005,7,Asphalt,Good,449670,499634,0,0,0,0,0.0,27,27,X,No,Yes
+APP-00078,Paul Miller,applicantAPP-00078@example.com,CA,3887 Beach St,City,84963,Owner-occupied,2011,14,Wood Shake,Good,440289,489210,0,0,0,0,0.0,30,28,X,No,Yes
+APP-00085,George Ortiz,applicantAPP-00085@example.com,ID,8851 Mountain St,City,86983,Owner-occupied,2004,9,Tile,Good,463112,514569,0,0,0,0,0.0,24,31,X,No,Yes
+APP-00287,Melissa Harris,applicantAPP-00287@example.com,MI,8681 Cherry St,City,64146,Owner-occupied,2001,15,3-tab Shingle,Good,473841,526490,0,0,0,0,0.0,13,47,X,No,Yes
+APP-00083,Mark Ortega,applicantAPP-00083@example.com,IL,6087 Maple St,City,98452,Owner-occupied,2007,11,Tile,Good,406641,451824,0,0,0,0,0.0,18,38,X,No,Yes
+APP-00992,Charles Allen,applicantAPP-00992@example.com,OH,1487 Cedar St,City,44144,Owner-occupied,2000,11,3-tab Shingle,Good,400000,700000,5,0,446053,0,0.8708893926170631,72,63,X,No,Yes
+APP-00790,Steven Gutierrez,applicantAPP-00790@example.com,VA,2640 Cedar St,City,49158,Owner-occupied,1995,23,Asphalt,Fair,550000,650000,2,0,170556,0,0.33825040160244335,40,55,X,No,Yes
+APP-00895,Donna Thompson,applicantAPP-00895@example.com,NY,1929 Apple St,City,71112,Seasonal,1992,21,Wood Shake,Fair,550000,650000,2,0,208976,0,0.4584485984998892,39,43,X,No,Yes
+APP-00399,George Thomas,applicantAPP-00399@example.com,PA,9340 Park St,City,33448,Owner-occupied,2017,13,Asphalt,Good,416456,462729,0,0,0,0,0.0,16,36,X,No,Yes
+APP-00324,Amanda Parker,applicantAPP-00324@example.com,GA,3995 Oak St,City,99463,Owner-occupied,2010,13,Tile,Good,493724,548583,0,0,0,0,0.0,17,48,X,No,Yes
+APP-00520,Jennifer Martinez,applicantAPP-00520@example.com,CA,3405 Cherry St,City,72208,Owner-occupied,2016,11,Metal,Good,457199,507999,0,0,0,0,0.0,19,20,X,No,Yes
+APP-00917,Christopher Moore,applicantAPP-00917@example.com,GA,83 Mountain St,City,37149,Owner-occupied,1976,12,Tile,Good,400000,700000,3,0,554308,0,1.008368079052879,55,71,X,No,Yes
+APP-00923,Kimberly Murphy,applicantAPP-00923@example.com,TX,7601 Cherry St,City,68911,Owner-occupied,1985,11,3-tab Shingle,Good,400000,700000,5,0,472971,0,0.9720852610095919,46,82,X,No,Yes
+APP-00006,Sarah Hernandez,applicantAPP-00006@example.com,CA,7574 Beach St,City,45382,Owner-occupied,2020,15,Asphalt,Good,436493,484993,0,0,0,0,0.0,32,36,X,No,Yes
+APP-00732,Paul Jackson,applicantAPP-00732@example.com,TN,4338 Birch St,City,10292,Seasonal,2010,23,Wood Shake,Fair,550000,650000,2,0,194597,0,0.3894370086934247,39,44,X,No,Yes
+APP-00466,Carol Garcia,applicantAPP-00466@example.com,KS,4018 River St,City,92662,Owner-occupied,2021,12,Asphalt,Good,486453,540504,0,0,0,0,0.0,26,48,X,No,Yes
+APP-00098,Edward Murphy,applicantAPP-00098@example.com,MA,5063 Apple St,City,56009,Owner-occupied,2000,14,3-tab Shingle,Good,477379,530422,0,0,0,0,0.0,15,28,X,No,Yes
+APP-00267,Charles Anderson,applicantAPP-00267@example.com,OH,4401 Valley St,City,18079,Owner-occupied,2004,7,Asphalt,Good,448767,498630,0,0,0,0,0.0,24,34,X,No,Yes
+APP-00358,Sarah Edwards,applicantAPP-00358@example.com,NJ,5 Cedar St,City,21382,Owner-occupied,2008,8,Tile,Good,408964,454405,0,0,0,0,0.0,11,31,X,No,Yes
+APP-00869,Steven Lee,applicantAPP-00869@example.com,TX,4054 Garden St,City,65687,Owner-occupied,1995,25,Tile,Fair,550000,650000,2,0,252126,0,0.47718600953895074,27,53,X,No,Yes
+APP-00799,Nancy Moore,applicantAPP-00799@example.com,OH,5197 Lane St,City,55327,Owner-occupied,1992,20,Wood Shake,Fair,550000,650000,2,0,165997,0,0.3197525917764311,43,58,X,No,Yes
+APP-00381,James Cook,applicantAPP-00381@example.com,CA,7053 Street St,City,48393,Owner-occupied,2019,7,3-tab Shingle,Good,445565,495073,0,0,0,0,0.0,19,30,X,No,Yes
+APP-00632,Amanda Edwards,applicantAPP-00632@example.com,TX,1271 Creek St,City,14056,Owner-occupied,2021,15,Tile,Good,425470,472745,0,0,0,0,0.0,27,67,X,No,Yes
+APP-00382,Deborah Ortiz,applicantAPP-00382@example.com,OH,6386 Avenue St,City,59592,Owner-occupied,2007,5,Metal,Good,469669,521855,0,0,0,0,0.0,17,25,X,No,Yes
+APP-00491,Susan Garcia,applicantAPP-00491@example.com,MI,9728 Cherry St,City,64555,Owner-occupied,2022,15,Tile,Good,477245,530273,0,0,0,0,0.0,10,20,X,No,Yes
+APP-00119,Anthony Hernandez,applicantAPP-00119@example.com,TX,4470 Forest St,City,77286,Owner-occupied,2004,5,Tile,Good,480636,534040,0,0,0,0,0.0,31,53,X,No,Yes
+APP-00901,Nancy Hernandez,applicantAPP-00901@example.com,FL,7649 Creek St,City,34400,Owner-occupied,1976,6,Tile,Good,400000,700000,5,0,399701,0,0.8041642607521744,30,75,X,No,Yes
+APP-00251,Frank Morris,applicantAPP-00251@example.com,GA,5884 River St,City,81371,Owner-occupied,2015,11,Metal,Good,428528,476143,0,0,0,0,0.0,10,32,X,No,Yes
+APP-00524,Paul Stewart,applicantAPP-00524@example.com,TX,1960 Walnut St,City,77177,Owner-occupied,2018,6,Architectural Shingle,Good,475647,528497,0,0,0,0,0.0,28,58,X,No,Yes
+APP-00010,Karen Cook,applicantAPP-00010@example.com,OH,5574 Maple St,City,48469,Owner-occupied,2013,14,3-tab Shingle,Good,460213,511348,0,0,0,0,0.0,27,44,X,No,Yes
+APP-00197,Kevin Parker,applicantAPP-00197@example.com,OK,3204 Forest St,City,24021,Owner-occupied,2004,9,Metal,Good,454674,505194,0,0,0,0,0.0,30,35,X,No,Yes
+APP-00604,Anthony Murphy,applicantAPP-00604@example.com,CA,8678 Mountain St,City,39908,Owner-occupied,2004,6,Tile,Good,436380,484867,0,0,0,0,0.0,21,37,X,No,Yes
+APP-00082,Anthony Anderson,applicantAPP-00082@example.com,NY,6512 Boulevard St,City,83048,Owner-occupied,2011,9,Architectural Shingle,Good,461840,513156,0,0,0,0,0.0,12,24,X,No,Yes
+APP-00784,Sarah Smith,applicantAPP-00784@example.com,IL,6793 Oak St,City,12035,Owner-occupied,1994,25,Metal,Fair,550000,650000,2,0,233508,0,0.5177606896735226,43,56,X,No,Yes
+APP-00588,Margaret Williams,applicantAPP-00588@example.com,CA,1365 Mountain St,City,49013,Owner-occupied,2010,14,Wood Shake,Good,414645,460717,0,0,0,0,0.0,34,31,X,No,Yes
+APP-00798,Christopher Johnson,applicantAPP-00798@example.com,NC,9434 Main St,City,70525,Owner-occupied,1994,22,Tile,Fair,550000,650000,2,0,172219,0,0.3698615427237448,48,35,X,No,Yes
+APP-00240,Frank Thomas,applicantAPP-00240@example.com,CO,2467 Main St,City,63744,Owner-occupied,2000,14,3-tab Shingle,Good,433615,481795,0,0,0,0,0.0,27,44,X,No,Yes
+APP-00291,Mark King,applicantAPP-00291@example.com,AZ,9645 Cherry St,City,31891,Owner-occupied,2002,15,Architectural Shingle,Good,405486,450540,0,0,0,0,0.0,14,23,X,No,Yes
+APP-00212,Patricia Thompson,applicantAPP-00212@example.com,OH,158 River St,City,27895,Owner-occupied,2006,7,Tile,Good,470459,522733,0,0,0,0,0.0,24,39,X,No,Yes
+APP-00718,Stephanie Miller,applicantAPP-00718@example.com,WA,9714 Cedar St,City,60326,Owner-occupied,2010,20,Asphalt,Fair,550000,650000,2,0,335540,0,0.6282697024734585,38,57,X,No,Yes
+APP-00360,Susan Clark,applicantAPP-00360@example.com,NH,8295 Maple St,City,83220,Owner-occupied,2002,10,Wood Shake,Good,437617,486242,0,0,0,0,0.0,10,28,X,No,Yes
+APP-00450,Carol Perez,applicantAPP-00450@example.com,CA,8857 Forest St,City,16648,Owner-occupied,2004,13,Architectural Shingle,Good,442569,491744,0,0,0,0,0.0,18,19,X,No,Yes
+APP-00228,Rebecca Stewart,applicantAPP-00228@example.com,KY,440 Boulevard St,City,96298,Owner-occupied,2009,8,3-tab Shingle,Good,437671,486302,0,0,0,0,0.0,29,29,X,No,Yes
+APP-00951,Rebecca Reeves,applicantAPP-00951@example.com,NJ,7061 Avenue St,City,46289,Owner-occupied,2004,6,Tile,Good,400000,700000,5,0,399108,0,0.8637261755075453,74,52,X,No,Yes
+APP-00947,Donald Ortega,applicantAPP-00947@example.com,CA,2487 Boulevard St,City,29715,Owner-occupied,2012,9,Metal,Good,400000,700000,5,0,513590,0,1.030427908768438,69,38,X,No,Yes
+APP-00797,Ryan Lee,applicantAPP-00797@example.com,VA,3247 Birch St,City,16509,Owner-occupied,2005,24,Architectural Shingle,Fair,550000,650000,2,0,212738,0,0.40981373854046066,43,45,X,No,Yes
+APP-00502,Jennifer Torres,applicantAPP-00502@example.com,NC,204 Court St,City,63296,Owner-occupied,2006,13,3-tab Shingle,Good,408965,454406,0,0,0,0,0.0,25,27,X,No,Yes
+APP-00465,Robert Peterson,applicantAPP-00465@example.com,WA,7918 Court St,City,58310,Owner-occupied,2003,12,Wood Shake,Good,491221,545802,0,0,0,0,0.0,21,21,X,No,Yes
+APP-00363,Stephanie Ortega,applicantAPP-00363@example.com,MI,5604 Elm St,City,82686,Owner-occupied,2005,13,Tile,Good,468187,520208,0,0,0,0,0.0,22,41,X,No,Yes
+APP-00469,Jennifer Rodriguez,applicantAPP-00469@example.com,FL,8284 Elm St,City,46418,Owner-occupied,2008,14,3-tab Shingle,Good,424944,472161,0,0,0,0,0.0,14,60,X,No,Yes
+APP-00936,Susan Stewart,applicantAPP-00936@example.com,GA,4016 Ash St,City,69777,Owner-occupied,1986,13,Architectural Shingle,Good,400000,700000,5,0,578688,0,1.0576250370094196,75,73,X,No,Yes
+APP-00429,Deborah Gonzalez,applicantAPP-00429@example.com,IL,7450 Elm St,City,42778,Owner-occupied,2010,7,Asphalt,Good,451368,501520,0,0,0,0,0.0,28,48,X,No,Yes
+APP-00008,Charles Ortiz,applicantAPP-00008@example.com,TX,9578 Mountain St,City,86484,Owner-occupied,2012,12,Metal,Good,451670,501856,0,0,0,0,0.0,19,57,X,No,Yes
+APP-00156,Robert Jackson,applicantAPP-00156@example.com,FL,1295 Walnut St,City,67983,Owner-occupied,2020,9,Metal,Good,438948,487721,0,0,0,0,0.0,17,47,X,No,Yes
+APP-00542,Michael Collins,applicantAPP-00542@example.com,NM,8519 Lane St,City,74512,Owner-occupied,2014,11,3-tab Shingle,Good,476319,529244,0,0,0,0,0.0,13,44,X,No,Yes
+APP-00441,James Davis,applicantAPP-00441@example.com,CA,5461 Apple St,City,61910,Owner-occupied,2018,9,Wood Shake,Good,435012,483347,0,0,0,0,0.0,35,17,X,No,Yes
+APP-00483,Amanda Garcia,applicantAPP-00483@example.com,MI,5986 Creek St,City,54572,Owner-occupied,2002,12,Tile,Good,419297,465886,0,0,0,0,0.0,11,40,X,No,Yes
+APP-00423,Kevin Young,applicantAPP-00423@example.com,CA,6127 Cedar St,City,60785,Owner-occupied,2015,8,Tile,Good,486085,540095,0,0,0,0,0.0,10,26,X,No,Yes
+APP-00779,William Williams,applicantAPP-00779@example.com,OK,3582 Drive St,City,34596,Owner-occupied,2007,22,3-tab Shingle,Fair,550000,650000,2,0,268031,0,0.4978888610251981,50,53,X,No,Yes
+APP-00950,Kimberly Jackson,applicantAPP-00950@example.com,NJ,9418 Apple St,City,93148,Owner-occupied,1979,11,Asphalt,Good,400000,700000,4,0,380839,0,0.8346332964419948,75,67,X,No,Yes
+APP-00335,Sandra Hernandez,applicantAPP-00335@example.com,AZ,80 Apple St,City,42266,Owner-occupied,2007,14,Asphalt,Good,482787,536431,0,0,0,0,0.0,20,50,X,No,Yes
+APP-00577,Kimberly Williams,applicantAPP-00577@example.com,CA,7234 Walnut St,City,83512,Owner-occupied,2015,8,Tile,Good,426603,474004,0,0,0,0,0.0,11,30,X,No,Yes
+APP-00935,Margaret Evans,applicantAPP-00935@example.com,CO,1620 Apple St,City,76508,Owner-occupied,1979,6,Metal,Good,400000,700000,5,0,474104,0,0.9964082528220121,71,51,X,No,Yes
+APP-00568,Brian Anderson,applicantAPP-00568@example.com,MD,1458 Forest St,City,35987,Owner-occupied,2008,7,Asphalt,Good,451418,501576,0,0,0,0,0.0,30,39,X,No,Yes
+APP-00595,Kenneth Lee,applicantAPP-00595@example.com,TX,9065 Elm St,City,45107,Owner-occupied,2020,12,Tile,Good,465557,517286,0,0,0,0,0.0,16,66,X,No,Yes
+APP-00531,Sandra Williams,applicantAPP-00531@example.com,TN,3218 Maple St,City,14298,Owner-occupied,2021,8,Wood Shake,Good,420360,467067,0,0,0,0,0.0,25,44,X,No,Yes
+APP-00582,Mary Peterson,applicantAPP-00582@example.com,WA,3412 Cedar St,City,60921,Owner-occupied,2012,14,Metal,Good,449990,499989,0,0,0,0,0.0,22,22,X,No,Yes
+APP-00708,Karen Anderson,applicantAPP-00708@example.com,TN,4221 Garden St,City,72429,Seasonal,1993,21,Asphalt,Fair,550000,650000,2,0,337567,0,0.6151786853279391,42,59,X,No,Yes
+APP-00449,Carol Torres,applicantAPP-00449@example.com,KS,8423 Maple St,City,37076,Owner-occupied,2017,10,Metal,Good,457035,507817,0,0,0,0,0.0,13,20,X,No,Yes
+APP-00454,Richard Jackson,applicantAPP-00454@example.com,TX,5712 Hill St,City,85324,Owner-occupied,2004,12,Wood Shake,Good,462508,513898,0,0,0,0,0.0,26,65,X,No,Yes
+APP-00229,Mark Davis,applicantAPP-00229@example.com,TX,3950 River St,City,93634,Owner-occupied,2019,13,Architectural Shingle,Good,476595,529551,0,0,0,0,0.0,35,51,X,No,Yes
+APP-00353,Carol Moore,applicantAPP-00353@example.com,NY,6512 Lane St,City,36698,Owner-occupied,2013,6,Wood Shake,Good,423258,470287,0,0,0,0,0.0,28,31,X,No,Yes
+APP-00729,Sarah Garcia,applicantAPP-00729@example.com,DE,2706 Valley St,City,17525,Owner-occupied,1999,25,Wood Shake,Fair,550000,650000,2,0,313627,0,0.64005379580858,32,58,X,No,Yes
+APP-00213,Richard Garcia,applicantAPP-00213@example.com,NY,9264 Main St,City,38905,Owner-occupied,2009,13,Architectural Shingle,Good,464623,516248,0,0,0,0,0.0,24,35,X,No,Yes
+APP-00080,Brian Edwards,applicantAPP-00080@example.com,CA,646 Cherry St,City,67779,Owner-occupied,2001,10,Wood Shake,Good,430834,478705,0,0,0,0,0.0,30,21,X,No,Yes
+APP-00149,Paul Wright,applicantAPP-00149@example.com,CA,7488 Pine St,City,89463,Owner-occupied,2016,13,3-tab Shingle,Good,452349,502610,0,0,0,0,0.0,26,16,X,No,Yes
+APP-00303,Edward Parker,applicantAPP-00303@example.com,NC,1561 Mountain St,City,96732,Owner-occupied,2007,15,Tile,Good,466909,518788,0,0,0,0,0.0,26,42,X,No,Yes
+APP-00629,Stephanie Scott,applicantAPP-00629@example.com,AZ,9226 Elm St,City,49405,Owner-occupied,2002,9,Tile,Good,485215,539128,0,0,0,0,0.0,11,25,X,No,Yes
+APP-00778,Ryan Morales,applicantAPP-00778@example.com,OK,5186 Main St,City,29727,Owner-occupied,1994,23,Tile,Fair,550000,650000,2,0,311750,0,0.576440546652392,40,56,X,No,Yes
+APP-00507,Karen King,applicantAPP-00507@example.com,TX,6930 Willow St,City,17138,Owner-occupied,2002,6,Metal,Good,481563,535070,0,0,0,0,0.0,22,60,X,No,Yes
+APP-00343,David Lewis,applicantAPP-00343@example.com,CO,2714 Ash St,City,20104,Owner-occupied,2016,13,Asphalt,Good,452874,503194,0,0,0,0,0.0,10,36,X,No,Yes
+APP-00486,Sharon Edwards,applicantAPP-00486@example.com,TX,8571 Forest St,City,98877,Owner-occupied,2017,12,3-tab Shingle,Good,406935,452151,0,0,0,0,0.0,16,62,X,No,Yes
+APP-00712,Linda Moore,applicantAPP-00712@example.com,NJ,9404 River St,City,92716,Owner-occupied,2005,25,Metal,Fair,550000,650000,2,0,298466,0,0.635950081287301,46,57,X,No,Yes
+APP-00134,Linda Rodriguez,applicantAPP-00134@example.com,IL,1214 Forest St,City,32630,Owner-occupied,2022,6,Tile,Good,435879,484311,0,0,0,0,0.0,25,26,X,No,Yes
+APP-00704,Sharon Miller,applicantAPP-00704@example.com,CA,51 Forest St,City,62665,Seasonal,1994,22,Architectural Shingle,Fair,550000,650000,2,0,231124,0,0.4669483016039453,47,36,X,No,Yes
+APP-00312,Mark Clark,applicantAPP-00312@example.com,CA,9978 Court St,City,42537,Owner-occupied,2008,14,Tile,Good,425484,472760,0,0,0,0,0.0,33,19,X,No,Yes
+APP-00723,Charles Taylor,applicantAPP-00723@example.com,CA,6256 Park St,City,31406,Owner-occupied,2004,21,Architectural Shingle,Fair,550000,650000,2,0,213341,0,0.40841678456086883,58,36,X,No,Yes
+APP-00630,Sharon Lee,applicantAPP-00630@example.com,FL,5614 Park St,City,44257,Owner-occupied,2022,6,Tile,Good,421473,468304,0,0,0,0,0.0,13,48,X,No,Yes
+APP-00001,Stephanie Scott,applicantAPP-00001@example.com,KS,1425 Valley St,City,65302,Owner-occupied,2001,15,Architectural Shingle,Good,418132,464592,0,0,0,0,0.0,13,41,X,No,Yes
+APP-00317,Steven Miller,applicantAPP-00317@example.com,LA,9206 Boulevard St,City,39400,Owner-occupied,2020,5,Wood Shake,Good,486465,540517,0,0,0,0,0.0,21,46,X,No,Yes
+APP-00707,Richard Lewis,applicantAPP-00707@example.com,IL,1896 River St,City,96853,Seasonal,1997,25,3-tab Shingle,Fair,550000,650000,2,0,305367,0,0.5893250013509237,47,49,X,No,Yes
+APP-00548,Joshua Lee,applicantAPP-00548@example.com,NY,613 Forest St,City,96214,Owner-occupied,2013,15,Wood Shake,Good,441816,490907,0,0,0,0,0.0,15,20,X,No,Yes
+APP-00873,Cynthia Morris,applicantAPP-00873@example.com,NY,3758 Cherry St,City,31155,Owner-occupied,2000,24,Tile,Fair,550000,650000,2,0,173653,0,0.32407440239025237,47,47,X,No,Yes
+APP-00533,Richard Peterson,applicantAPP-00533@example.com,WI,8203 Lane St,City,90341,Owner-occupied,2007,7,Wood Shake,Good,484106,537896,0,0,0,0,0.0,21,31,X,No,Yes
+APP-00478,George Jones,applicantAPP-00478@example.com,NC,7430 Willow St,City,65965,Owner-occupied,2022,15,Asphalt,Good,481429,534922,0,0,0,0,0.0,19,34,X,No,Yes
+APP-00405,Edward Stewart,applicantAPP-00405@example.com,IL,9441 Avenue St,City,22499,Owner-occupied,2019,8,Asphalt,Good,491616,546241,0,0,0,0,0.0,25,46,X,No,Yes
+APP-00173,Anthony Cook,applicantAPP-00173@example.com,MO,925 Pine St,City,76046,Owner-occupied,2009,15,3-tab Shingle,Good,487962,542181,0,0,0,0,0.0,27,26,X,No,Yes
+APP-00126,Susan Gutierrez,applicantAPP-00126@example.com,MA,2210 Elm St,City,69988,Owner-occupied,2001,5,Metal,Good,446558,496176,0,0,0,0,0.0,25,40,X,No,Yes
+APP-00395,Carol Jackson,applicantAPP-00395@example.com,IL,5286 Mountain St,City,94004,Owner-occupied,2010,6,Architectural Shingle,Good,482654,536283,0,0,0,0,0.0,27,24,X,No,Yes
+APP-00421,Daniel Clark,applicantAPP-00421@example.com,SC,6738 Cherry St,City,68065,Owner-occupied,2020,6,Asphalt,Good,470745,523051,0,0,0,0,0.0,10,44,X,No,Yes
+APP-00553,Deborah Wright,applicantAPP-00553@example.com,NC,3057 Valley St,City,75431,Owner-occupied,2006,11,Asphalt,Good,452457,502730,0,0,0,0,0.0,10,40,X,No,Yes
+APP-00904,Barbara Gonzalez,applicantAPP-00904@example.com,NJ,2820 Cherry St,City,50308,Owner-occupied,1980,10,3-tab Shingle,Good,400000,700000,3,0,450552,0,0.9755417366752698,50,71,X,No,Yes
+APP-00091,Frank Collins,applicantAPP-00091@example.com,CA,8544 Cherry St,City,70036,Owner-occupied,2020,10,Architectural Shingle,Good,465543,517271,0,0,0,0,0.0,28,18,X,No,Yes
+APP-00940,Linda Murphy,applicantAPP-00940@example.com,NH,2985 River St,City,10854,Owner-occupied,1995,12,Wood Shake,Good,400000,700000,5,0,468301,0,0.9612247327542324,70,64,X,No,Yes
+APP-00182,Anthony Ortega,applicantAPP-00182@example.com,CA,8006 Drive St,City,94108,Owner-occupied,2015,8,Tile,Good,449807,499786,0,0,0,0,0.0,28,22,X,No,Yes
+APP-00275,Joseph Lewis,applicantAPP-00275@example.com,MO,3464 Avenue St,City,63368,Owner-occupied,2015,7,Wood Shake,Good,440445,489384,0,0,0,0,0.0,30,22,X,No,Yes
+APP-00896,James Wilson,applicantAPP-00896@example.com,FL,6137 Forest St,City,20652,Seasonal,1997,23,Metal,Fair,550000,650000,2,0,163311,0,0.3510267862900279,15,55,X,No,Yes
+APP-00070,Ronald Martin,applicantAPP-00070@example.com,WI,9617 Valley St,City,96499,Owner-occupied,2015,7,3-tab Shingle,Good,413235,459150,0,0,0,0,0.0,10,29,X,No,Yes
+APP-00292,Anthony Gonzalez,applicantAPP-00292@example.com,AZ,2702 Street St,City,62873,Owner-occupied,2000,9,3-tab Shingle,Good,439307,488119,0,0,0,0,0.0,25,31,X,No,Yes
+APP-00132,Barbara Reeves,applicantAPP-00132@example.com,FL,7372 Walnut St,City,58760,Owner-occupied,2014,6,Architectural Shingle,Good,432838,480932,0,0,0,0,0.0,16,46,X,No,Yes
+APP-00301,Sharon Peterson,applicantAPP-00301@example.com,CA,7179 Cedar St,City,90127,Owner-occupied,2012,7,Metal,Good,418336,464818,0,0,0,0,0.0,14,37,X,No,Yes
+APP-00425,Robert Campbell,applicantAPP-00425@example.com,CA,6233 Drive St,City,51012,Owner-occupied,2012,12,Wood Shake,Good,477791,530879,0,0,0,0,0.0,25,37,X,No,Yes
+APP-00327,Ashley Morris,applicantAPP-00327@example.com,NC,5435 Oak St,City,21471,Owner-occupied,2002,8,Architectural Shingle,Good,468435,520484,0,0,0,0,0.0,14,20,X,No,Yes
+APP-00145,Mary Garcia,applicantAPP-00145@example.com,GA,6443 Lake St,City,69930,Owner-occupied,2007,10,3-tab Shingle,Good,427392,474881,0,0,0,0,0.0,19,35,X,No,Yes
+APP-00424,Stephanie Collins,applicantAPP-00424@example.com,MN,3324 Lane St,City,36812,Owner-occupied,2002,7,3-tab Shingle,Good,424320,471467,0,0,0,0,0.0,23,27,X,No,Yes
+APP-00581,Patricia Gutierrez,applicantAPP-00581@example.com,MI,4636 Apple St,City,17279,Owner-occupied,2002,15,Wood Shake,Good,405684,450760,0,0,0,0,0.0,16,47,X,No,Yes
+APP-00136,Kenneth White,applicantAPP-00136@example.com,IL,7658 Street St,City,82305,Owner-occupied,2004,13,Wood Shake,Good,431451,479391,0,0,0,0,0.0,21,37,X,No,Yes
+APP-00451,Deborah Campbell,applicantAPP-00451@example.com,PA,9712 Park St,City,68436,Owner-occupied,2019,12,Metal,Good,484684,538538,0,0,0,0,0.0,22,25,X,No,Yes
+APP-00165,Stephanie Campbell,applicantAPP-00165@example.com,CA,6122 Mountain St,City,81989,Owner-occupied,2015,6,Wood Shake,Good,480345,533717,0,0,0,0,0.0,19,26,X,No,Yes
+APP-00029,Richard Rogers,applicantAPP-00029@example.com,NJ,1772 Beach St,City,15075,Owner-occupied,2015,7,3-tab Shingle,Good,453636,504040,0,0,0,0,0.0,17,28,X,No,Yes
+APP-00774,Rebecca Ramirez,applicantAPP-00774@example.com,LA,3269 Beach St,City,53086,Owner-occupied,2000,23,Metal,Fair,550000,650000,2,0,230147,0,0.49787887637775685,33,47,X,No,Yes
+APP-00194,Susan Ramirez,applicantAPP-00194@example.com,NY,7354 Creek St,City,82710,Owner-occupied,2016,6,Tile,Good,415795,461995,0,0,0,0,0.0,14,22,X,No,Yes
+APP-00389,James Hernandez,applicantAPP-00389@example.com,PA,4524 Valley St,City,25682,Owner-occupied,2012,8,3-tab Shingle,Good,447516,497241,0,0,0,0,0.0,23,30,X,No,Yes
+APP-00853,Robert Jackson,applicantAPP-00853@example.com,FL,2459 Valley St,City,13346,Owner-occupied,2009,20,3-tab Shingle,Fair,550000,650000,2,0,253313,0,0.4783497873690412,21,60,X,No,Yes
+APP-00170,Amanda Thompson,applicantAPP-00170@example.com,NJ,1944 Cedar St,City,80419,Owner-occupied,2012,15,Wood Shake,Good,454587,505097,0,0,0,0,0.0,27,24,X,No,Yes
+APP-00706,George Peterson,applicantAPP-00706@example.com,WI,1646 Drive St,City,60444,Owner-occupied,2009,22,3-tab Shingle,Fair,550000,650000,2,0,213695,0,0.42046411509613646,43,50,X,No,Yes
+APP-00141,Rebecca Peterson,applicantAPP-00141@example.com,WA,6826 Hill St,City,93753,Owner-occupied,2000,14,Tile,Good,409859,455399,0,0,0,0,0.0,30,26,X,No,Yes
+APP-00174,Donald Martin,applicantAPP-00174@example.com,FL,4509 Oak St,City,82970,Owner-occupied,2018,14,Asphalt,Good,442619,491799,0,0,0,0,0.0,15,42,X,No,Yes
+APP-00007,Karen Jones,applicantAPP-00007@example.com,CA,3457 Valley St,City,51245,Owner-occupied,2006,13,Asphalt,Good,430906,478785,0,0,0,0,0.0,31,25,X,No,Yes
+APP-00746,Anthony King,applicantAPP-00746@example.com,TX,6294 Creek St,City,61150,Owner-occupied,2009,25,Metal,Fair,550000,650000,2,0,158302,0,0.32441261156025536,35,52,X,No,Yes
+APP-00479,Patricia Taylor,applicantAPP-00479@example.com,WA,4337 Cedar St,City,67747,Owner-occupied,2002,10,Tile,Good,435356,483729,0,0,0,0,0.0,22,30,X,No,Yes
+APP-00074,Michael Thomas,applicantAPP-00074@example.com,TN,4709 Ash St,City,21846,Owner-occupied,2013,10,Architectural Shingle,Good,484550,538389,0,0,0,0,0.0,11,39,X,No,Yes
+APP-00911,Barbara Smith,applicantAPP-00911@example.com,NJ,5524 Court St,City,87352,Owner-occupied,1991,12,3-tab Shingle,Good,400000,700000,5,0,535386,0,1.0839594506769357,71,52,X,No,Yes
+APP-00814,Mary Thomas,applicantAPP-00814@example.com,UT,9464 Drive St,City,66455,Owner-occupied,1996,20,Asphalt,Fair,550000,650000,2,0,298099,0,0.552150727837492,41,50,X,No,Yes
+APP-00239,Ashley Smith,applicantAPP-00239@example.com,NY,6045 Birch St,City,48219,Owner-occupied,2018,13,Metal,Good,410417,456019,0,0,0,0,0.0,12,37,X,No,Yes
+APP-00146,Joshua Smith,applicantAPP-00146@example.com,AZ,1762 Mountain St,City,27555,Owner-occupied,2008,14,Asphalt,Good,446628,496254,0,0,0,0,0.0,25,29,X,No,Yes
+APP-00793,Susan Gonzalez,applicantAPP-00793@example.com,MO,4606 Beach St,City,23486,Seasonal,2008,22,Metal,Fair,550000,650000,2,0,327583,0,0.6272111969518558,36,43,X,No,Yes
+APP-00235,Sharon Ramirez,applicantAPP-00235@example.com,CT,4457 Lake St,City,18371,Owner-occupied,2008,9,Asphalt,Good,424695,471884,0,0,0,0,0.0,10,30,X,No,Yes
+APP-00221,David Peterson,applicantAPP-00221@example.com,NY,7952 Street St,City,55054,Owner-occupied,2021,8,Architectural Shingle,Good,455682,506314,0,0,0,0,0.0,27,38,X,No,Yes
+APP-00924,Joseph Evans,applicantAPP-00924@example.com,SC,476 Hill St,City,39385,Owner-occupied,1983,11,Wood Shake,Good,400000,700000,4,0,447919,0,0.9944098730788101,63,63,X,No,Yes
+APP-00501,Barbara Peterson,applicantAPP-00501@example.com,OH,84 Mountain St,City,15796,Owner-occupied,2001,11,Tile,Good,491842,546492,0,0,0,0,0.0,28,50,X,No,Yes
+APP-00133,Linda Johnson,applicantAPP-00133@example.com,CA,3049 River St,City,77861,Owner-occupied,2012,14,Wood Shake,Good,421242,468047,0,0,0,0,0.0,26,26,X,No,Yes
+APP-00991,Lisa Garcia,applicantAPP-00991@example.com,SC,1543 Beach St,City,85235,Owner-occupied,1999,13,Tile,Good,400000,700000,4,0,478844,0,0.8774343450631445,73,53,X,No,Yes
+APP-00775,Brian Wilson,applicantAPP-00775@example.com,SC,5246 Valley St,City,14105,Seasonal,2002,24,Architectural Shingle,Fair,550000,650000,2,0,268199,0,0.5612384121204511,45,39,X,No,Yes
+APP-00186,Carol Wright,applicantAPP-00186@example.com,NY,4136 Avenue St,City,56457,Owner-occupied,2008,15,Tile,Good,455792,506436,0,0,0,0,0.0,17,26,X,No,Yes
+APP-00042,Stephanie Scott,applicantAPP-00042@example.com,MN,9884 Ash St,City,73993,Owner-occupied,2007,14,Metal,Good,449871,499857,0,0,0,0,0.0,27,43,X,No,Yes
+APP-00697,Deborah Harris,applicantAPP-00697@example.com,GA,6516 Court St,City,86829,Owner-occupied,2002,7,Wood Shake,Good,434997,483330,0,0,0,0,0.0,12,40,X,No,Yes
+APP-00109,Cynthia Peterson,applicantAPP-00109@example.com,FL,1480 Hill St,City,87867,Owner-occupied,2016,6,Tile,Good,441616,490685,0,0,0,0,0.0,6,36,X,No,Yes
+APP-00589,Stephanie Campbell,applicantAPP-00589@example.com,CA,4249 Boulevard St,City,98265,Owner-occupied,2003,12,Tile,Good,494340,549267,0,0,0,0,0.0,31,29,X,No,Yes
+APP-00057,Michael Sanchez,applicantAPP-00057@example.com,CA,8057 Elm St,City,85631,Owner-occupied,2020,12,Asphalt,Good,461471,512746,0,0,0,0,0.0,24,25,X,No,Yes
+APP-00406,Ryan Ramirez,applicantAPP-00406@example.com,TX,6825 Boulevard St,City,25799,Owner-occupied,2007,9,Asphalt,Good,409408,454898,0,0,0,0,0.0,16,74,X,No,Yes
+APP-00443,Jessica Peterson,applicantAPP-00443@example.com,KS,5435 Street St,City,56346,Owner-occupied,2002,12,3-tab Shingle,Good,453831,504257,0,0,0,0,0.0,27,20,X,No,Yes
+APP-00758,Jennifer Lee,applicantAPP-00758@example.com,NC,2090 Cedar St,City,60465,Owner-occupied,2000,21,Tile,Fair,550000,650000,2,0,243203,0,0.5181488338599268,38,39,X,No,Yes
+APP-00998,Anthony Gonzalez,applicantAPP-00998@example.com,CA,4800 Park St,City,65878,Owner-occupied,2000,15,Tile,Good,400000,700000,4,0,562881,0,1.08430051683718,78,52,X,No,Yes
+APP-00025,Kevin Wilson,applicantAPP-00025@example.com,MI,5618 Birch St,City,93130,Owner-occupied,2008,15,Wood Shake,Good,417219,463577,0,0,0,0,0.0,18,29,X,No,Yes
+APP-00468,Nancy Morales,applicantAPP-00468@example.com,TX,9236 Willow St,City,18050,Owner-occupied,2020,10,Tile,Good,454664,505183,0,0,0,0,0.0,20,51,X,No,Yes
+APP-00540,Margaret Allen,applicantAPP-00540@example.com,CA,8380 Willow St,City,29316,Owner-occupied,2014,14,Architectural Shingle,Good,475029,527810,0,0,0,0,0.0,18,39,X,No,Yes
+APP-00532,William Rogers,applicantAPP-00532@example.com,WY,2029 Hill St,City,36922,Owner-occupied,2018,14,3-tab Shingle,Good,411991,457768,0,0,0,0,0.0,10,44,X,No,Yes
+APP-00619,Sharon Parker,applicantAPP-00619@example.com,TN,6712 Beach St,City,40516,Owner-occupied,2012,13,Metal,Good,480079,533422,0,0,0,0,0.0,20,22,X,No,Yes
+APP-00695,Deborah Allen,applicantAPP-00695@example.com,CA,6033 Court St,City,17563,Owner-occupied,2020,11,Tile,Good,409580,455089,0,0,0,0,0.0,13,27,X,No,Yes
+APP-00927,Michael Smith,applicantAPP-00927@example.com,FL,530 Garden St,City,98719,Owner-occupied,2001,15,Wood Shake,Good,400000,700000,5,0,469928,0,0.9247820525435403,18,75,X,No,Yes
+APP-00339,Sarah Peterson,applicantAPP-00339@example.com,MI,2718 Lane St,City,77388,Owner-occupied,2004,9,Tile,Good,420793,467548,0,0,0,0,0.0,10,41,X,No,Yes
+APP-00052,Donald Allen,applicantAPP-00052@example.com,PA,9097 Lane St,City,41499,Owner-occupied,2022,14,Tile,Good,487714,541905,0,0,0,0,0.0,17,43,X,No,Yes
+APP-00508,Christopher Lewis,applicantAPP-00508@example.com,TN,6032 Street St,City,98251,Owner-occupied,2022,10,Architectural Shingle,Good,458368,509298,0,0,0,0,0.0,27,48,X,No,Yes
+APP-00517,Michelle Wright,applicantAPP-00517@example.com,KS,3640 Street St,City,46428,Owner-occupied,2006,14,Architectural Shingle,Good,430994,478883,0,0,0,0,0.0,30,26,X,No,Yes
+APP-00921,Mary Murphy,applicantAPP-00921@example.com,TX,4652 Creek St,City,74324,Owner-occupied,1990,12,Tile,Good,400000,700000,5,0,416758,0,0.8151586277041036,48,83,X,No,Yes
+APP-00782,Carol Clark,applicantAPP-00782@example.com,NC,1699 River St,City,91766,Seasonal,1993,25,Asphalt,Fair,550000,650000,2,0,276435,0,0.5127094674172099,50,35,X,No,Yes
+APP-00265,Ryan Collins,applicantAPP-00265@example.com,TX,9834 River St,City,36171,Owner-occupied,2003,14,Architectural Shingle,Good,469840,522045,0,0,0,0,0.0,15,63,X,No,Yes
+APP-00818,Karen Martinez,applicantAPP-00818@example.com,LA,3224 Mountain St,City,86706,Owner-occupied,1999,23,3-tab Shingle,Fair,550000,650000,2,0,161130,0,0.30031311738174227,32,57,X,No,Yes
+APP-00711,James Scott,applicantAPP-00711@example.com,PA,7547 Apple St,City,28966,Owner-occupied,1997,20,Tile,Fair,550000,650000,2,0,205830,0,0.39567321924944543,33,47,X,No,Yes
+APP-00683,William Morris,applicantAPP-00683@example.com,CO,8785 Street St,City,84606,Owner-occupied,2005,15,Metal,Good,478599,531777,0,0,0,0,0.0,29,35,X,No,Yes
+APP-00833,Frank Gonzalez,applicantAPP-00833@example.com,CA,1410 Valley St,City,13177,Seasonal,1993,21,3-tab Shingle,Fair,550000,650000,2,0,273667,0,0.566486922861963,54,34,X,No,Yes
+APP-00519,Nancy Lewis,applicantAPP-00519@example.com,WI,9192 Elm St,City,38271,Owner-occupied,2014,7,Asphalt,Good,489457,543842,0,0,0,0,0.0,21,31,X,No,Yes
+APP-00448,Jessica Lee,applicantAPP-00448@example.com,PA,3286 Birch St,City,47560,Owner-occupied,2008,12,Wood Shake,Good,410442,456047,0,0,0,0,0.0,19,40,X,No,Yes
+APP-00019,Cynthia Sanchez,applicantAPP-00019@example.com,MD,961 Cedar St,City,59672,Owner-occupied,2000,15,Tile,Good,468769,520855,0,0,0,0,0.0,25,26,X,No,Yes
+APP-00716,Lisa Phillips,applicantAPP-00716@example.com,VA,7108 Pine St,City,92178,Seasonal,2002,23,3-tab Shingle,Fair,550000,650000,2,0,156380,0,0.33127916805246915,46,55,X,No,Yes
+APP-00484,William Evans,applicantAPP-00484@example.com,NY,5887 River St,City,21123,Owner-occupied,2020,9,Tile,Good,481416,534907,0,0,0,0,0.0,22,48,X,No,Yes
+APP-00569,Betty Hernandez,applicantAPP-00569@example.com,TX,9294 Maple St,City,11850,Owner-occupied,2022,7,Wood Shake,Good,410872,456525,0,0,0,0,0.0,23,54,X,No,Yes
+APP-00434,Susan Martinez,applicantAPP-00434@example.com,CA,903 Park St,City,55746,Owner-occupied,2001,14,3-tab Shingle,Good,405774,450861,0,0,0,0,0.0,17,32,X,No,Yes
+APP-00368,Charles Thomas,applicantAPP-00368@example.com,TX,4414 River St,City,90358,Owner-occupied,2010,8,Metal,Good,449758,499732,0,0,0,0,0.0,34,58,X,No,Yes
+APP-00084,Edward Martin,applicantAPP-00084@example.com,CA,6690 Maple St,City,28320,Owner-occupied,2001,5,Architectural Shingle,Good,478084,531205,0,0,0,0,0.0,27,25,X,No,Yes
+APP-00062,Ashley Stewart,applicantAPP-00062@example.com,GA,4983 Court St,City,62757,Owner-occupied,2008,6,Wood Shake,Good,412034,457816,0,0,0,0,0.0,24,23,X,No,Yes
+APP-00639,Thomas Stewart,applicantAPP-00639@example.com,FL,6944 Elm St,City,42765,Owner-occupied,2006,10,3-tab Shingle,Good,405608,450676,0,0,0,0,0.0,15,37,X,No,Yes
+APP-00273,Kevin Reeves,applicantAPP-00273@example.com,TX,6582 Oak St,City,61877,Owner-occupied,2010,12,Asphalt,Good,472478,524976,0,0,0,0,0.0,23,62,X,No,Yes
+APP-00286,Charles Phillips,applicantAPP-00286@example.com,AZ,4818 Forest St,City,25437,Owner-occupied,2015,15,Architectural Shingle,Good,415533,461704,0,0,0,0,0.0,20,31,X,No,Yes
+APP-00361,Mark Peterson,applicantAPP-00361@example.com,KY,7924 Lane St,City,41886,Owner-occupied,2010,9,Tile,Good,445104,494560,0,0,0,0,0.0,24,50,X,No,Yes
+APP-00355,Lisa Gutierrez,applicantAPP-00355@example.com,CA,9021 Hill St,City,99727,Owner-occupied,2022,8,Architectural Shingle,Good,457682,508536,0,0,0,0,0.0,35,37,X,No,Yes
+APP-00457,Kevin Robinson,applicantAPP-00457@example.com,AL,5331 Creek St,City,22799,Owner-occupied,2014,13,3-tab Shingle,Good,486882,540981,0,0,0,0,0.0,13,38,X,No,Yes
+APP-00279,Melissa Wilson,applicantAPP-00279@example.com,OH,4409 Park St,City,63674,Owner-occupied,2016,9,Architectural Shingle,Good,408237,453597,0,0,0,0,0.0,30,27,X,No,Yes
+APP-00013,George Young,applicantAPP-00013@example.com,TX,9008 Cedar St,City,44741,Owner-occupied,2016,6,Wood Shake,Good,415103,461226,0,0,0,0,0.0,32,74,X,No,Yes
+APP-00183,Joshua Edwards,applicantAPP-00183@example.com,UT,963 Lake St,City,14433,Owner-occupied,2002,7,Asphalt,Good,491440,546045,0,0,0,0,0.0,15,49,X,No,Yes
+APP-00369,Steven Lopez,applicantAPP-00369@example.com,CT,9362 Pine St,City,85483,Owner-occupied,2021,7,3-tab Shingle,Good,463836,515374,0,0,0,0,0.0,22,28,X,No,Yes
+APP-00882,Melissa Moore,applicantAPP-00882@example.com,NY,8561 Apple St,City,90622,Owner-occupied,2008,23,Asphalt,Fair,550000,650000,2,0,307866,0,0.5616229942426829,39,58,X,No,Yes
+APP-00616,Barbara Davis,applicantAPP-00616@example.com,UT,6087 Cherry St,City,59081,Owner-occupied,2009,6,Metal,Good,475966,528852,0,0,0,0,0.0,11,36,X,No,Yes
+APP-00224,Emily Reeves,applicantAPP-00224@example.com,IN,7292 Main St,City,11056,Owner-occupied,2022,6,Metal,Good,488011,542235,0,0,0,0,0.0,28,27,X,No,Yes
+APP-00573,Matthew Campbell,applicantAPP-00573@example.com,LA,9802 Court St,City,15965,Owner-occupied,2000,14,Metal,Good,435225,483584,0,0,0,0,0.0,25,49,X,No,Yes
+APP-00971,Ryan Hernandez,applicantAPP-00971@example.com,NY,3973 Beach St,City,30898,Owner-occupied,2001,9,Tile,Good,400000,700000,5,0,499960,0,0.9562316866981356,54,65,X,No,Yes
+APP-00654,Kevin Ramirez,applicantAPP-00654@example.com,PA,4007 Oak St,City,90744,Owner-occupied,2018,6,3-tab Shingle,Good,418977,465531,0,0,0,0,0.0,21,30,X,No,Yes
+APP-00546,Patricia Johnson,applicantAPP-00546@example.com,IN,9675 Oak St,City,26803,Owner-occupied,2011,11,Metal,Good,436070,484523,0,0,0,0,0.0,19,30,X,No,Yes
+APP-00583,Sharon Martin,applicantAPP-00583@example.com,MN,9888 Pine St,City,57060,Owner-occupied,2021,15,Architectural Shingle,Good,493775,548639,0,0,0,0,0.0,23,43,X,No,Yes
+APP-00634,Sharon Morris,applicantAPP-00634@example.com,MT,3624 Ash St,City,74724,Owner-occupied,2011,5,Architectural Shingle,Good,494466,549407,0,0,0,0,0.0,30,29,X,No,Yes
+APP-00177,Betty Garcia,applicantAPP-00177@example.com,OH,8776 Drive St,City,34966,Owner-occupied,2001,7,Metal,Good,450819,500910,0,0,0,0,0.0,24,47,X,No,Yes
+APP-00666,Sharon Campbell,applicantAPP-00666@example.com,CA,9959 Valley St,City,61234,Owner-occupied,2012,14,3-tab Shingle,Good,407741,453046,0,0,0,0,0.0,28,40,X,No,Yes
+APP-00674,Betty Jones,applicantAPP-00674@example.com,MS,1724 Lake St,City,52731,Owner-occupied,2013,15,Tile,Good,412873,458748,0,0,0,0,0.0,27,23,X,No,Yes
+APP-00586,Melissa Martin,applicantAPP-00586@example.com,FL,4074 Lake St,City,66063,Owner-occupied,2009,13,Wood Shake,Good,414905,461006,0,0,0,0,0.0,18,37,X,No,Yes
+APP-00874,Richard Jackson,applicantAPP-00874@example.com,LA,4940 Main St,City,40147,Seasonal,1997,21,Architectural Shingle,Fair,550000,650000,2,0,229031,0,0.4193792927914978,45,36,X,No,Yes
+APP-00394,Susan Johnson,applicantAPP-00394@example.com,PA,5966 Lane St,City,91290,Owner-occupied,2007,9,Metal,Good,436065,484517,0,0,0,0,0.0,22,43,X,No,Yes
+APP-00164,Nancy Hernandez,applicantAPP-00164@example.com,NC,6643 Garden St,City,75866,Owner-occupied,2022,14,Metal,Good,406348,451498,0,0,0,0,0.0,13,34,X,No,Yes
+APP-00249,Melissa Ramirez,applicantAPP-00249@example.com,WA,2832 Walnut St,City,38143,Owner-occupied,2005,12,Metal,Good,410973,456637,0,0,0,0,0.0,10,32,X,No,Yes
+APP-00635,Cynthia Moore,applicantAPP-00635@example.com,CA,9325 Lake St,City,74751,Owner-occupied,2005,9,Wood Shake,Good,463137,514597,0,0,0,0,0.0,32,37,X,No,Yes
+APP-00886,William Rodriguez,applicantAPP-00886@example.com,CO,8558 Valley St,City,94519,Owner-occupied,2000,25,Wood Shake,Fair,550000,650000,2,0,163274,0,0.3426145675297396,38,53,X,No,Yes
+APP-00670,Nancy Phillips,applicantAPP-00670@example.com,GA,3326 Lake St,City,99762,Owner-occupied,2014,8,Metal,Good,420327,467030,0,0,0,0,0.0,29,38,X,No,Yes
+APP-00376,Stephanie Stewart,applicantAPP-00376@example.com,IL,1312 Birch St,City,31877,Owner-occupied,2012,11,Architectural Shingle,Good,424737,471930,0,0,0,0,0.0,18,50,X,No,Yes
+APP-00413,Jessica Ortiz,applicantAPP-00413@example.com,VA,8815 Birch St,City,36712,Owner-occupied,2017,7,Wood Shake,Good,438936,487707,0,0,0,0,0.0,10,30,X,No,Yes
+APP-00075,Frank Brown,applicantAPP-00075@example.com,OH,4807 Walnut St,City,59131,Owner-occupied,2013,15,3-tab Shingle,Good,488034,542260,0,0,0,0,0.0,11,30,X,No,Yes
+APP-00114,Sandra King,applicantAPP-00114@example.com,TN,5929 Main St,City,57526,Owner-occupied,2009,9,3-tab Shingle,Good,470933,523259,0,0,0,0,0.0,30,41,X,No,Yes
+APP-00599,Ryan King,applicantAPP-00599@example.com,CT,524 Street St,City,18344,Owner-occupied,2010,8,Tile,Good,429705,477450,0,0,0,0,0.0,15,25,X,No,Yes
+APP-00962,Daniel Collins,applicantAPP-00962@example.com,NJ,8848 Walnut St,City,90427,Owner-occupied,1981,12,Tile,Good,400000,700000,4,0,544222,0,1.078940690398966,58,54,X,No,Yes
+APP-00391,William Rodriguez,applicantAPP-00391@example.com,WI,7993 Ash St,City,51515,Owner-occupied,2017,10,Asphalt,Good,494601,549557,0,0,0,0,0.0,27,45,X,No,Yes
+APP-00105,Emily Garcia,applicantAPP-00105@example.com,TX,6485 Boulevard St,City,50668,Owner-occupied,2010,12,3-tab Shingle,Good,486349,540388,0,0,0,0,0.0,22,63,X,No,Yes
+APP-00115,Gary Rogers,applicantAPP-00115@example.com,NY,1658 Lake St,City,80748,Owner-occupied,2016,8,Architectural Shingle,Good,445311,494791,0,0,0,0,0.0,12,29,X,No,Yes
+APP-00418,Barbara Perez,applicantAPP-00418@example.com,IL,6437 Garden St,City,27991,Owner-occupied,2002,13,Asphalt,Good,437543,486159,0,0,0,0,0.0,18,27,X,No,Yes
+APP-00526,Anthony Miller,applicantAPP-00526@example.com,MI,9811 Lane St,City,31906,Owner-occupied,2017,5,Metal,Good,439192,487992,0,0,0,0,0.0,30,25,X,No,Yes
+APP-00458,Kimberly Edwards,applicantAPP-00458@example.com,MI,1008 Elm St,City,38522,Owner-occupied,2004,9,Wood Shake,Good,452869,503188,0,0,0,0,0.0,22,30,X,No,Yes
+APP-00410,Sarah Jones,applicantAPP-00410@example.com,CA,4363 Lane St,City,66369,Owner-occupied,2010,8,Asphalt,Good,462549,513944,0,0,0,0,0.0,22,35,X,No,Yes
+APP-00093,Kevin Ramirez,applicantAPP-00093@example.com,PA,1625 Street St,City,24996,Owner-occupied,2020,14,Asphalt,Good,469686,521874,0,0,0,0,0.0,24,36,X,No,Yes
+APP-00931,Deborah Jackson,applicantAPP-00931@example.com,CA,5025 Court St,City,30749,Owner-occupied,2011,14,Asphalt,Good,400000,700000,3,0,476535,0,0.8667613698371008,64,51,X,No,Yes
+APP-00090,Donald Wright,applicantAPP-00090@example.com,MI,1863 Drive St,City,18330,Owner-occupied,2015,10,Tile,Good,433067,481186,0,0,0,0,0.0,14,43,X,No,Yes
+APP-00337,Ronald Jones,applicantAPP-00337@example.com,TX,306 Boulevard St,City,76476,Owner-occupied,2020,15,Architectural Shingle,Good,476559,529511,0,0,0,0,0.0,21,58,X,No,Yes
+APP-00989,George Lewis,applicantAPP-00989@example.com,FL,5077 Creek St,City,98430,Owner-occupied,1994,15,Metal,Good,400000,700000,4,0,439233,0,0.9578256896938983,15,80,X,No,Yes
+APP-00922,Rebecca Cook,applicantAPP-00922@example.com,MN,6572 Creek St,City,63545,Owner-occupied,1997,13,3-tab Shingle,Good,400000,700000,3,0,432053,0,0.8647961072936203,55,55,X,No,Yes
+APP-00934,Nancy Wilson,applicantAPP-00934@example.com,MS,3676 Pine St,City,46479,Owner-occupied,2013,12,Asphalt,Good,400000,700000,5,0,515420,0,1.091605300666925,60,57,X,No,Yes
+APP-00606,Brian Morris,applicantAPP-00606@example.com,MI,8517 Cherry St,City,64959,Owner-occupied,2012,7,Asphalt,Good,456204,506894,0,0,0,0,0.0,28,21,X,No,Yes
+APP-00594,Michelle Campbell,applicantAPP-00594@example.com,IL,9082 Cherry St,City,14851,Owner-occupied,2015,11,Tile,Good,411006,456674,0,0,0,0,0.0,25,43,X,No,Yes
+APP-00612,Daniel Wright,applicantAPP-00612@example.com,SC,9542 Birch St,City,57352,Owner-occupied,2014,9,Architectural Shingle,Good,438564,487294,0,0,0,0,0.0,17,23,X,No,Yes
+APP-00095,William Ortiz,applicantAPP-00095@example.com,PA,6106 Street St,City,27054,Owner-occupied,2017,9,Architectural Shingle,Good,449154,499060,0,0,0,0,0.0,12,33,X,No,Yes
+APP-00012,Betty Morgan,applicantAPP-00012@example.com,WA,5039 Ash St,City,17592,Owner-occupied,2007,7,Wood Shake,Good,468627,520697,0,0,0,0,0.0,10,23,X,No,Yes
+APP-00397,Michael Smith,applicantAPP-00397@example.com,TX,3420 Park St,City,74409,Owner-occupied,2002,15,Tile,Good,462791,514213,0,0,0,0,0.0,26,57,X,No,Yes
+APP-00534,Christopher Hernandez,applicantAPP-00534@example.com,NC,8801 Main St,City,22934,Owner-occupied,2006,14,Wood Shake,Good,413061,458957,0,0,0,0,0.0,16,50,X,No,Yes
+APP-00044,Mark Lee,applicantAPP-00044@example.com,TX,3468 Forest St,City,52840,Owner-occupied,2010,15,Tile,Good,408196,453552,0,0,0,0,0.0,29,55,X,No,Yes
+APP-00043,Ashley Rodriguez,applicantAPP-00043@example.com,AZ,8752 Main St,City,61645,Owner-occupied,2018,11,Wood Shake,Good,462288,513654,0,0,0,0,0.0,15,46,X,No,Yes
+APP-00330,Thomas Rodriguez,applicantAPP-00330@example.com,FL,6407 Street St,City,81529,Owner-occupied,2009,6,Asphalt,Good,438209,486899,0,0,0,0,0.0,17,47,X,No,Yes
+APP-00168,Mary Sanchez,applicantAPP-00168@example.com,CO,4170 Avenue St,City,10395,Owner-occupied,2006,7,Wood Shake,Good,465544,517272,0,0,0,0,0.0,19,43,X,No,Yes
+APP-00498,David Robinson,applicantAPP-00498@example.com,CA,3182 Park St,City,57001,Owner-occupied,2008,12,3-tab Shingle,Good,411409,457122,0,0,0,0,0.0,23,19,X,No,Yes
+APP-00877,Kimberly Morales,applicantAPP-00877@example.com,OH,6450 Walnut St,City,81641,Seasonal,1993,22,Tile,Fair,550000,650000,2,0,196921,0,0.42605425824918813,42,35,X,No,Yes
+APP-00598,Richard Campbell,applicantAPP-00598@example.com,CO,8064 Maple St,City,64523,Owner-occupied,2015,8,Metal,Good,438319,487022,0,0,0,0,0.0,15,26,X,No,Yes
+APP-00757,Karen Allen,applicantAPP-00757@example.com,NV,6048 Willow St,City,20009,Owner-occupied,1994,21,Asphalt,Fair,550000,650000,2,0,243636,0,0.4689537294213435,41,38,X,No,Yes
+APP-00101,Linda Jackson,applicantAPP-00101@example.com,AZ,9718 River St,City,79066,Owner-occupied,2021,14,Metal,Good,457145,507939,0,0,0,0,0.0,21,33,X,No,Yes
+APP-00427,Nancy Cook,applicantAPP-00427@example.com,MD,4685 Forest St,City,31821,Owner-occupied,2013,11,Metal,Good,465884,517649,0,0,0,0,0.0,22,48,X,No,Yes
+APP-00179,Jessica Sanchez,applicantAPP-00179@example.com,VA,3922 Creek St,City,52154,Owner-occupied,2009,5,Tile,Good,429985,477762,0,0,0,0,0.0,29,42,X,No,Yes
+APP-00445,Nancy Lopez,applicantAPP-00445@example.com,TN,1839 Walnut St,City,14901,Owner-occupied,2006,9,Architectural Shingle,Good,453821,504246,0,0,0,0,0.0,16,36,X,No,Yes
+APP-00417,Matthew Reeves,applicantAPP-00417@example.com,GA,5766 Walnut St,City,91950,Owner-occupied,2009,5,3-tab Shingle,Good,434183,482426,0,0,0,0,0.0,15,20,X,No,Yes
+APP-00871,Ronald Anderson,applicantAPP-00871@example.com,KS,5568 Park St,City,15980,Owner-occupied,2004,22,Tile,Fair,550000,650000,2,0,255290,0,0.5192726237210911,38,50,X,No,Yes
+APP-00883,Jessica Perez,applicantAPP-00883@example.com,AR,2218 Cedar St,City,78731,Seasonal,2005,21,Architectural Shingle,Fair,550000,650000,2,0,283577,0,0.5810575449352097,45,49,X,No,Yes
+APP-00681,Carol Wilson,applicantAPP-00681@example.com,TN,8876 Beach St,City,66083,Owner-occupied,2003,7,3-tab Shingle,Good,410191,455768,0,0,0,0,0.0,30,26,X,No,Yes
+APP-00178,George Torres,applicantAPP-00178@example.com,KY,3556 River St,City,37379,Owner-occupied,2010,11,Metal,Good,484469,538299,0,0,0,0,0.0,28,43,X,No,Yes
+APP-00396,Kimberly Gonzalez,applicantAPP-00396@example.com,VA,1618 Oak St,City,84843,Owner-occupied,2020,6,Tile,Good,466718,518576,0,0,0,0,0.0,16,23,X,No,Yes
+APP-00912,Betty Brown,applicantAPP-00912@example.com,FL,9820 Garden St,City,58404,Owner-occupied,1991,13,Tile,Good,400000,700000,5,0,555568,0,1.0186973638128907,29,74,X,No,Yes
+APP-00794,Kevin Harris,applicantAPP-00794@example.com,NM,7034 Birch St,City,84336,Owner-occupied,2001,21,Asphalt,Fair,550000,650000,2,0,291274,0,0.5347999875147115,49,38,X,No,Yes
+APP-00961,James Thompson,applicantAPP-00961@example.com,CA,3649 Elm St,City,65034,Owner-occupied,1979,10,Architectural Shingle,Good,400000,700000,3,0,418306,0,0.8175324281908812,64,48,X,No,Yes
+APP-00685,Michelle Morris,applicantAPP-00685@example.com,VA,218 Ash St,City,12780,Owner-occupied,2019,10,Architectural Shingle,Good,407081,452313,0,0,0,0,0.0,17,36,X,No,Yes
+APP-00384,Mary Martinez,applicantAPP-00384@example.com,TX,814 Creek St,City,12900,Owner-occupied,2005,9,Architectural Shingle,Good,418017,464464,0,0,0,0,0.0,34,65,X,No,Yes
+APP-00957,James Harris,applicantAPP-00957@example.com,MO,6882 Beach St,City,23115,Owner-occupied,1997,10,Metal,Good,400000,700000,4,0,435161,0,0.9160667070849964,64,50,X,No,Yes
+APP-00752,Ashley Edwards,applicantAPP-00752@example.com,VA,6595 Maple St,City,79045,Owner-occupied,1990,22,Wood Shake,Fair,550000,650000,2,0,189903,0,0.38704135101589104,43,42,X,No,Yes
+APP-00258,Ronald Stewart,applicantAPP-00258@example.com,OH,4826 Pine St,City,33292,Owner-occupied,2000,10,Asphalt,Good,425549,472833,0,0,0,0,0.0,22,29,X,No,Yes
+APP-00539,Gary Sanchez,applicantAPP-00539@example.com,ME,2012 Ash St,City,65666,Owner-occupied,2015,14,Metal,Good,416998,463332,0,0,0,0,0.0,16,39,X,No,Yes
+APP-00336,Matthew Cook,applicantAPP-00336@example.com,AZ,5005 River St,City,82308,Owner-occupied,2003,15,3-tab Shingle,Good,456446,507163,0,0,0,0,0.0,24,34,X,No,Yes
+APP-00016,Paul Thomas,applicantAPP-00016@example.com,CO,7750 Street St,City,63354,Owner-occupied,2006,13,Architectural Shingle,Good,433075,481195,0,0,0,0,0.0,28,38,X,No,Yes
+APP-00325,Sharon King,applicantAPP-00325@example.com,VT,7301 River St,City,15747,Owner-occupied,2009,6,Asphalt,Good,450519,500577,0,0,0,0,0.0,21,36,X,No,Yes
+APP-00759,Donna Allen,applicantAPP-00759@example.com,TX,8827 Creek St,City,74566,Seasonal,2007,23,3-tab Shingle,Fair,550000,650000,2,0,270779,0,0.5006193518806111,40,57,X,No,Yes
+APP-00223,Patricia Sanchez,applicantAPP-00223@example.com,CA,5006 Drive St,City,40689,Owner-occupied,2013,7,Asphalt,Good,437324,485916,0,0,0,0,0.0,12,35,X,No,Yes
+APP-00180,William Gutierrez,applicantAPP-00180@example.com,CA,7693 Lane St,City,51973,Owner-occupied,2006,12,Metal,Good,467951,519946,0,0,0,0,0.0,30,26,X,No,Yes
+APP-00984,Mary Allen,applicantAPP-00984@example.com,CA,3678 Avenue St,City,38701,Owner-occupied,1990,9,3-tab Shingle,Good,400000,700000,5,0,441331,0,0.8410710372099671,70,42,X,No,Yes
+APP-00023,Kenneth Miller,applicantAPP-00023@example.com,GA,1201 Creek St,City,37938,Owner-occupied,2016,15,Metal,Good,481146,534607,0,0,0,0,0.0,24,39,X,No,Yes
+APP-00357,Kimberly Lewis,applicantAPP-00357@example.com,AR,176 Birch St,City,96099,Owner-occupied,2016,11,Metal,Good,452261,502513,0,0,0,0,0.0,15,40,X,No,Yes
+APP-00667,Steven Evans,applicantAPP-00667@example.com,FL,4992 Elm St,City,32468,Owner-occupied,2003,11,Asphalt,Good,412515,458350,0,0,0,0,0.0,11,50,X,No,Yes
+APP-00862,Christopher Hernandez,applicantAPP-00862@example.com,ME,1943 Cherry St,City,45893,Owner-occupied,2004,22,3-tab Shingle,Fair,550000,650000,2,0,151622,0,0.32344715627526566,33,46,X,No,Yes
+APP-00341,Amanda Lee,applicantAPP-00341@example.com,MN,1692 Court St,City,78337,Owner-occupied,2020,5,Metal,Good,483868,537632,0,0,0,0,0.0,11,21,X,No,Yes
+APP-00432,David Gonzalez,applicantAPP-00432@example.com,PA,58 Hill St,City,43175,Owner-occupied,2000,5,Tile,Good,454495,504995,0,0,0,0,0.0,13,48,X,No,Yes
+APP-00552,Sharon Martin,applicantAPP-00552@example.com,TX,7093 Garden St,City,80772,Owner-occupied,2010,14,3-tab Shingle,Good,467646,519607,0,0,0,0,0.0,17,70,X,No,Yes
+APP-00834,Kenneth Ortega,applicantAPP-00834@example.com,CO,7762 Lake St,City,56151,Owner-occupied,2009,20,Wood Shake,Fair,550000,650000,2,0,229461,0,0.5091371819847965,36,41,X,No,Yes
+APP-00204,Melissa Phillips,applicantAPP-00204@example.com,TX,8200 Pine St,City,55215,Owner-occupied,2000,8,Tile,Good,465241,516935,0,0,0,0,0.0,26,62,X,No,Yes
+APP-00631,Edward Rodriguez,applicantAPP-00631@example.com,OH,34 Hill St,City,72459,Owner-occupied,2000,9,Architectural Shingle,Good,434010,482234,0,0,0,0,0.0,20,20,X,No,Yes
+APP-00094,Donald Morales,applicantAPP-00094@example.com,NC,1558 Apple St,City,65936,Owner-occupied,2010,13,Asphalt,Good,490032,544481,0,0,0,0,0.0,24,32,X,No,Yes
+APP-00559,Mark Gutierrez,applicantAPP-00559@example.com,PA,3866 Mountain St,City,38574,Owner-occupied,2004,9,Architectural Shingle,Good,463563,515070,0,0,0,0,0.0,28,43,X,No,Yes
+APP-00069,Donna Martinez,applicantAPP-00069@example.com,CA,6285 Birch St,City,88561,Owner-occupied,2016,12,Asphalt,Good,489533,543926,0,0,0,0,0.0,19,31,X,No,Yes
+APP-00623,Joshua Hernandez,applicantAPP-00623@example.com,IN,4676 Pine St,City,33942,Owner-occupied,2008,7,Architectural Shingle,Good,453947,504386,0,0,0,0,0.0,13,23,X,No,Yes
+APP-00285,Charles Morales,applicantAPP-00285@example.com,NJ,9160 Lane St,City,33995,Owner-occupied,2021,13,Metal,Good,440412,489347,0,0,0,0,0.0,14,43,X,No,Yes
+APP-00845,Robert Anderson,applicantAPP-00845@example.com,CA,3371 Beach St,City,34173,Seasonal,2003,24,Wood Shake,Fair,550000,650000,2,0,168961,0,0.345258748403576,41,33,X,No,Yes
+APP-00435,Susan Hernandez,applicantAPP-00435@example.com,CA,4660 Hill St,City,96628,Owner-occupied,2022,5,Asphalt,Good,483681,537424,0,0,0,0,0.0,28,34,X,No,Yes
+APP-00154,Rebecca Morales,applicantAPP-00154@example.com,MN,4332 Hill St,City,73462,Owner-occupied,2006,13,3-tab Shingle,Good,449451,499391,0,0,0,0,0.0,21,41,X,No,Yes
+APP-00076,Mark Parker,applicantAPP-00076@example.com,OK,3946 River St,City,86435,Owner-occupied,2004,8,3-tab Shingle,Good,467658,519621,0,0,0,0,0.0,29,47,X,No,Yes
+APP-00731,Susan Jones,applicantAPP-00731@example.com,CA,6014 Avenue St,City,27474,Seasonal,2001,22,Architectural Shingle,Fair,550000,650000,2,0,337379,0,0.6169396498914711,56,44,X,No,Yes
+APP-00447,James Martin,applicantAPP-00447@example.com,WI,722 Garden St,City,87894,Owner-occupied,2002,13,Metal,Good,484828,538698,0,0,0,0,0.0,26,23,X,No,Yes
+APP-00189,Joshua Peterson,applicantAPP-00189@example.com,MS,540 Cedar St,City,51220,Owner-occupied,2000,8,3-tab Shingle,Good,429939,477710,0,0,0,0,0.0,18,48,X,No,Yes
+APP-00272,Christopher Scott,applicantAPP-00272@example.com,TN,5634 Mountain St,City,44620,Owner-occupied,2012,7,Asphalt,Good,422481,469424,0,0,0,0,0.0,13,45,X,No,Yes
+APP-00237,Betty Harris,applicantAPP-00237@example.com,GA,2459 Cedar St,City,14635,Owner-occupied,2017,15,Asphalt,Good,490262,544736,0,0,0,0,0.0,11,35,X,No,Yes
+APP-00488,Ryan Ortega,applicantAPP-00488@example.com,GA,1743 Maple St,City,75161,Owner-occupied,2019,7,Wood Shake,Good,479631,532924,0,0,0,0,0.0,28,22,X,No,Yes
+APP-00118,Richard Ortega,applicantAPP-00118@example.com,CO,3272 Street St,City,89254,Owner-occupied,2004,15,Metal,Good,472289,524766,0,0,0,0,0.0,26,33,X,No,Yes
+APP-00944,David Robinson,applicantAPP-00944@example.com,TX,4493 Main St,City,36504,Owner-occupied,1988,9,Asphalt,Good,400000,700000,4,0,522228,0,0.996939852738765,43,81,X,No,Yes
+APP-00513,Sarah Davis,applicantAPP-00513@example.com,VA,675 Apple St,City,85304,Owner-occupied,2004,7,Tile,Good,477976,531085,0,0,0,0,0.0,14,25,X,No,Yes
+APP-00826,George Thomas,applicantAPP-00826@example.com,UT,2798 Lake St,City,81654,Owner-occupied,2005,25,Tile,Fair,550000,650000,2,0,322663,0,0.6016846117411881,34,58,X,No,Yes
+APP-00592,Frank Scott,applicantAPP-00592@example.com,NY,3128 Elm St,City,49441,Owner-occupied,2014,5,3-tab Shingle,Good,429681,477424,0,0,0,0,0.0,30,47,X,No,Yes
+APP-00127,Joshua Young,applicantAPP-00127@example.com,TN,4151 Oak St,City,94790,Owner-occupied,2006,8,Metal,Good,410166,455741,0,0,0,0,0.0,22,46,X,No,Yes
+APP-00117,Joshua Thomas,applicantAPP-00117@example.com,SD,5071 Street St,City,71474,Owner-occupied,2006,10,Metal,Good,484786,538652,0,0,0,0,0.0,24,27,X,No,Yes
+APP-00474,Amanda Peterson,applicantAPP-00474@example.com,TX,4467 Apple St,City,45432,Owner-occupied,2008,10,Architectural Shingle,Good,467550,519501,0,0,0,0,0.0,35,61,X,No,Yes
+APP-00694,Betty Harris,applicantAPP-00694@example.com,FL,8021 Cherry St,City,94023,Owner-occupied,2018,5,Architectural Shingle,Good,464064,515627,0,0,0,0,0.0,16,50,X,No,Yes
+APP-00058,Donald Campbell,applicantAPP-00058@example.com,CT,9767 Street St,City,91057,Owner-occupied,2007,5,Wood Shake,Good,422898,469887,0,0,0,0,0.0,27,44,X,No,Yes
+APP-00864,Linda Morris,applicantAPP-00864@example.com,MD,1966 Forest St,City,66657,Owner-occupied,1998,20,Architectural Shingle,Fair,550000,650000,2,0,232885,0,0.5136663005262717,44,44,X,No,Yes
+APP-00913,Daniel Martin,applicantAPP-00913@example.com,NY,584 Hill St,City,24638,Owner-occupied,1997,10,Asphalt,Good,400000,700000,5,0,397220,0,0.8126166082943275,50,64,X,No,Yes
+APP-00370,Sharon Ortiz,applicantAPP-00370@example.com,CA,2451 River St,City,11276,Owner-occupied,2005,6,Tile,Good,490030,544478,0,0,0,0,0.0,18,40,X,No,Yes
+APP-00269,Kenneth Wright,applicantAPP-00269@example.com,IN,9364 Garden St,City,91300,Owner-occupied,2004,15,Architectural Shingle,Good,461012,512236,0,0,0,0,0.0,11,36,X,No,Yes
+APP-00047,Nancy Peterson,applicantAPP-00047@example.com,ID,6150 Beach St,City,35995,Owner-occupied,2002,14,Wood Shake,Good,493228,548032,0,0,0,0,0.0,10,49,X,No,Yes
+APP-00350,Betty Williams,applicantAPP-00350@example.com,NY,8681 Mountain St,City,40079,Owner-occupied,2015,15,Tile,Good,420373,467082,0,0,0,0,0.0,26,33,X,No,Yes
+APP-00196,Nancy Moore,applicantAPP-00196@example.com,IL,8080 Pine St,City,18292,Owner-occupied,2005,13,Tile,Good,433634,481816,0,0,0,0,0.0,14,28,X,No,Yes
+APP-01000,Mark Gonzalez,applicantAPP-01000@example.com,MD,5764 Creek St,City,16872,Owner-occupied,2002,5,Asphalt,Good,400000,700000,3,0,449860,0,0.9743788567628858,51,59,X,No,Yes
+APP-00835,William Davis,applicantAPP-00835@example.com,MN,8171 Ash St,City,16747,Seasonal,2007,21,Metal,Fair,550000,650000,2,0,264326,0,0.5208147792025599,46,44,X,No,Yes
+APP-00737,Frank Johnson,applicantAPP-00737@example.com,KY,2067 Pine St,City,55104,Seasonal,1990,23,Asphalt,Fair,550000,650000,2,0,333199,0,0.6470448874173471,33,38,X,No,Yes
+APP-00264,George Jackson,applicantAPP-00264@example.com,MO,4873 Ash St,City,22571,Owner-occupied,2001,6,Tile,Good,444057,493397,0,0,0,0,0.0,27,28,X,No,Yes
+APP-00444,Linda Rogers,applicantAPP-00444@example.com,IN,5051 Court St,City,51222,Owner-occupied,2022,9,Architectural Shingle,Good,408676,454085,0,0,0,0,0.0,15,39,X,No,Yes
+APP-00676,Ashley Jones,applicantAPP-00676@example.com,WI,1353 Creek St,City,96117,Owner-occupied,2007,11,Asphalt,Good,409455,454951,0,0,0,0,0.0,24,35,X,No,Yes
+APP-00305,Donna Edwards,applicantAPP-00305@example.com,OK,6204 Beach St,City,40801,Owner-occupied,2002,6,Tile,Good,493641,548491,0,0,0,0,0.0,26,27,X,No,Yes
+APP-00342,Amanda Morgan,applicantAPP-00342@example.com,MI,1276 Lake St,City,42975,Owner-occupied,2012,9,3-tab Shingle,Good,473257,525842,0,0,0,0,0.0,21,38,X,No,Yes
+APP-00967,William Anderson,applicantAPP-00967@example.com,OK,7495 Avenue St,City,24566,Owner-occupied,1982,6,Wood Shake,Good,400000,700000,5,0,531971,0,1.0749603435210913,67,54,X,No,Yes
+APP-00150,Laura King,applicantAPP-00150@example.com,GA,8722 River St,City,83783,Owner-occupied,2009,10,Tile,Good,477320,530356,0,0,0,0,0.0,20,36,X,No,Yes
+APP-00125,Sarah Morales,applicantAPP-00125@example.com,FL,1699 Lane St,City,86271,Owner-occupied,2010,5,3-tab Shingle,Good,479986,533318,0,0,0,0,0.0,13,58,X,No,Yes
+APP-00787,Deborah Scott,applicantAPP-00787@example.com,NJ,1291 Valley St,City,60122,Owner-occupied,1994,21,Tile,Fair,550000,650000,2,0,167458,0,0.3512807657533873,30,54,X,No,Yes
+APP-00051,Kimberly Wilson,applicantAPP-00051@example.com,WA,5814 Street St,City,43862,Owner-occupied,2010,8,Metal,Good,493529,548366,0,0,0,0,0.0,20,25,X,No,Yes
+APP-00354,Deborah Sanchez,applicantAPP-00354@example.com,CA,2263 Boulevard St,City,96413,Owner-occupied,2003,13,Asphalt,Good,461914,513238,0,0,0,0,0.0,15,26,X,No,Yes
+APP-00928,Christopher Gutierrez,applicantAPP-00928@example.com,NC,6528 Avenue St,City,15230,Owner-occupied,1998,12,Tile,Good,400000,700000,4,0,476714,0,1.038090509601021,73,51,X,No,Yes
+APP-00143,David Murphy,applicantAPP-00143@example.com,MN,6071 Lake St,City,83616,Owner-occupied,2003,12,Metal,Good,429066,476741,0,0,0,0,0.0,21,32,X,No,Yes
+APP-00471,Barbara Campbell,applicantAPP-00471@example.com,AL,2526 Avenue St,City,75004,Owner-occupied,2013,9,Tile,Good,487665,541851,0,0,0,0,0.0,20,22,X,No,Yes
+APP-00400,William Hernandez,applicantAPP-00400@example.com,PA,2956 Creek St,City,62632,Owner-occupied,2016,13,Metal,Good,453977,504419,0,0,0,0,0.0,23,48,X,No,Yes
+APP-00626,Thomas Johnson,applicantAPP-00626@example.com,IN,4410 Creek St,City,86830,Owner-occupied,2021,9,Architectural Shingle,Good,412152,457947,0,0,0,0,0.0,23,40,X,No,Yes
+APP-00321,Daniel Campbell,applicantAPP-00321@example.com,NC,834 Lane St,City,91968,Owner-occupied,2019,7,Asphalt,Good,473889,526544,0,0,0,0,0.0,14,49,X,No,Yes
+APP-00020,Patricia Phillips,applicantAPP-00020@example.com,GA,8884 Oak St,City,51104,Owner-occupied,2001,9,Architectural Shingle,Good,458674,509638,0,0,0,0,0.0,16,50,X,No,Yes
+APP-00810,Susan King,applicantAPP-00810@example.com,CA,7812 Drive St,City,50019,Seasonal,1997,25,3-tab Shingle,Fair,550000,650000,2,0,208394,0,0.40472477340392266,45,31,X,No,Yes
+APP-00791,Stephanie Taylor,applicantAPP-00791@example.com,CA,1993 Birch St,City,89444,Owner-occupied,2007,24,Architectural Shingle,Fair,550000,650000,2,0,167098,0,0.3155680197916962,43,35,X,No,Yes
+APP-00809,Carol Stewart,applicantAPP-00809@example.com,ME,6629 Beach St,City,61496,Owner-occupied,1997,20,Asphalt,Fair,550000,650000,2,0,153458,0,0.32994837636020014,38,42,X,No,Yes
+APP-00408,Thomas Ramirez,applicantAPP-00408@example.com,AL,4748 Street St,City,61684,Owner-occupied,2004,7,3-tab Shingle,Good,410958,456621,0,0,0,0,0.0,26,22,X,No,Yes
+APP-00538,George Reeves,applicantAPP-00538@example.com,FL,1393 Maple St,City,28791,Owner-occupied,2012,10,Tile,Good,426150,473500,0,0,0,0,0.0,20,56,X,No,Yes
+APP-00621,Mary Davis,applicantAPP-00621@example.com,CO,8714 Cedar St,City,12486,Owner-occupied,2008,13,3-tab Shingle,Good,415044,461161,0,0,0,0,0.0,25,36,X,No,Yes
+APP-00039,Sarah Morgan,applicantAPP-00039@example.com,OH,4544 Lane St,City,78327,Owner-occupied,2015,14,Asphalt,Good,489848,544276,0,0,0,0,0.0,18,44,X,No,Yes
+APP-00176,Ashley Brown,applicantAPP-00176@example.com,CO,9215 Mountain St,City,64592,Owner-occupied,2017,7,Wood Shake,Good,493993,548882,0,0,0,0,0.0,14,45,X,No,Yes
+APP-00246,Patricia Reeves,applicantAPP-00246@example.com,UT,4897 Willow St,City,32789,Owner-occupied,2000,14,Tile,Good,409757,455286,0,0,0,0,0.0,22,36,X,No,Yes
+APP-00829,Kenneth Perez,applicantAPP-00829@example.com,OR,7529 Court St,City,28355,Owner-occupied,1999,22,Tile,Fair,550000,650000,2,0,258045,0,0.4973690297212906,50,58,X,No,Yes
+APP-00668,Mark Jackson,applicantAPP-00668@example.com,CA,3374 Ash St,City,48155,Owner-occupied,2021,13,Wood Shake,Good,425954,473283,0,0,0,0,0.0,11,37,X,No,Yes
+APP-00755,Sandra Harris,applicantAPP-00755@example.com,CA,2415 Walnut St,City,95899,Owner-occupied,1997,20,Asphalt,Fair,550000,650000,2,0,281816,0,0.6080487447030698,49,28,X,No,Yes
+APP-00859,Kevin Parker,applicantAPP-00859@example.com,NC,1766 Drive St,City,15929,Owner-occupied,2001,24,Tile,Fair,550000,650000,2,0,244502,0,0.4838184340241294,40,53,X,No,Yes
+APP-00155,Deborah Allen,applicantAPP-00155@example.com,WI,5195 River St,City,55718,Owner-occupied,2017,9,Asphalt,Good,470834,523149,0,0,0,0,0.0,16,42,X,No,Yes
+APP-00288,Jennifer Allen,applicantAPP-00288@example.com,NC,5450 Park St,City,33176,Owner-occupied,2010,7,Asphalt,Good,428627,476253,0,0,0,0,0.0,15,44,X,No,Yes
+APP-00603,Laura Gutierrez,applicantAPP-00603@example.com,CO,7761 Apple St,City,47585,Owner-occupied,2016,10,3-tab Shingle,Good,444471,493857,0,0,0,0,0.0,10,27,X,No,Yes
+APP-00570,Stephanie Allen,applicantAPP-00570@example.com,IL,6260 Pine St,City,66532,Owner-occupied,2006,11,Wood Shake,Good,458521,509468,0,0,0,0,0.0,18,29,X,No,Yes
+APP-00744,Paul Murphy,applicantAPP-00744@example.com,MO,3310 Creek St,City,30142,Owner-occupied,1994,20,3-tab Shingle,Fair,550000,650000,2,0,210651,0,0.3931765114312752,39,58,X,No,Yes
+APP-00018,Sarah Jones,applicantAPP-00018@example.com,MS,7261 Street St,City,82132,Owner-occupied,2003,8,Architectural Shingle,Good,427600,475112,0,0,0,0,0.0,18,34,X,No,Yes
+APP-00128,Steven Harris,applicantAPP-00128@example.com,TX,5555 Cedar St,City,75038,Owner-occupied,2022,10,Tile,Good,410638,456265,0,0,0,0,0.0,26,63,X,No,Yes
+APP-00323,Betty Jackson,applicantAPP-00323@example.com,NY,3580 Lane St,City,91039,Owner-occupied,2016,13,Tile,Good,468351,520390,0,0,0,0,0.0,20,30,X,No,Yes
+APP-00256,Michelle Morris,applicantAPP-00256@example.com,NC,2321 Lane St,City,24538,Owner-occupied,2016,8,Metal,Good,420392,467103,0,0,0,0,0.0,10,24,X,No,Yes
+APP-00658,Donna Garcia,applicantAPP-00658@example.com,IN,2201 Lane St,City,21013,Owner-occupied,2009,8,Tile,Good,451701,501891,0,0,0,0,0.0,21,28,X,No,Yes
+APP-00965,Paul Young,applicantAPP-00965@example.com,GA,5635 Birch St,City,92406,Owner-occupied,2011,8,Tile,Good,400000,700000,3,0,398975,0,0.8829283189894596,50,68,X,No,Yes
+APP-00191,Michael Perez,applicantAPP-00191@example.com,CA,9916 Lane St,City,90460,Owner-occupied,2019,7,Tile,Good,486314,540349,0,0,0,0,0.0,33,17,X,No,Yes
+APP-00116,Laura Stewart,applicantAPP-00116@example.com,TX,2713 Drive St,City,67366,Owner-occupied,2001,15,Tile,Good,444726,494140,0,0,0,0,0.0,27,54,X,No,Yes
+APP-00617,Nancy Jackson,applicantAPP-00617@example.com,CA,3533 Cedar St,City,74067,Owner-occupied,2000,12,Architectural Shingle,Good,408300,453667,0,0,0,0,0.0,35,19,X,No,Yes
+APP-00607,Barbara Stewart,applicantAPP-00607@example.com,FL,6619 Forest St,City,94394,Owner-occupied,2006,13,Wood Shake,Good,440899,489888,0,0,0,0,0.0,15,46,X,No,Yes
+APP-00181,Michelle Phillips,applicantAPP-00181@example.com,IL,6842 Cherry St,City,29976,Owner-occupied,2006,10,Metal,Good,453828,504254,0,0,0,0,0.0,18,37,X,No,Yes
+APP-00302,Robert Jones,applicantAPP-00302@example.com,MT,4287 Park St,City,51187,Owner-occupied,2000,14,Asphalt,Good,408399,453777,0,0,0,0,0.0,23,34,X,No,Yes
+APP-00760,Gary Johnson,applicantAPP-00760@example.com,SC,5938 Creek St,City,72118,Owner-occupied,1993,23,Architectural Shingle,Fair,550000,650000,2,0,268427,0,0.5101739434531729,30,41,X,No,Yes
+APP-00713,Ryan Collins,applicantAPP-00713@example.com,MI,2609 Main St,City,81819,Owner-occupied,2000,25,Tile,Fair,550000,650000,2,0,224643,0,0.49079981123336275,42,44,X,No,Yes
+APP-00724,George Edwards,applicantAPP-00724@example.com,OR,8380 Hill St,City,31501,Owner-occupied,1994,22,Metal,Fair,550000,650000,2,0,189275,0,0.3742461690558576,41,53,X,No,Yes
+APP-00686,Kimberly Jackson,applicantAPP-00686@example.com,NC,3310 Pine St,City,59250,Owner-occupied,2006,9,Asphalt,Good,432885,480984,0,0,0,0,0.0,14,31,X,No,Yes
+APP-00980,Anthony Thompson,applicantAPP-00980@example.com,NJ,2819 Boulevard St,City,75514,Owner-occupied,1980,8,Metal,Good,400000,700000,4,0,419297,0,0.8246426948878868,73,62,X,No,Yes
+APP-00518,Kevin Campbell,applicantAPP-00518@example.com,TN,8382 Oak St,City,97394,Owner-occupied,2011,6,Tile,Good,468513,520570,0,0,0,0,0.0,25,30,X,No,Yes
+APP-00985,Donna Torres,applicantAPP-00985@example.com,OK,9308 Birch St,City,64044,Owner-occupied,1986,12,Wood Shake,Good,400000,700000,5,0,420754,0,0.8796735151273136,64,63,X,No,Yes
+APP-00046,Jessica Robinson,applicantAPP-00046@example.com,NY,4199 Lane St,City,58351,Owner-occupied,2005,8,Wood Shake,Good,428517,476130,0,0,0,0,0.0,13,38,X,No,Yes
+APP-00910,Charles Ortiz,applicantAPP-00910@example.com,KS,1900 Hill St,City,69017,Owner-occupied,2007,7,Metal,Good,400000,700000,5,0,513819,0,0.9949075320118734,59,63,X,No,Yes
+APP-00158,Melissa Cook,applicantAPP-00158@example.com,PA,2253 Main St,City,82135,Owner-occupied,2005,8,Tile,Good,480254,533616,0,0,0,0,0.0,25,23,X,No,Yes
+APP-00852,Kenneth White,applicantAPP-00852@example.com,PA,6816 Elm St,City,94133,Owner-occupied,1999,21,3-tab Shingle,Fair,550000,650000,2,0,159602,0,0.34374165424675,36,45,X,No,Yes
+APP-00172,Jessica Jones,applicantAPP-00172@example.com,AL,1654 Hill St,City,14400,Owner-occupied,2014,9,Wood Shake,Good,427233,474704,0,0,0,0,0.0,10,27,X,No,Yes
+APP-00017,Amanda Edwards,applicantAPP-00017@example.com,HI,1613 Oak St,City,62772,Owner-occupied,2010,6,Architectural Shingle,Good,482736,536374,0,0,0,0,0.0,11,41,X,No,Yes
+APP-00512,Christopher Cook,applicantAPP-00512@example.com,MA,776 Pine St,City,56284,Owner-occupied,2009,9,Tile,Good,471915,524350,0,0,0,0,0.0,25,31,X,No,Yes
+APP-00049,Betty Evans,applicantAPP-00049@example.com,NC,7533 Court St,City,30052,Owner-occupied,2013,10,3-tab Shingle,Good,413134,459038,0,0,0,0,0.0,13,33,X,No,Yes
+APP-00972,Michelle Reeves,applicantAPP-00972@example.com,VA,2488 Birch St,City,68114,Owner-occupied,1984,14,Asphalt,Good,400000,700000,3,0,477921,0,0.9903456421733184,73,73,X,No,Yes
+APP-00941,Joshua Ortega,applicantAPP-00941@example.com,GA,2993 Birch St,City,24249,Owner-occupied,1989,12,3-tab Shingle,Good,400000,700000,4,0,423974,0,0.8994295484968635,70,71,X,No,Yes
+APP-00516,Robert Rodriguez,applicantAPP-00516@example.com,AR,9027 Maple St,City,50380,Owner-occupied,2000,7,Tile,Good,471677,524086,0,0,0,0,0.0,25,48,X,No,Yes
+APP-00953,Matthew Morris,applicantAPP-00953@example.com,CO,9452 Pine St,City,34752,Owner-occupied,1984,8,3-tab Shingle,Good,400000,700000,4,0,444240,0,0.8779672205017125,74,68,X,No,Yes
+APP-00481,Amanda Evans,applicantAPP-00481@example.com,NY,15 Oak St,City,97111,Owner-occupied,2012,6,Metal,Good,413306,459229,0,0,0,0,0.0,25,24,X,No,Yes
+APP-00284,Deborah Anderson,applicantAPP-00284@example.com,CA,8760 Park St,City,72355,Owner-occupied,2021,11,Metal,Good,452727,503031,0,0,0,0,0.0,22,38,X,No,Yes
+APP-00719,Donna Ortega,applicantAPP-00719@example.com,CA,8789 Street St,City,79479,Owner-occupied,1992,23,Wood Shake,Fair,550000,650000,2,0,190298,0,0.3625435085359604,43,35,X,No,Yes
+APP-00878,Lisa Martinez,applicantAPP-00878@example.com,NY,1371 Maple St,City,83516,Owner-occupied,1996,21,Tile,Fair,550000,650000,2,0,240140,0,0.5298039544457731,50,44,X,No,Yes
+APP-00226,Amanda Hernandez,applicantAPP-00226@example.com,FL,7211 Walnut St,City,37925,Owner-occupied,2020,11,Asphalt,Good,493845,548717,0,0,0,0,0.0,9,37,X,No,Yes
+APP-00027,Betty Phillips,applicantAPP-00027@example.com,DE,9053 Pine St,City,66333,Owner-occupied,2004,11,Architectural Shingle,Good,471167,523519,0,0,0,0,0.0,11,46,X,No,Yes
+APP-00955,Steven Ortiz,applicantAPP-00955@example.com,MA,3418 Beach St,City,16450,Owner-occupied,2003,7,Tile,Good,400000,700000,4,0,449498,0,0.9257883138014129,62,50,X,No,Yes
+APP-00438,Kenneth Parker,applicantAPP-00438@example.com,TN,5798 Pine St,City,90516,Owner-occupied,2018,15,Tile,Good,467397,519330,0,0,0,0,0.0,18,36,X,No,Yes
+APP-00952,Kenneth Jackson,applicantAPP-00952@example.com,NY,105 Hill St,City,61111,Owner-occupied,1976,7,Architectural Shingle,Good,400000,700000,5,0,413791,0,0.8388052137601103,50,62,X,No,Yes
+APP-00365,James Murphy,applicantAPP-00365@example.com,VA,8872 Oak St,City,73214,Owner-occupied,2011,14,Wood Shake,Good,446998,496665,0,0,0,0,0.0,25,39,X,No,Yes
+APP-00230,Melissa Lopez,applicantAPP-00230@example.com,NY,7718 Lane St,City,19567,Owner-occupied,2000,13,Wood Shake,Good,406422,451581,0,0,0,0,0.0,21,37,X,No,Yes
+APP-00038,Sharon Robinson,applicantAPP-00038@example.com,CA,8703 Creek St,City,88047,Owner-occupied,2010,7,Tile,Good,487092,541214,0,0,0,0,0.0,26,29,X,No,Yes
+APP-00966,Charles Perez,applicantAPP-00966@example.com,IN,7985 Lane St,City,81945,Owner-occupied,2004,12,Asphalt,Good,400000,700000,3,0,476412,0,0.9352414605418139,60,55,X,No,Yes
+APP-00375,Steven Cook,applicantAPP-00375@example.com,CA,5951 Drive St,City,86928,Owner-occupied,2016,10,Tile,Good,482031,535591,0,0,0,0,0.0,19,37,X,No,Yes
+APP-00470,Michelle Ortiz,applicantAPP-00470@example.com,WA,2477 Garden St,City,68543,Owner-occupied,2011,14,3-tab Shingle,Good,438144,486827,0,0,0,0,0.0,15,49,X,No,Yes
+APP-00968,Thomas Cook,applicantAPP-00968@example.com,GA,274 Birch St,City,56391,Owner-occupied,2008,9,Wood Shake,Good,400000,700000,3,0,476936,0,0.962412448064121,54,71,X,No,Yes
+APP-00851,Charles Taylor,applicantAPP-00851@example.com,CA,265 Garden St,City,56312,Seasonal,1991,20,Wood Shake,Fair,550000,650000,2,0,184814,0,0.40614355471754504,56,39,X,No,Yes
+APP-00705,Brian Ortega,applicantAPP-00705@example.com,CA,5279 Main St,City,93070,Owner-occupied,1991,24,Asphalt,Fair,550000,650000,2,0,229125,0,0.4410066403618516,47,36,X,No,Yes
+APP-00842,Jessica Allen,applicantAPP-00842@example.com,NY,5849 Boulevard St,City,38873,Owner-occupied,1999,25,Metal,Fair,550000,650000,2,0,180502,0,0.3696334628230673,38,52,X,No,Yes
+APP-00195,Mark Smith,applicantAPP-00195@example.com,IL,4782 Mountain St,City,60829,Owner-occupied,2002,6,Asphalt,Good,408097,453442,0,0,0,0,0.0,20,47,X,No,Yes
+APP-00855,Joseph Morgan,applicantAPP-00855@example.com,FL,9425 Cherry St,City,41985,Owner-occupied,1997,25,Metal,Fair,550000,650000,2,0,273457,0,0.5006536067374588,11,64,X,No,Yes
+APP-00865,Lisa Moore,applicantAPP-00865@example.com,LA,7430 Park St,City,77219,Seasonal,1992,21,Asphalt,Fair,550000,650000,2,0,339067,0,0.6211201400999458,35,51,X,No,Yes
+APP-00504,Brian Smith,applicantAPP-00504@example.com,TN,1159 Beach St,City,53634,Owner-occupied,2016,12,Architectural Shingle,Good,421352,468169,0,0,0,0,0.0,24,42,X,No,Yes
+APP-00970,Paul Robinson,applicantAPP-00970@example.com,MI,5275 Pine St,City,49320,Owner-occupied,1975,7,Architectural Shingle,Good,400000,700000,5,0,535081,0,1.009758260836746,66,63,X,No,Yes
+APP-00831,Sharon Morales,applicantAPP-00831@example.com,FL,3877 Maple St,City,32806,Seasonal,2002,20,Tile,Fair,550000,650000,2,0,205544,0,0.3764135377312708,13,60,X,No,Yes
+APP-00580,Deborah Collins,applicantAPP-00580@example.com,FL,7862 Forest St,City,92359,Owner-occupied,2008,11,Wood Shake,Good,449066,498963,0,0,0,0,0.0,15,39,X,No,Yes
+APP-00969,William Reeves,applicantAPP-00969@example.com,ND,2714 Park St,City,93140,Owner-occupied,2014,7,3-tab Shingle,Good,400000,700000,5,0,553269,0,1.0649188418238407,61,55,X,No,Yes
+APP-00163,Sarah Lewis,applicantAPP-00163@example.com,NY,4375 Apple St,City,49576,Owner-occupied,2018,15,Asphalt,Good,416251,462502,0,0,0,0,0.0,18,32,X,No,Yes
+APP-00909,Ronald Miller,applicantAPP-00909@example.com,FL,6627 Street St,City,11602,Owner-occupied,1985,12,Metal,Good,400000,700000,3,0,497924,0,1.0283181746838161,27,68,X,No,Yes
+APP-00153,David Wright,applicantAPP-00153@example.com,CA,3398 Creek St,City,52604,Owner-occupied,2021,7,Tile,Good,453714,504127,0,0,0,0,0.0,32,21,X,No,Yes
+APP-00802,Michelle Peterson,applicantAPP-00802@example.com,CA,6772 Park St,City,68560,Seasonal,1993,25,Wood Shake,Fair,550000,650000,2,0,220679,0,0.4415796729958439,45,29,X,No,Yes
+APP-00994,Kimberly Lopez,applicantAPP-00994@example.com,NJ,8769 Birch St,City,55252,Owner-occupied,1981,5,Asphalt,Good,400000,700000,4,0,480629,0,0.9604320284555282,70,69,X,No,Yes
+APP-00756,Carol Perez,applicantAPP-00756@example.com,SC,1940 Walnut St,City,21115,Owner-occupied,2009,23,3-tab Shingle,Fair,550000,650000,2,0,192575,0,0.3541960948765487,41,37,X,No,Yes
+APP-00112,Lisa Miller,applicantAPP-00112@example.com,CA,9142 Garden St,City,60667,Owner-occupied,2009,11,Metal,Good,453220,503578,0,0,0,0,0.0,34,25,X,No,Yes
+APP-00227,Linda Phillips,applicantAPP-00227@example.com,WA,6292 Walnut St,City,66280,Owner-occupied,2010,7,3-tab Shingle,Good,453566,503963,0,0,0,0,0.0,14,44,X,No,Yes
+APP-00689,Barbara Wilson,applicantAPP-00689@example.com,PA,2058 Elm St,City,32764,Owner-occupied,2018,7,Wood Shake,Good,457182,507981,0,0,0,0,0.0,11,40,X,No,Yes
+APP-00104,Christopher Davis,applicantAPP-00104@example.com,MO,6637 Main St,City,52568,Owner-occupied,2005,5,Wood Shake,Good,459234,510260,0,0,0,0,0.0,30,33,X,No,Yes
+APP-00422,Karen Campbell,applicantAPP-00422@example.com,SC,9291 Hill St,City,40266,Owner-occupied,2019,9,3-tab Shingle,Good,422925,469917,0,0,0,0,0.0,29,39,X,No,Yes
+APP-00420,David Ramirez,applicantAPP-00420@example.com,PA,2379 Park St,City,84035,Owner-occupied,2005,15,Metal,Good,421346,468163,0,0,0,0,0.0,26,49,X,No,Yes
+APP-00751,Ryan Lopez,applicantAPP-00751@example.com,CA,3095 Valley St,City,74293,Seasonal,1995,21,Asphalt,Fair,550000,650000,2,0,277303,0,0.5086308568493841,51,29,X,No,Yes
+APP-00587,George Morales,applicantAPP-00587@example.com,CA,9314 Avenue St,City,43211,Owner-occupied,2011,5,Metal,Good,469997,522219,0,0,0,0,0.0,12,16,X,No,Yes
+APP-00781,Susan Torres,applicantAPP-00781@example.com,OH,9747 Cedar St,City,81141,Owner-occupied,2002,23,Metal,Fair,550000,650000,2,0,291053,0,0.586605262362319,43,46,X,No,Yes
+APP-00673,Robert Thomas,applicantAPP-00673@example.com,CA,2588 Willow St,City,92324,Owner-occupied,2017,11,Metal,Good,459007,510008,0,0,0,0,0.0,22,36,X,No,Yes
+APP-00120,Sarah Harris,applicantAPP-00120@example.com,NC,1338 Walnut St,City,39430,Owner-occupied,2000,6,Metal,Good,431191,479102,0,0,0,0,0.0,26,31,X,No,Yes
+APP-00054,Thomas Davis,applicantAPP-00054@example.com,TX,3156 Apple St,City,25670,Owner-occupied,2017,10,Asphalt,Good,455193,505771,0,0,0,0,0.0,29,58,X,No,Yes
+APP-00152,Edward Davis,applicantAPP-00152@example.com,FL,3126 Main St,City,67807,Owner-occupied,2010,5,Tile,Good,473834,526483,0,0,0,0,0.0,17,39,X,No,Yes
+APP-00404,Charles Gutierrez,applicantAPP-00404@example.com,TN,4921 Elm St,City,84774,Owner-occupied,2012,5,Wood Shake,Good,459306,510341,0,0,0,0,0.0,17,27,X,No,Yes
+APP-00946,Michelle Harris,applicantAPP-00946@example.com,AL,972 Maple St,City,17355,Owner-occupied,2015,8,Metal,Good,400000,700000,3,0,519873,0,1.0552347354468894,58,69,X,No,Yes
+APP-00208,Deborah Wilson,applicantAPP-00208@example.com,NY,3372 Willow St,City,18200,Owner-occupied,2018,15,Architectural Shingle,Good,455976,506640,0,0,0,0,0.0,22,20,X,No,Yes
+APP-00659,Steven Robinson,applicantAPP-00659@example.com,NY,7087 Mountain St,City,58170,Owner-occupied,2015,13,Metal,Good,446472,496081,0,0,0,0,0.0,20,33,X,No,Yes
+APP-00844,Anthony Robinson,applicantAPP-00844@example.com,WA,1872 Main St,City,75392,Owner-occupied,1998,21,Metal,Fair,550000,650000,2,0,309128,0,0.5648825110599861,44,55,X,No,Yes
+APP-00763,Barbara Brown,applicantAPP-00763@example.com,FL,527 Hill St,City,32751,Seasonal,1995,25,Architectural Shingle,Fair,550000,650000,2,0,302683,0,0.5522858107306748,23,55,X,No,Yes
+APP-00009,Richard Rogers,applicantAPP-00009@example.com,NJ,6917 Hill St,City,18326,Owner-occupied,2012,8,Tile,Good,421317,468131,0,0,0,0,0.0,14,40,X,No,Yes
+APP-00808,Kimberly Wright,applicantAPP-00808@example.com,UT,7104 Maple St,City,99281,Owner-occupied,2010,25,3-tab Shingle,Fair,550000,650000,2,0,274562,0,0.5029123866184078,46,54,X,No,Yes
+APP-00037,Barbara Edwards,applicantAPP-00037@example.com,HI,91 Lane St,City,23970,Owner-occupied,2013,14,3-tab Shingle,Good,413590,459545,0,0,0,0,0.0,22,27,X,No,Yes
+APP-00453,Betty Sanchez,applicantAPP-00453@example.com,MA,3005 Court St,City,97186,Owner-occupied,2010,15,Metal,Good,488780,543089,0,0,0,0,0.0,29,28,X,No,Yes
+APP-00652,Mary Lopez,applicantAPP-00652@example.com,NC,4290 Maple St,City,12751,Owner-occupied,2021,7,3-tab Shingle,Good,430827,478697,0,0,0,0,0.0,15,26,X,No,Yes
+APP-00254,Edward Thompson,applicantAPP-00254@example.com,IL,9301 Valley St,City,28625,Owner-occupied,2018,10,3-tab Shingle,Good,425491,472768,0,0,0,0,0.0,10,42,X,No,Yes
+APP-00304,Amanda Hernandez,applicantAPP-00304@example.com,NY,8284 Boulevard St,City,71510,Owner-occupied,2015,10,3-tab Shingle,Good,483293,536993,0,0,0,0,0.0,11,20,X,No,Yes
+APP-00747,Christopher Morris,applicantAPP-00747@example.com,KY,4400 Creek St,City,25611,Owner-occupied,1997,21,Architectural Shingle,Fair,550000,650000,2,0,177084,0,0.39310854638811377,39,42,X,No,Yes
+APP-00572,Margaret Reeves,applicantAPP-00572@example.com,RI,3477 Court St,City,60265,Owner-occupied,2022,14,Tile,Good,485719,539688,0,0,0,0,0.0,20,42,X,No,Yes
+APP-00624,Deborah Brown,applicantAPP-00624@example.com,MI,4883 Beach St,City,22942,Owner-occupied,2010,7,3-tab Shingle,Good,441190,490212,0,0,0,0,0.0,15,20,X,No,Yes
+APP-00733,Carol Robinson,applicantAPP-00733@example.com,NY,5383 Cherry St,City,56385,Owner-occupied,1990,23,Metal,Fair,550000,650000,2,0,315536,0,0.6440127930638245,41,35,X,No,Yes
+APP-00892,Joshua Gutierrez,applicantAPP-00892@example.com,TX,1703 Oak St,City,58435,Owner-occupied,2009,25,Asphalt,Fair,550000,650000,2,0,165474,0,0.3151909728836029,25,65,X,No,Yes
+APP-00263,Mary Ramirez,applicantAPP-00263@example.com,CA,2704 Hill St,City,66911,Owner-occupied,2005,11,Architectural Shingle,Good,423981,471090,0,0,0,0,0.0,33,17,X,No,Yes
+APP-00611,Deborah Evans,applicantAPP-00611@example.com,AZ,8738 Boulevard St,City,88059,Owner-occupied,2007,6,Metal,Good,457934,508816,0,0,0,0,0.0,28,38,X,No,Yes
+APP-00298,Ashley Jackson,applicantAPP-00298@example.com,FL,4328 Forest St,City,16564,Owner-occupied,2003,7,3-tab Shingle,Good,415626,461807,0,0,0,0,0.0,7,58,X,No,Yes
+APP-00415,George Moore,applicantAPP-00415@example.com,NY,5902 Boulevard St,City,24141,Owner-occupied,2000,8,Metal,Good,487165,541295,0,0,0,0,0.0,12,32,X,No,Yes
+APP-00151,Kevin Young,applicantAPP-00151@example.com,TX,4351 Park St,City,85821,Owner-occupied,2018,5,3-tab Shingle,Good,448452,498281,0,0,0,0,0.0,33,59,X,No,Yes
+APP-00789,Jennifer Jones,applicantAPP-00789@example.com,MI,8098 Boulevard St,City,57369,Owner-occupied,2002,25,Architectural Shingle,Fair,550000,650000,2,0,168146,0,0.36273149895913104,38,40,X,No,Yes
+APP-00641,Steven Murphy,applicantAPP-00641@example.com,AR,1568 Park St,City,68517,Owner-occupied,2018,12,Architectural Shingle,Good,433117,481242,0,0,0,0,0.0,29,39,X,No,Yes
+APP-00890,Susan Ortiz,applicantAPP-00890@example.com,FL,175 Birch St,City,67944,Owner-occupied,2006,20,3-tab Shingle,Fair,550000,650000,2,0,328972,0,0.6436687152335503,16,64,X,No,Yes
+APP-00551,Gary Phillips,applicantAPP-00551@example.com,MO,1553 Valley St,City,54150,Owner-occupied,2008,9,Architectural Shingle,Good,410607,456230,0,0,0,0,0.0,12,42,X,No,Yes
+APP-00887,Carol Martinez,applicantAPP-00887@example.com,NY,2349 Cedar St,City,72320,Owner-occupied,2000,24,Architectural Shingle,Fair,550000,650000,2,0,307352,0,0.6319720030102521,32,60,X,No,Yes
+APP-00489,Kenneth Scott,applicantAPP-00489@example.com,VA,2251 Apple St,City,37948,Owner-occupied,2001,8,Wood Shake,Good,412443,458271,0,0,0,0,0.0,13,41,X,No,Yes
+APP-00148,Lisa Torres,applicantAPP-00148@example.com,MO,5991 Lane St,City,28909,Owner-occupied,2006,9,Wood Shake,Good,478520,531689,0,0,0,0,0.0,21,45,X,No,Yes
+APP-00147,Donna Jackson,applicantAPP-00147@example.com,NM,1205 Beach St,City,76093,Owner-occupied,2014,10,Wood Shake,Good,452569,502855,0,0,0,0,0.0,16,31,X,No,Yes
+APP-00721,Richard Ramirez,applicantAPP-00721@example.com,VA,2 Ash St,City,49400,Owner-occupied,2006,25,Metal,Fair,550000,650000,2,0,285908,0,0.6195055361747308,41,52,X,No,Yes
+APP-00932,Brian Anderson,applicantAPP-00932@example.com,TX,459 Boulevard St,City,37742,Owner-occupied,2012,9,Metal,Good,400000,700000,4,0,550078,0,1.012170079342882,49,79,X,No,Yes
+APP-00740,Nancy Stewart,applicantAPP-00740@example.com,KS,3792 Ash St,City,54063,Owner-occupied,2005,22,Architectural Shingle,Fair,550000,650000,2,0,252500,0,0.5381924832094602,43,51,X,No,Yes
+APP-00660,Jennifer Jackson,applicantAPP-00660@example.com,NE,8221 Lake St,City,81650,Owner-occupied,2020,9,Architectural Shingle,Good,450106,500118,0,0,0,0,0.0,12,31,X,No,Yes
+APP-00349,Frank Scott,applicantAPP-00349@example.com,KS,8247 Lane St,City,25403,Owner-occupied,2002,15,Tile,Good,454520,505023,0,0,0,0,0.0,29,21,X,No,Yes
+APP-00464,Matthew Anderson,applicantAPP-00464@example.com,NJ,3045 Mountain St,City,89242,Owner-occupied,2000,14,Wood Shake,Good,455217,505797,0,0,0,0,0.0,24,32,X,No,Yes
+APP-00326,Michael Wilson,applicantAPP-00326@example.com,OR,3493 Boulevard St,City,99837,Owner-occupied,2013,8,Architectural Shingle,Good,442785,491984,0,0,0,0,0.0,10,40,X,No,Yes
+APP-00187,Gary Edwards,applicantAPP-00187@example.com,TN,520 Elm St,City,63120,Owner-occupied,2012,6,Tile,Good,449006,498896,0,0,0,0,0.0,12,40,X,No,Yes
+APP-00124,Andrew Rogers,applicantAPP-00124@example.com,CA,8317 Creek St,City,12665,Owner-occupied,2012,14,Tile,Good,454140,504600,0,0,0,0,0.0,15,36,X,No,Yes
+APP-00854,Anthony Edwards,applicantAPP-00854@example.com,TX,1286 Elm St,City,39436,Seasonal,2006,22,Wood Shake,Fair,550000,650000,2,0,296361,0,0.5449645744800181,38,51,X,No,Yes
+APP-00609,Lisa Murphy,applicantAPP-00609@example.com,MO,2622 Main St,City,13655,Owner-occupied,2017,7,Wood Shake,Good,466397,518219,0,0,0,0,0.0,19,36,X,No,Yes
+APP-00144,Mark Parker,applicantAPP-00144@example.com,GA,6851 Ash St,City,30932,Owner-occupied,2010,8,Wood Shake,Good,460026,511141,0,0,0,0,0.0,11,29,X,No,Yes
+APP-00959,Christopher White,applicantAPP-00959@example.com,CA,6798 Avenue St,City,30641,Owner-occupied,2001,5,3-tab Shingle,Good,400000,700000,3,0,455211,0,0.8788264321126847,64,50,X,No,Yes
+APP-00198,Ryan Ortega,applicantAPP-00198@example.com,TX,9739 Pine St,City,49378,Owner-occupied,2010,5,Wood Shake,Good,451677,501864,0,0,0,0,0.0,25,64,X,No,Yes
+APP-00610,Betty Taylor,applicantAPP-00610@example.com,OH,8315 Walnut St,City,26228,Owner-occupied,2001,9,Asphalt,Good,433468,481632,0,0,0,0,0.0,11,46,X,No,Yes
+APP-00280,Sharon Martin,applicantAPP-00280@example.com,SC,4512 Mountain St,City,59345,Owner-occupied,2011,15,Tile,Good,406049,451166,0,0,0,0,0.0,18,39,X,No,Yes
+APP-00294,Steven Harris,applicantAPP-00294@example.com,IN,2025 Creek St,City,43126,Owner-occupied,2015,14,Asphalt,Good,410731,456368,0,0,0,0,0.0,13,33,X,No,Yes
+APP-00401,Betty Clark,applicantAPP-00401@example.com,CA,7055 Avenue St,City,52395,Owner-occupied,2019,15,3-tab Shingle,Good,423658,470732,0,0,0,0,0.0,27,34,X,No,Yes
+APP-00123,Barbara Jackson,applicantAPP-00123@example.com,IL,7033 Main St,City,90584,Owner-occupied,2011,6,3-tab Shingle,Good,463961,515513,0,0,0,0,0.0,17,42,X,No,Yes
+APP-00184,Ashley White,applicantAPP-00184@example.com,TX,991 Hill St,City,93588,Owner-occupied,2021,5,Wood Shake,Good,405752,450836,0,0,0,0,0.0,19,50,X,No,Yes
+APP-00203,Anthony Perez,applicantAPP-00203@example.com,CA,7053 Maple St,City,11382,Owner-occupied,2003,15,Metal,Good,483409,537122,0,0,0,0,0.0,21,20,X,No,Yes
+APP-00439,Christopher Gonzalez,applicantAPP-00439@example.com,OH,26 Maple St,City,13143,Owner-occupied,2014,13,Asphalt,Good,491017,545575,0,0,0,0,0.0,17,42,X,No,Yes
+APP-00247,James Brown,applicantAPP-00247@example.com,MA,3642 Pine St,City,35969,Owner-occupied,2012,12,Metal,Good,470582,522869,0,0,0,0,0.0,14,23,X,No,Yes
+APP-00416,Susan Gonzalez,applicantAPP-00416@example.com,MD,8203 Forest St,City,83490,Owner-occupied,2022,15,Architectural Shingle,Good,450595,500662,0,0,0,0,0.0,27,22,X,No,Yes
+APP-00933,Barbara Phillips,applicantAPP-00933@example.com,WI,8210 Apple St,City,78594,Owner-occupied,1998,7,Tile,Good,400000,700000,5,0,429269,0,0.9505913667758387,61,70,X,No,Yes
+APP-00766,Kevin Smith,applicantAPP-00766@example.com,NE,5065 Birch St,City,82311,Owner-occupied,2010,20,Architectural Shingle,Fair,550000,650000,2,0,307384,0,0.6178076134582144,32,41,X,No,Yes
+APP-00907,Ryan Smith,applicantAPP-00907@example.com,TN,9817 Lane St,City,62190,Owner-occupied,1979,10,Asphalt,Good,400000,700000,4,0,583969,0,1.0858438607517265,60,66,X,No,Yes
+APP-00836,Sarah Peterson,applicantAPP-00836@example.com,MA,8483 Hill St,City,75542,Owner-occupied,2002,20,Wood Shake,Fair,550000,650000,2,0,212297,0,0.43503751047649886,47,53,X,No,Yes
+APP-00888,Margaret Harris,applicantAPP-00888@example.com,FL,6317 Court St,City,72190,Owner-occupied,1999,20,Wood Shake,Fair,550000,650000,2,0,270382,0,0.5229117914402305,20,54,X,No,Yes
+APP-00130,Steven Williams,applicantAPP-00130@example.com,MO,5777 Hill St,City,67008,Owner-occupied,2008,10,Asphalt,Good,482965,536628,0,0,0,0,0.0,24,31,X,No,Yes
+APP-00638,Ronald Anderson,applicantAPP-00638@example.com,FL,770 Willow St,City,65058,Owner-occupied,2017,9,Tile,Good,419357,465953,0,0,0,0,0.0,19,50,X,No,Yes
+APP-00403,Donna King,applicantAPP-00403@example.com,MO,9115 Valley St,City,84922,Owner-occupied,2004,9,Architectural Shingle,Good,405774,450860,0,0,0,0,0.0,18,49,X,No,Yes
+APP-00785,Amanda Sanchez,applicantAPP-00785@example.com,CO,846 Street St,City,85740,Owner-occupied,1994,24,Asphalt,Fair,550000,650000,2,0,241813,0,0.45742817363932836,36,54,X,No,Yes
+APP-00771,Rebecca Robinson,applicantAPP-00771@example.com,CA,4227 River St,City,43557,Owner-occupied,2010,22,3-tab Shingle,Fair,550000,650000,2,0,188952,0,0.38660651259859435,42,33,X,No,Yes
+APP-00736,Richard Collins,applicantAPP-00736@example.com,TX,3261 River St,City,97194,Owner-occupied,1993,22,Tile,Fair,550000,650000,2,0,171813,0,0.3609418230174386,32,63,X,No,Yes
+APP-00914,Sandra Moore,applicantAPP-00914@example.com,LA,5659 Forest St,City,90903,Owner-occupied,1990,5,Asphalt,Good,400000,700000,5,0,541321,0,0.9899436743352474,70,65,X,No,Yes
+APP-00220,George Stewart,applicantAPP-00220@example.com,TX,5870 Boulevard St,City,18300,Owner-occupied,2017,10,Tile,Good,458637,509597,0,0,0,0,0.0,17,73,X,No,Yes
+APP-00642,Sharon Lewis,applicantAPP-00642@example.com,IL,898 Cherry St,City,90050,Owner-occupied,2020,6,Tile,Good,412158,457954,0,0,0,0,0.0,14,21,X,No,Yes
+APP-00916,Andrew Scott,applicantAPP-00916@example.com,MD,3994 Court St,City,16400,Owner-occupied,1998,5,Wood Shake,Good,400000,700000,3,0,505637,0,0.9228973497846243,59,69,X,No,Yes
+APP-00753,Brian Campbell,applicantAPP-00753@example.com,NY,222 Street St,City,11231,Owner-occupied,2007,20,Asphalt,Fair,550000,650000,2,0,155529,0,0.31085283712749584,38,39,X,No,Yes
+APP-00807,Andrew Perez,applicantAPP-00807@example.com,VA,871 Forest St,City,45728,Owner-occupied,1993,22,Architectural Shingle,Fair,550000,650000,2,0,283910,0,0.6098915380798223,46,48,X,No,Yes
+APP-00920,Jennifer Wilson,applicantAPP-00920@example.com,CA,8677 Walnut St,City,49850,Owner-occupied,1993,13,Metal,Good,400000,700000,5,0,480078,0,1.0165049345413661,68,47,X,No,Yes
+APP-00625,Sarah Allen,applicantAPP-00625@example.com,NV,8334 Lane St,City,76115,Owner-occupied,2012,11,Architectural Shingle,Good,443245,492495,0,0,0,0,0.0,29,38,X,No,Yes
+APP-00875,Ronald Morris,applicantAPP-00875@example.com,AR,6806 Main St,City,11932,Seasonal,2007,22,Wood Shake,Fair,550000,650000,2,0,238913,0,0.5124623020724745,32,51,X,No,Yes
+APP-00761,David Davis,applicantAPP-00761@example.com,CA,2345 Beach St,City,13453,Seasonal,2003,22,Metal,Fair,550000,650000,2,0,217732,0,0.4649770215092341,54,29,X,No,Yes
+APP-00387,Stephanie Williams,applicantAPP-00387@example.com,GA,3264 Forest St,City,22315,Owner-occupied,2016,8,Asphalt,Good,434500,482778,0,0,0,0,0.0,24,27,X,No,Yes
+APP-00973,Joshua Ortiz,applicantAPP-00973@example.com,OR,9995 Forest St,City,30142,Owner-occupied,1979,9,Asphalt,Good,400000,700000,4,0,391875,0,0.8681113220546243,59,53,X,No,Yes
+APP-00510,Amanda Johnson,applicantAPP-00510@example.com,OK,4777 Birch St,City,18250,Owner-occupied,2000,15,3-tab Shingle,Good,407676,452974,0,0,0,0,0.0,24,43,X,No,Yes
+APP-00268,Donna Brown,applicantAPP-00268@example.com,OH,6343 Avenue St,City,78495,Owner-occupied,2013,15,Wood Shake,Good,416407,462675,0,0,0,0,0.0,28,27,X,No,Yes
+APP-00820,Brian Robinson,applicantAPP-00820@example.com,IL,8943 Cedar St,City,59278,Owner-occupied,1993,25,3-tab Shingle,Fair,550000,650000,2,0,180401,0,0.37367897756695734,39,53,X,No,Yes
+APP-00442,David Young,applicantAPP-00442@example.com,WI,2546 Park St,City,70374,Owner-occupied,2017,5,Metal,Good,425718,473020,0,0,0,0,0.0,11,40,X,No,Yes
+APP-00497,Donald Gonzalez,applicantAPP-00497@example.com,NJ,6153 Ash St,City,19637,Owner-occupied,2015,15,Wood Shake,Good,443419,492688,0,0,0,0,0.0,17,43,X,No,Yes
+APP-00113,Amanda Stewart,applicantAPP-00113@example.com,VA,6422 Pine St,City,87993,Owner-occupied,2022,15,Architectural Shingle,Good,476097,528997,0,0,0,0,0.0,19,50,X,No,Yes
+APP-00692,Nancy Campbell,applicantAPP-00692@example.com,MA,8802 Pine St,City,82463,Owner-occupied,2005,11,Metal,Good,494691,549657,0,0,0,0,0.0,12,44,X,No,Yes
+APP-00233,Sarah Garcia,applicantAPP-00233@example.com,NH,7119 Maple St,City,69424,Owner-occupied,2019,15,Wood Shake,Good,481657,535175,0,0,0,0,0.0,17,21,X,No,Yes
+APP-00870,Christopher Moore,applicantAPP-00870@example.com,VA,8315 Birch St,City,63609,Owner-occupied,2007,22,Metal,Fair,550000,650000,2,0,230579,0,0.4959957494498592,37,35,X,No,Yes
+APP-00608,Nancy Garcia,applicantAPP-00608@example.com,IN,606 Creek St,City,53842,Owner-occupied,2012,14,Asphalt,Good,477924,531027,0,0,0,0,0.0,16,48,X,No,Yes
+APP-00672,Sharon Peterson,applicantAPP-00672@example.com,TX,2870 Mountain St,City,42654,Owner-occupied,2005,6,Wood Shake,Good,438963,487737,0,0,0,0,0.0,24,62,X,No,Yes
+APP-00374,Gary Jones,applicantAPP-00374@example.com,OH,1297 Cedar St,City,55039,Owner-occupied,2007,12,Metal,Good,479519,532799,0,0,0,0,0.0,28,32,X,No,Yes
+APP-00982,Nancy King,applicantAPP-00982@example.com,PA,9183 Cherry St,City,83389,Owner-occupied,2009,12,3-tab Shingle,Good,400000,700000,4,0,510094,0,1.0322216398776942,56,68,X,No,Yes
+APP-00843,Donald Morris,applicantAPP-00843@example.com,CO,7967 Willow St,City,20282,Owner-occupied,1994,24,Wood Shake,Fair,550000,650000,2,0,224719,0,0.41950701359408893,31,46,X,No,Yes
+APP-00234,James Hernandez,applicantAPP-00234@example.com,MN,8134 Walnut St,City,78551,Owner-occupied,2016,5,Asphalt,Good,441485,490539,0,0,0,0,0.0,14,42,X,No,Yes
+APP-00786,Linda Evans,applicantAPP-00786@example.com,TX,9453 Street St,City,61381,Seasonal,1998,23,Wood Shake,Fair,550000,650000,2,0,247505,0,0.5235220583413888,27,53,X,No,Yes
+APP-00677,Christopher Davis,applicantAPP-00677@example.com,CA,8760 Drive St,City,61229,Owner-occupied,2005,12,Architectural Shingle,Good,421544,468383,0,0,0,0,0.0,25,23,X,No,Yes
+APP-00318,Frank Reeves,applicantAPP-00318@example.com,CO,5123 Creek St,City,17051,Owner-occupied,2000,11,Asphalt,Good,433027,481142,0,0,0,0,0.0,22,33,X,No,Yes
+APP-00649,Frank Williams,applicantAPP-00649@example.com,SC,8126 Ash St,City,10484,Owner-occupied,2020,10,3-tab Shingle,Good,473231,525813,0,0,0,0,0.0,13,34,X,No,Yes
+APP-00411,Matthew Campbell,applicantAPP-00411@example.com,IL,397 Lane St,City,49953,Owner-occupied,2005,14,Metal,Good,415568,461743,0,0,0,0,0.0,16,30,X,No,Yes
+APP-00899,Edward King,applicantAPP-00899@example.com,AL,9038 Avenue St,City,45251,Owner-occupied,2006,24,3-tab Shingle,Fair,550000,650000,2,0,282142,0,0.5997814663015935,36,45,X,No,Yes
+APP-00710,Betty Rodriguez,applicantAPP-00710@example.com,NY,5135 Beach St,City,85617,Seasonal,1990,21,Metal,Fair,550000,650000,2,0,215825,0,0.46397714349593583,33,53,X,No,Yes
+APP-00359,Jennifer Torres,applicantAPP-00359@example.com,VA,4662 Drive St,City,83284,Owner-occupied,2018,10,Metal,Good,483995,537773,0,0,0,0,0.0,12,49,X,No,Yes
+APP-00259,Brian Peterson,applicantAPP-00259@example.com,NE,1706 River St,City,28434,Owner-occupied,2010,14,Asphalt,Good,451194,501327,0,0,0,0,0.0,29,27,X,No,Yes
+APP-00745,Paul Clark,applicantAPP-00745@example.com,FL,8582 Lake St,City,12867,Owner-occupied,2009,23,Metal,Fair,550000,650000,2,0,229179,0,0.42185023680630845,21,59,X,No,Yes
+APP-00628,Amanda Hernandez,applicantAPP-00628@example.com,PA,9 Oak St,City,73201,Owner-occupied,2008,7,Wood Shake,Good,433919,482133,0,0,0,0,0.0,29,29,X,No,Yes
+APP-00633,Ashley White,applicantAPP-00633@example.com,MO,3162 Forest St,City,11227,Owner-occupied,2007,15,Asphalt,Good,419558,466176,0,0,0,0,0.0,10,23,X,No,Yes
+APP-00283,David Morales,applicantAPP-00283@example.com,KS,418 Park St,City,75191,Owner-occupied,2009,7,Metal,Good,466021,517802,0,0,0,0,0.0,20,41,X,No,Yes
+APP-00377,Charles Parker,applicantAPP-00377@example.com,TX,2545 Elm St,City,95830,Owner-occupied,2012,6,Metal,Good,412524,458361,0,0,0,0,0.0,27,66,X,No,Yes
+APP-00385,James Allen,applicantAPP-00385@example.com,OR,3559 Apple St,City,65082,Owner-occupied,2009,9,Tile,Good,436754,485283,0,0,0,0,0.0,12,24,X,No,Yes
+APP-00225,Sharon Miller,applicantAPP-00225@example.com,FL,1691 Apple St,City,58177,Owner-occupied,2009,6,3-tab Shingle,Good,454817,505353,0,0,0,0,0.0,20,37,X,No,Yes
+APP-00954,Cynthia Lee,applicantAPP-00954@example.com,TX,3771 Garden St,City,37368,Owner-occupied,1987,9,Metal,Good,400000,700000,3,0,377453,0,0.8148390411550351,47,81,X,No,Yes
+APP-00815,Margaret Phillips,applicantAPP-00815@example.com,TX,6837 Willow St,City,50543,Owner-occupied,1991,20,Wood Shake,Fair,550000,650000,2,0,317294,0,0.63520287638434,25,58,X,No,Yes
+APP-00473,Emily Ramirez,applicantAPP-00473@example.com,AZ,195 Cherry St,City,68827,Owner-occupied,2012,12,Asphalt,Good,440550,489500,0,0,0,0,0.0,18,24,X,No,Yes
+APP-00348,Mark Rodriguez,applicantAPP-00348@example.com,AZ,1779 Main St,City,36522,Owner-occupied,2016,7,Wood Shake,Good,490428,544920,0,0,0,0,0.0,17,32,X,No,Yes
+APP-00506,Deborah Cook,applicantAPP-00506@example.com,CA,3355 Pine St,City,53899,Owner-occupied,2007,12,Wood Shake,Good,478035,531151,0,0,0,0,0.0,11,26,X,No,Yes
+APP-00640,Sharon Evans,applicantAPP-00640@example.com,KS,5478 Avenue St,City,42821,Owner-occupied,2007,10,Architectural Shingle,Good,441663,490737,0,0,0,0,0.0,10,38,X,No,Yes
+APP-00988,Donna Edwards,applicantAPP-00988@example.com,MD,943 Walnut St,City,72472,Owner-occupied,1984,14,Architectural Shingle,Good,400000,700000,3,0,523044,0,1.0249253415477226,67,64,X,No,Yes
+APP-00929,Betty Clark,applicantAPP-00929@example.com,NY,5568 Pine St,City,41859,Owner-occupied,2005,13,3-tab Shingle,Good,400000,700000,5,0,543473,0,1.0155564441986142,73,55,X,No,Yes
+APP-00906,Christopher Ortega,applicantAPP-00906@example.com,TX,6957 Hill St,City,61622,Owner-occupied,2009,11,Architectural Shingle,Good,400000,700000,4,0,497685,0,0.9172801097009396,34,82,X,No,Yes
+APP-00620,Brian Rogers,applicantAPP-00620@example.com,PA,5061 Creek St,City,94562,Owner-occupied,2003,13,Asphalt,Good,410404,456005,0,0,0,0,0.0,10,38,X,No,Yes
+APP-00856,Michael White,applicantAPP-00856@example.com,CT,7933 Hill St,City,40192,Owner-occupied,2003,21,3-tab Shingle,Fair,550000,650000,2,0,177633,0,0.3615843244860696,47,51,X,No,Yes
+APP-00804,Kimberly Miller,applicantAPP-00804@example.com,NM,5578 Birch St,City,87401,Seasonal,2006,21,Metal,Fair,550000,650000,2,0,157765,0,0.3427997175294693,42,41,X,No,Yes
+APP-00646,Andrew Edwards,applicantAPP-00646@example.com,TX,5862 Cherry St,City,86502,Owner-occupied,2017,7,3-tab Shingle,Good,433683,481870,0,0,0,0,0.0,19,59,X,No,Yes
+APP-00847,Ashley Ortiz,applicantAPP-00847@example.com,CA,3904 Pine St,City,11990,Owner-occupied,1998,25,Architectural Shingle,Fair,550000,650000,2,0,284336,0,0.6123786920058408,52,34,X,No,Yes
+APP-00557,Mary Brown,applicantAPP-00557@example.com,CA,1376 Apple St,City,88852,Owner-occupied,2009,9,Architectural Shingle,Good,437767,486408,0,0,0,0,0.0,31,32,X,No,Yes
+APP-00958,Daniel Williams,applicantAPP-00958@example.com,AZ,2306 Boulevard St,City,42636,Owner-occupied,1986,9,Wood Shake,Good,400000,700000,3,0,484348,0,0.9555024225494374,73,70,X,No,Yes
+APP-00578,Laura Hernandez,applicantAPP-00578@example.com,UT,8336 Avenue St,City,45755,Owner-occupied,2018,12,Asphalt,Good,418269,464744,0,0,0,0,0.0,19,25,X,No,Yes
+APP-00796,Ashley Peterson,applicantAPP-00796@example.com,TX,5269 Ash St,City,83615,Owner-occupied,2002,21,Metal,Fair,550000,650000,2,0,247122,0,0.4955184735138777,30,50,X,No,Yes
+APP-00086,Steven Lewis,applicantAPP-00086@example.com,IL,3869 Boulevard St,City,57537,Owner-occupied,2003,15,Asphalt,Good,416680,462978,0,0,0,0,0.0,21,26,X,No,Yes
+APP-00243,David Thomas,applicantAPP-00243@example.com,TX,4779 Willow St,City,51288,Owner-occupied,2012,13,Asphalt,Good,420749,467499,0,0,0,0,0.0,33,51,X,No,Yes
+APP-00699,Stephanie Sanchez,applicantAPP-00699@example.com,CA,5048 Main St,City,32072,Owner-occupied,2015,15,Architectural Shingle,Good,472547,525053,0,0,0,0,0.0,34,40,X,No,Yes
+APP-00160,Robert Smith,applicantAPP-00160@example.com,OK,4889 Valley St,City,89007,Owner-occupied,2003,5,Metal,Good,425651,472946,0,0,0,0,0.0,19,48,X,No,Yes
+APP-00525,Richard Brown,applicantAPP-00525@example.com,TX,4468 Walnut St,City,64986,Owner-occupied,2020,9,Metal,Good,424209,471344,0,0,0,0,0.0,29,72,X,No,Yes
+APP-00036,Sharon Gonzalez,applicantAPP-00036@example.com,TN,2415 Main St,City,16057,Owner-occupied,2007,15,Tile,Good,479664,532960,0,0,0,0,0.0,19,27,X,No,Yes
+APP-00541,Patricia Morgan,applicantAPP-00541@example.com,VA,1118 River St,City,98880,Owner-occupied,2000,6,3-tab Shingle,Good,434572,482858,0,0,0,0,0.0,13,43,X,No,Yes
+APP-00171,Joshua Harris,applicantAPP-00171@example.com,NY,3763 Ash St,City,70375,Owner-occupied,2011,7,3-tab Shingle,Good,490860,545401,0,0,0,0,0.0,27,33,X,No,Yes
+APP-00655,David Peterson,applicantAPP-00655@example.com,MD,8328 Valley St,City,74092,Owner-occupied,2006,13,Asphalt,Good,439703,488559,0,0,0,0,0.0,18,47,X,No,Yes
+APP-00891,Karen Edwards,applicantAPP-00891@example.com,OK,7844 Beach St,City,15756,Seasonal,1998,20,Metal,Fair,550000,650000,2,0,233305,0,0.4754699062327409,31,55,X,No,Yes
+APP-00858,Cynthia Williams,applicantAPP-00858@example.com,MI,7069 Main St,City,31880,Owner-occupied,1994,25,Wood Shake,Fair,550000,650000,2,0,261105,0,0.5513417979184131,33,39,X,No,Yes
+APP-00848,Charles Rogers,applicantAPP-00848@example.com,WI,9962 Main St,City,26293,Owner-occupied,2008,21,Asphalt,Fair,550000,650000,2,0,235114,0,0.4810280415897736,38,56,X,No,Yes
+APP-00945,Carol King,applicantAPP-00945@example.com,FL,7211 Boulevard St,City,45908,Owner-occupied,1981,9,Architectural Shingle,Good,400000,700000,4,0,405368,0,0.8124388718754509,27,75,X,No,Yes
+APP-00734,Barbara Clark,applicantAPP-00734@example.com,MS,2030 River St,City,10905,Owner-occupied,1998,25,3-tab Shingle,Fair,550000,650000,2,0,243747,0,0.4848766359193076,46,51,X,No,Yes
+APP-00096,Ronald Brown,applicantAPP-00096@example.com,MN,4713 Hill St,City,50953,Owner-occupied,2011,14,Architectural Shingle,Good,471247,523608,0,0,0,0,0.0,23,47,X,No,Yes
+APP-00564,Ryan Miller,applicantAPP-00564@example.com,AL,2628 Court St,City,44205,Owner-occupied,2016,9,Architectural Shingle,Good,414448,460498,0,0,0,0,0.0,23,48,X,No,Yes
+APP-00241,Stephanie Morales,applicantAPP-00241@example.com,VA,5039 Maple St,City,36895,Owner-occupied,2016,13,3-tab Shingle,Good,445865,495406,0,0,0,0,0.0,22,47,X,No,Yes
+APP-00743,Mark Garcia,applicantAPP-00743@example.com,PA,1743 Pine St,City,92517,Seasonal,2009,25,Architectural Shingle,Fair,550000,650000,2,0,318592,0,0.5820339546601337,36,53,X,No,Yes
+APP-00575,David Allen,applicantAPP-00575@example.com,TX,4604 Drive St,City,57263,Owner-occupied,2013,12,Metal,Good,420561,467290,0,0,0,0,0.0,23,53,X,No,Yes
+APP-00691,Mark Hernandez,applicantAPP-00691@example.com,IL,7713 Forest St,City,65403,Owner-occupied,2016,9,Wood Shake,Good,472996,525552,0,0,0,0,0.0,21,32,X,No,Yes
+APP-00461,Edward Phillips,applicantAPP-00461@example.com,CA,6460 Park St,City,51697,Owner-occupied,2022,13,Tile,Good,411266,456963,0,0,0,0,0.0,10,37,X,No,Yes
+APP-00554,Betty Robinson,applicantAPP-00554@example.com,NC,2421 Ash St,City,29722,Owner-occupied,2021,12,Metal,Good,436606,485118,0,0,0,0,0.0,26,26,X,No,Yes
+APP-00889,Frank Taylor,applicantAPP-00889@example.com,CA,1971 Creek St,City,67070,Seasonal,2001,22,3-tab Shingle,Fair,550000,650000,2,0,296770,0,0.6448031391703187,46,30,X,No,Yes
+APP-00207,Ashley Anderson,applicantAPP-00207@example.com,CA,6637 Park St,City,34176,Owner-occupied,2005,15,Asphalt,Good,424387,471542,0,0,0,0,0.0,33,22,X,No,Yes
+APP-00393,Cynthia Torres,applicantAPP-00393@example.com,IN,2628 Elm St,City,79617,Owner-occupied,2004,12,Tile,Good,427386,474874,0,0,0,0,0.0,29,49,X,No,Yes
+APP-00795,Linda Lopez,applicantAPP-00795@example.com,AR,5287 Mountain St,City,34368,Owner-occupied,1997,20,Architectural Shingle,Fair,550000,650000,2,0,150425,0,0.31875038406851997,42,35,X,No,Yes
+APP-00398,Robert Morales,applicantAPP-00398@example.com,MA,1154 Avenue St,City,49833,Owner-occupied,2002,15,3-tab Shingle,Good,412160,457956,0,0,0,0,0.0,18,36,X,No,Yes
+APP-00767,James Thompson,applicantAPP-00767@example.com,PA,4627 Beach St,City,75564,Owner-occupied,2000,21,Tile,Fair,550000,650000,2,0,287797,0,0.6240908519210836,32,44,X,No,Yes
+APP-00849,Brian Peterson,applicantAPP-00849@example.com,MN,9120 Birch St,City,63557,Owner-occupied,2008,22,Architectural Shingle,Fair,550000,650000,2,0,258370,0,0.5457372004063933,41,50,X,No,Yes
+APP-00218,Barbara Morris,applicantAPP-00218@example.com,PA,5278 Avenue St,City,42447,Owner-occupied,2021,7,Tile,Good,493484,548316,0,0,0,0,0.0,14,27,X,No,Yes
+APP-00005,Ashley Evans,applicantAPP-00005@example.com,CA,5978 Cedar St,City,58520,Owner-occupied,2011,5,3-tab Shingle,Good,483005,536673,0,0,0,0,0.0,17,39,X,No,Yes
+APP-00769,David Perez,applicantAPP-00769@example.com,IL,4766 Walnut St,City,91719,Owner-occupied,1991,25,Asphalt,Fair,550000,650000,2,0,162551,0,0.35312455194407394,44,60,X,No,Yes
+APP-00643,Anthony Clark,applicantAPP-00643@example.com,FL,3820 Boulevard St,City,88587,Owner-occupied,2021,6,Wood Shake,Good,417011,463346,0,0,0,0,0.0,6,44,X,No,Yes
+APP-00930,Lisa Rogers,applicantAPP-00930@example.com,FL,7379 Court St,City,43806,Owner-occupied,2011,9,Metal,Good,400000,700000,3,0,414021,0,0.8393616309550599,22,73,X,No,Yes
+APP-00613,Jessica Lewis,applicantAPP-00613@example.com,NY,1280 Walnut St,City,98712,Owner-occupied,2016,7,Tile,Good,488948,543276,0,0,0,0,0.0,14,35,X,No,Yes
+APP-00739,Brian Evans,applicantAPP-00739@example.com,MD,2437 Ash St,City,25789,Owner-occupied,2002,21,Architectural Shingle,Fair,550000,650000,2,0,208604,0,0.4485384077836908,36,53,X,No,Yes
+APP-00547,Donald Thompson,applicantAPP-00547@example.com,CA,925 Garden St,City,42011,Owner-occupied,2007,14,3-tab Shingle,Good,408172,453525,0,0,0,0,0.0,34,35,X,No,Yes
+APP-00726,Kimberly Miller,applicantAPP-00726@example.com,TX,8667 Walnut St,City,84993,Owner-occupied,2007,22,Metal,Fair,550000,650000,2,0,237720,0,0.5136138346462478,25,59,X,No,Yes
+APP-00684,Anthony Stewart,applicantAPP-00684@example.com,NY,5210 Boulevard St,City,97342,Owner-occupied,2015,6,Architectural Shingle,Good,475762,528625,0,0,0,0,0.0,15,40,X,No,Yes
+APP-00099,Emily Wilson,applicantAPP-00099@example.com,AR,6164 Mountain St,City,69460,Owner-occupied,2010,7,3-tab Shingle,Good,471805,524228,0,0,0,0,0.0,12,43,X,No,Yes
+APP-00805,Cynthia Parker,applicantAPP-00805@example.com,MA,8413 Birch St,City,62455,Owner-occupied,1992,22,Metal,Fair,550000,650000,2,0,324632,0,0.6371467432371165,42,49,X,No,Yes
+APP-00728,Steven Thompson,applicantAPP-00728@example.com,SC,7679 Lake St,City,47594,Owner-occupied,2003,21,Wood Shake,Fair,550000,650000,2,0,298677,0,0.597772440708496,44,40,X,No,Yes
+APP-00574,Michelle Lopez,applicantAPP-00574@example.com,NV,4265 Cedar St,City,76027,Owner-occupied,2015,13,Metal,Good,478097,531219,0,0,0,0,0.0,27,21,X,No,Yes
+APP-00407,Joshua Peterson,applicantAPP-00407@example.com,KY,2451 Apple St,City,75850,Owner-occupied,2022,15,3-tab Shingle,Good,476049,528944,0,0,0,0,0.0,11,30,X,No,Yes
+APP-00503,Deborah Robinson,applicantAPP-00503@example.com,ID,9346 Drive St,City,86501,Owner-occupied,2000,10,Tile,Good,439892,488769,0,0,0,0,0.0,19,25,X,No,Yes
+APP-00048,Kenneth Rogers,applicantAPP-00048@example.com,MO,673 Walnut St,City,79827,Owner-occupied,2013,15,Asphalt,Good,433647,481830,0,0,0,0,0.0,13,45,X,No,Yes
+APP-00033,Gary Davis,applicantAPP-00033@example.com,CA,4921 Lake St,City,50538,Owner-occupied,2021,15,Tile,Good,428242,475825,0,0,0,0,0.0,21,28,X,No,Yes
+APP-00780,Andrew Ortega,applicantAPP-00780@example.com,NY,2044 Court St,City,75422,Seasonal,2004,24,Tile,Fair,550000,650000,2,0,234746,0,0.49076263408658055,39,44,X,No,Yes
+APP-00840,Carol White,applicantAPP-00840@example.com,NY,5764 Birch St,City,54974,Owner-occupied,1991,23,3-tab Shingle,Fair,550000,650000,2,0,249110,0,0.4974827305932608,44,38,X,No,Yes
+APP-00201,Sandra Rogers,applicantAPP-00201@example.com,NY,6177 Elm St,City,68860,Owner-occupied,2019,11,Tile,Good,484387,538208,0,0,0,0,0.0,14,42,X,No,Yes
+APP-00135,Nancy Peterson,applicantAPP-00135@example.com,VA,2581 Court St,City,93584,Owner-occupied,2005,6,Metal,Good,485442,539381,0,0,0,0,0.0,27,29,X,No,Yes
+APP-00028,Rebecca Torres,applicantAPP-00028@example.com,MO,6659 Hill St,City,30257,Owner-occupied,2007,9,3-tab Shingle,Good,448015,497795,0,0,0,0,0.0,13,31,X,No,Yes
+APP-00881,Steven Davis,applicantAPP-00881@example.com,FL,640 Mountain St,City,74904,Owner-occupied,2010,25,Wood Shake,Fair,550000,650000,2,0,250725,0,0.5406259164064791,14,45,X,No,Yes
+APP-00231,Deborah King,applicantAPP-00231@example.com,SC,6807 Mountain St,City,62727,Owner-occupied,2002,6,Asphalt,Good,406626,451807,0,0,0,0,0.0,19,40,X,No,Yes
+APP-00490,Richard Lewis,applicantAPP-00490@example.com,TX,3992 Valley St,City,15334,Owner-occupied,2004,7,Architectural Shingle,Good,444577,493975,0,0,0,0,0.0,28,55,X,No,Yes
+APP-00773,Christopher Harris,applicantAPP-00773@example.com,CA,2593 Valley St,City,62334,Owner-occupied,1997,23,Tile,Fair,550000,650000,2,0,173025,0,0.3207356204225313,59,45,X,No,Yes
+APP-00379,Ashley Evans,applicantAPP-00379@example.com,TN,9241 Mountain St,City,78610,Owner-occupied,2020,12,Asphalt,Good,468769,520855,0,0,0,0,0.0,28,39,X,No,Yes
+APP-00289,Frank Murphy,applicantAPP-00289@example.com,GA,1443 Pine St,City,90541,Owner-occupied,2013,5,Asphalt,Good,405555,450617,0,0,0,0,0.0,15,35,X,No,Yes
+APP-00419,Nancy Campbell,applicantAPP-00419@example.com,NY,5396 Forest St,City,81071,Owner-occupied,2004,11,3-tab Shingle,Good,466425,518251,0,0,0,0,0.0,14,33,X,No,Yes
+APP-00675,Melissa Ortiz,applicantAPP-00675@example.com,MA,7568 Beach St,City,55043,Owner-occupied,2012,7,3-tab Shingle,Good,434817,483130,0,0,0,0,0.0,30,42,X,No,Yes
+APP-00392,Robert Allen,applicantAPP-00392@example.com,MA,7169 Creek St,City,48628,Owner-occupied,2017,10,Asphalt,Good,456752,507503,0,0,0,0,0.0,14,28,X,No,Yes
+APP-00593,Cynthia Lewis,applicantAPP-00593@example.com,CO,9589 Ash St,City,36389,Owner-occupied,2009,12,Wood Shake,Good,454766,505296,0,0,0,0,0.0,25,20,X,No,Yes
+APP-00499,Donald Hernandez,applicantAPP-00499@example.com,WA,5630 Ash St,City,48687,Owner-occupied,2019,10,3-tab Shingle,Good,420005,466673,0,0,0,0,0.0,24,34,X,No,Yes
+APP-00139,Christopher Peterson,applicantAPP-00139@example.com,IN,1293 Willow St,City,35729,Owner-occupied,2020,7,Wood Shake,Good,440875,489862,0,0,0,0,0.0,26,48,X,No,Yes
+APP-00063,Jennifer Anderson,applicantAPP-00063@example.com,TX,9425 Valley St,City,12719,Owner-occupied,2021,13,Metal,Good,463249,514722,0,0,0,0,0.0,25,69,X,No,Yes
+APP-00472,Amanda Taylor,applicantAPP-00472@example.com,WA,1901 Oak St,City,31967,Owner-occupied,2014,8,Tile,Good,482934,536594,0,0,0,0,0.0,21,21,X,No,Yes
+APP-00648,Joseph Collins,applicantAPP-00648@example.com,NY,7795 Court St,City,71263,Owner-occupied,2019,5,Asphalt,Good,454788,505320,0,0,0,0,0.0,12,30,X,No,Yes
+APP-00129,Ryan Lopez,applicantAPP-00129@example.com,AL,8938 Cherry St,City,52101,Owner-occupied,2003,10,Architectural Shingle,Good,466255,518062,0,0,0,0,0.0,23,39,X,No,Yes
+APP-00977,Amanda Miller,applicantAPP-00977@example.com,NJ,9432 Maple St,City,25397,Owner-occupied,1990,12,Metal,Good,400000,700000,5,0,571883,0,1.0800169212087334,68,75,X,No,Yes
+APP-00521,Susan Torres,applicantAPP-00521@example.com,NJ,7572 Court St,City,84437,Owner-occupied,2004,6,3-tab Shingle,Good,474678,527421,0,0,0,0,0.0,18,33,X,No,Yes
+APP-00839,Patricia Johnson,applicantAPP-00839@example.com,NJ,3215 Creek St,City,89709,Owner-occupied,1990,20,Wood Shake,Fair,550000,650000,2,0,266578,0,0.5863161089679018,37,35,X,No,Yes
+APP-00963,Deborah Sanchez,applicantAPP-00963@example.com,FL,4626 Hill St,City,23792,Owner-occupied,1990,12,3-tab Shingle,Good,400000,700000,5,0,471353,0,0.8980324764276311,19,69,X,No,Yes
+APP-00065,Edward Allen,applicantAPP-00065@example.com,GA,4723 Garden St,City,62488,Owner-occupied,2017,12,Architectural Shingle,Good,446046,495607,0,0,0,0,0.0,20,33,X,No,Yes
+APP-00813,Ashley Smith,applicantAPP-00813@example.com,CA,5778 Cherry St,City,53743,Seasonal,2009,20,Tile,Fair,550000,650000,2,0,251942,0,0.46101596909749987,54,40,X,No,Yes
+APP-00015,Brian Brown,applicantAPP-00015@example.com,CO,3751 Elm St,City,14117,Owner-occupied,2010,10,Architectural Shingle,Good,407481,452757,0,0,0,0,0.0,12,42,X,No,Yes
+APP-00157,Stephanie Phillips,applicantAPP-00157@example.com,NY,3921 Ash St,City,16653,Owner-occupied,2021,12,Wood Shake,Good,430242,478047,0,0,0,0,0.0,13,39,X,No,Yes
+APP-00041,Patricia Wilson,applicantAPP-00041@example.com,CA,6884 Beach St,City,86556,Owner-occupied,2022,7,Architectural Shingle,Good,488331,542591,0,0,0,0,0.0,16,17,X,No,Yes
+APP-00493,Joseph Davis,applicantAPP-00493@example.com,GA,8687 Maple St,City,91123,Owner-occupied,2011,14,Wood Shake,Good,415383,461537,0,0,0,0,0.0,27,27,X,No,Yes
+APP-00380,Donald Taylor,applicantAPP-00380@example.com,GA,2552 Cherry St,City,11383,Owner-occupied,2000,13,Wood Shake,Good,441528,490587,0,0,0,0,0.0,19,31,X,No,Yes
+APP-00188,Sandra Edwards,applicantAPP-00188@example.com,NC,5428 Valley St,City,22499,Owner-occupied,2016,13,Architectural Shingle,Good,461151,512390,0,0,0,0,0.0,25,47,X,No,Yes
+APP-00764,Emily Harris,applicantAPP-00764@example.com,PA,2051 Drive St,City,37769,Owner-occupied,2009,23,Architectural Shingle,Fair,550000,650000,2,0,280825,0,0.5208990272965373,38,37,X,No,Yes
+APP-00217,Christopher Jackson,applicantAPP-00217@example.com,IL,9384 Willow St,City,77425,Owner-occupied,2021,8,Architectural Shingle,Good,412002,457780,0,0,0,0,0.0,20,42,X,No,Yes
+APP-00792,Jennifer Morales,applicantAPP-00792@example.com,NJ,2074 Willow St,City,45870,Owner-occupied,1996,24,Architectural Shingle,Fair,550000,650000,2,0,204858,0,0.37264525048204605,34,42,X,No,Yes
+APP-00053,Sarah Martin,applicantAPP-00053@example.com,VA,9529 Walnut St,City,72031,Owner-occupied,2017,15,Wood Shake,Good,488971,543302,0,0,0,0,0.0,22,42,X,No,Yes
+APP-00879,Kimberly Taylor,applicantAPP-00879@example.com,AR,6748 Cherry St,City,54285,Owner-occupied,1991,24,Metal,Fair,550000,650000,2,0,175346,0,0.38036421219319083,31,59,X,No,Yes
+APP-00338,Joshua Young,applicantAPP-00338@example.com,OH,2436 Walnut St,City,61445,Owner-occupied,2007,14,Wood Shake,Good,473289,525877,0,0,0,0,0.0,27,48,X,No,Yes
+APP-00749,Brian Ortega,applicantAPP-00749@example.com,TX,171 Avenue St,City,56593,Owner-occupied,1998,24,3-tab Shingle,Fair,550000,650000,2,0,169584,0,0.34430503106346694,39,59,X,No,Yes
+APP-00720,Steven Gutierrez,applicantAPP-00720@example.com,OR,5150 Maple St,City,15130,Owner-occupied,2008,24,3-tab Shingle,Fair,550000,650000,2,0,333904,0,0.6143000117744024,30,52,X,No,Yes
+APP-00725,Michael Perez,applicantAPP-00725@example.com,NH,1458 Walnut St,City,53714,Owner-occupied,1994,23,3-tab Shingle,Fair,550000,650000,2,0,294250,0,0.6489911688678329,47,48,X,No,Yes
+APP-00296,Joseph Cook,applicantAPP-00296@example.com,MS,4309 Avenue St,City,78569,Owner-occupied,2006,13,Metal,Good,489789,544210,0,0,0,0,0.0,16,39,X,No,Yes
+APP-00702,Michelle Thomas,applicantAPP-00702@example.com,CA,7830 River St,City,98185,Owner-occupied,1990,20,Architectural Shingle,Fair,550000,650000,2,0,162453,0,0.3443449617825484,49,27,X,No,Yes
+APP-00252,Mary Gutierrez,applicantAPP-00252@example.com,KY,4603 Oak St,City,71824,Owner-occupied,2016,14,Metal,Good,464264,515849,0,0,0,0,0.0,29,27,X,No,Yes
+APP-00727,David Taylor,applicantAPP-00727@example.com,CA,156 Garden St,City,77314,Seasonal,1994,24,Asphalt,Fair,550000,650000,2,0,181645,0,0.398094616096045,50,37,X,No,Yes
+APP-00462,Donna Harris,applicantAPP-00462@example.com,NY,5903 Avenue St,City,64687,Owner-occupied,2004,11,Metal,Good,450010,500012,0,0,0,0,0.0,14,26,X,No,Yes
+APP-00456,Edward Phillips,applicantAPP-00456@example.com,MN,7064 Street St,City,67062,Owner-occupied,2018,14,Metal,Good,433746,481941,0,0,0,0,0.0,16,46,X,No,Yes
+APP-00997,Patricia Young,applicantAPP-00997@example.com,TX,9686 Maple St,City,78136,Owner-occupied,1980,13,Asphalt,Good,400000,700000,3,0,460022,0,0.9305649675228129,36,82,X,No,Yes
+APP-00816,Kimberly Reeves,applicantAPP-00816@example.com,MO,2411 Forest St,City,99249,Owner-occupied,2006,24,Metal,Fair,550000,650000,2,0,309025,0,0.6243017578026356,33,35,X,No,Yes
+APP-00863,Anthony Hernandez,applicantAPP-00863@example.com,MS,449 Hill St,City,15209,Seasonal,2007,21,3-tab Shingle,Fair,550000,650000,2,0,304103,0,0.6283080889994483,47,51,X,No,Yes
+APP-00270,Sandra Gonzalez,applicantAPP-00270@example.com,GA,2423 Avenue St,City,87994,Owner-occupied,2008,12,Metal,Good,425393,472659,0,0,0,0,0.0,12,41,X,No,Yes
+APP-00202,Sharon Scott,applicantAPP-00202@example.com,CA,9730 Park St,City,21138,Owner-occupied,2003,14,3-tab Shingle,Good,452280,502534,0,0,0,0,0.0,27,31,X,No,Yes
+APP-00162,Brian Sanchez,applicantAPP-00162@example.com,NY,7008 Lake St,City,52982,Owner-occupied,2002,7,Tile,Good,406661,451846,0,0,0,0,0.0,29,47,X,No,Yes
+APP-00556,Amanda Williams,applicantAPP-00556@example.com,LA,3310 Cedar St,City,45744,Owner-occupied,2004,7,Architectural Shingle,Good,427638,475154,0,0,0,0,0.0,23,33,X,No,Yes
+APP-00730,Carol Gonzalez,applicantAPP-00730@example.com,CA,120 Court St,City,65702,Seasonal,2007,23,Asphalt,Fair,550000,650000,2,0,285019,0,0.5637555086120276,44,40,X,No,Yes
+APP-00402,Ronald Williams,applicantAPP-00402@example.com,TX,4661 Hill St,City,12136,Owner-occupied,2016,14,3-tab Shingle,Good,469364,521516,0,0,0,0,0.0,29,64,X,No,Yes
+APP-00703,Anthony Moore,applicantAPP-00703@example.com,IL,7962 River St,City,54175,Seasonal,2003,22,Metal,Fair,550000,650000,2,0,313845,0,0.5842183151683249,49,51,X,No,Yes
+APP-00477,Deborah Davis,applicantAPP-00477@example.com,CA,1416 Boulevard St,City,89257,Owner-occupied,2004,5,Tile,Good,407795,453106,0,0,0,0,0.0,29,17,X,No,Yes
+APP-00822,James Robinson,applicantAPP-00822@example.com,AL,8488 Forest St,City,17123,Owner-occupied,1991,22,Metal,Fair,550000,650000,2,0,292090,0,0.5552366252014964,42,56,X,No,Yes
+APP-00772,Andrew Peterson,applicantAPP-00772@example.com,TX,5139 Walnut St,City,20943,Seasonal,2003,20,Wood Shake,Fair,550000,650000,2,0,164577,0,0.32019058476995,39,54,X,No,Yes
+APP-00106,Ronald Ortega,applicantAPP-00106@example.com,FL,2420 Ash St,City,23474,Owner-occupied,2004,10,Metal,Good,424833,472037,0,0,0,0,0.0,8,51,X,No,Yes
+APP-00566,Emily Morris,applicantAPP-00566@example.com,NJ,2132 Boulevard St,City,87858,Owner-occupied,2021,11,Tile,Good,428601,476224,0,0,0,0,0.0,15,27,X,No,Yes
+APP-00390,Jennifer Thomas,applicantAPP-00390@example.com,TN,2584 River St,City,21980,Owner-occupied,2021,5,Wood Shake,Good,409953,455504,0,0,0,0,0.0,21,44,X,No,Yes
+APP-00002,Joshua Clark,applicantAPP-00002@example.com,VA,3612 Forest St,City,87236,Owner-occupied,2008,6,Architectural Shingle,Good,430791,478657,0,0,0,0,0.0,30,42,X,No,Yes
+APP-00938,Joseph Miller,applicantAPP-00938@example.com,TX,8887 Valley St,City,38179,Owner-occupied,2013,6,Tile,Good,400000,700000,5,0,448942,0,0.9830236810124919,33,84,X,No,Yes
+APP-00983,Joshua Thompson,applicantAPP-00983@example.com,CA,6501 Pine St,City,60494,Owner-occupied,1981,11,Asphalt,Good,400000,700000,5,0,452847,0,0.8367801351865745,66,37,X,No,Yes
+APP-00562,Sharon Reeves,applicantAPP-00562@example.com,FL,2000 Creek St,City,40983,Owner-occupied,2014,15,Tile,Good,433272,481414,0,0,0,0,0.0,17,44,X,No,Yes
+APP-00081,Frank Scott,applicantAPP-00081@example.com,TX,5995 Lake St,City,75771,Owner-occupied,2008,10,3-tab Shingle,Good,491391,545991,0,0,0,0,0.0,28,55,X,No,Yes
+APP-00206,Deborah Davis,applicantAPP-00206@example.com,AL,371 Boulevard St,City,54967,Owner-occupied,2020,6,Architectural Shingle,Good,456687,507431,0,0,0,0,0.0,11,45,X,No,Yes
+APP-00035,Paul Rogers,applicantAPP-00035@example.com,WA,2781 Garden St,City,21114,Owner-occupied,2009,9,Wood Shake,Good,438845,487606,0,0,0,0,0.0,16,36,X,No,Yes
+APP-00776,Jennifer Martinez,applicantAPP-00776@example.com,CA,1135 Willow St,City,63093,Owner-occupied,1999,22,Asphalt,Fair,550000,650000,2,0,209561,0,0.40925886143931256,41,31,X,No,Yes
+APP-00509,Karen Davis,applicantAPP-00509@example.com,VA,2425 River St,City,29726,Owner-occupied,2006,8,Wood Shake,Good,459012,510014,0,0,0,0,0.0,13,25,X,No,Yes
+APP-00428,Andrew Davis,applicantAPP-00428@example.com,TX,2946 Lane St,City,86735,Owner-occupied,2022,14,Wood Shake,Good,411434,457149,0,0,0,0,0.0,35,64,X,No,Yes
+APP-00455,Nancy Scott,applicantAPP-00455@example.com,CA,7553 Beach St,City,87402,Owner-occupied,2013,6,3-tab Shingle,Good,452856,503174,0,0,0,0,0.0,32,40,X,No,Yes
+APP-00367,Emily Robinson,applicantAPP-00367@example.com,WA,5172 Court St,City,11103,Owner-occupied,2000,13,Asphalt,Good,408841,454268,0,0,0,0,0.0,13,42,X,No,Yes
+APP-00092,Kevin Martinez,applicantAPP-00092@example.com,OH,1077 Pine St,City,46046,Owner-occupied,2019,5,Asphalt,Good,461502,512781,0,0,0,0,0.0,12,30,X,No,Yes
+APP-00340,Anthony Allen,applicantAPP-00340@example.com,CA,3797 Elm St,City,44649,Owner-occupied,2011,7,3-tab Shingle,Good,426132,473480,0,0,0,0,0.0,28,33,X,No,Yes
+APP-00898,Amanda Wright,applicantAPP-00898@example.com,TX,7368 Avenue St,City,92709,Seasonal,1995,22,Architectural Shingle,Fair,550000,650000,2,0,277667,0,0.51284007166208,38,61,X,No,Yes
+APP-00565,Amanda Lopez,applicantAPP-00565@example.com,IL,7265 Street St,City,94030,Owner-occupied,2004,10,Architectural Shingle,Good,454647,505164,0,0,0,0,0.0,11,40,X,No,Yes
+APP-00346,Kenneth Evans,applicantAPP-00346@example.com,NV,306 Drive St,City,96736,Owner-occupied,2009,5,Architectural Shingle,Good,472507,525008,0,0,0,0,0.0,22,39,X,No,Yes
+APP-00777,Joseph Thompson,applicantAPP-00777@example.com,FL,6867 River St,City,72324,Seasonal,1995,23,Asphalt,Fair,550000,650000,2,0,211760,0,0.40818608165649223,11,47,X,No,Yes
+APP-00242,Edward White,applicantAPP-00242@example.com,VA,7512 Drive St,City,21128,Owner-occupied,2018,11,Architectural Shingle,Good,463041,514491,0,0,0,0,0.0,26,33,X,No,Yes
+APP-00014,Steven Wright,applicantAPP-00014@example.com,FL,7398 Maple St,City,42493,Owner-occupied,2007,11,Architectural Shingle,Good,429984,477760,0,0,0,0,0.0,11,57,X,No,Yes
+APP-00316,Karen Murphy,applicantAPP-00316@example.com,OH,2637 Cherry St,City,99573,Owner-occupied,2008,5,3-tab Shingle,Good,466663,518515,0,0,0,0,0.0,11,26,X,No,Yes
+APP-00601,Frank Parker,applicantAPP-00601@example.com,CA,9989 Street St,City,23352,Owner-occupied,2017,14,Architectural Shingle,Good,483975,537750,0,0,0,0,0.0,13,37,X,No,Yes
+APP-00388,Donna Wright,applicantAPP-00388@example.com,CO,2002 Willow St,City,73075,Owner-occupied,2020,8,Metal,Good,460776,511974,0,0,0,0,0.0,11,43,X,No,Yes
+APP-00274,Karen Morgan,applicantAPP-00274@example.com,TX,8055 Boulevard St,City,99764,Owner-occupied,2003,8,3-tab Shingle,Good,410814,456460,0,0,0,0,0.0,15,60,X,No,Yes
+APP-00167,Michelle Allen,applicantAPP-00167@example.com,IL,1490 Lake St,City,68390,Owner-occupied,2001,14,Tile,Good,468306,520341,0,0,0,0,0.0,16,42,X,No,Yes
+APP-00841,David Lewis,applicantAPP-00841@example.com,AL,2959 Cherry St,City,15730,Owner-occupied,2001,21,Wood Shake,Fair,550000,650000,2,0,160779,0,0.3049961016862341,32,36,X,No,Yes
+APP-00993,Melissa White,applicantAPP-00993@example.com,GA,1565 Cedar St,City,10226,Owner-occupied,2008,8,Architectural Shingle,Good,400000,700000,4,0,449248,0,0.8399780866176919,67,51,X,No,Yes
+APP-00647,George Reeves,applicantAPP-00647@example.com,NJ,2370 Oak St,City,41114,Owner-occupied,2016,7,Wood Shake,Good,460386,511541,0,0,0,0,0.0,26,38,X,No,Yes
+APP-00819,Nancy Lopez,applicantAPP-00819@example.com,CA,9240 Mountain St,City,98987,Owner-occupied,2008,20,3-tab Shingle,Fair,550000,650000,2,0,214146,0,0.43132681547367274,60,37,X,No,Yes
+APP-00485,Michael Rogers,applicantAPP-00485@example.com,NJ,8857 Park St,City,50334,Owner-occupied,2015,8,Wood Shake,Good,421507,468342,0,0,0,0,0.0,25,32,X,No,Yes
+APP-00981,Kimberly Evans,applicantAPP-00981@example.com,IL,3051 Lane St,City,60160,Owner-occupied,1987,10,Metal,Good,400000,700000,5,0,476093,0,0.9146013712498583,60,69,X,No,Yes
+APP-00505,Patricia King,applicantAPP-00505@example.com,OH,5964 Oak St,City,24544,Owner-occupied,2012,9,Metal,Good,455240,505823,0,0,0,0,0.0,20,43,X,No,Yes
+APP-00832,William Stewart,applicantAPP-00832@example.com,ME,7365 Beach St,City,27460,Seasonal,2008,20,Wood Shake,Fair,550000,650000,2,0,224722,0,0.4238414343185535,35,45,X,No,Yes
+APP-00244,Barbara Miller,applicantAPP-00244@example.com,IN,2694 Forest St,City,71086,Owner-occupied,2010,10,Tile,Good,442519,491688,0,0,0,0,0.0,28,23,X,No,Yes
+APP-00567,Daniel Gutierrez,applicantAPP-00567@example.com,KY,4617 Birch St,City,21062,Owner-occupied,2013,10,Metal,Good,458259,509177,0,0,0,0,0.0,28,46,X,No,Yes
+APP-00876,Ashley Gonzalez,applicantAPP-00876@example.com,CA,1634 Willow St,City,95989,Seasonal,2005,21,Tile,Fair,550000,650000,2,0,318126,0,0.5821664116884923,52,31,X,No,Yes
+APP-00563,Richard Lewis,applicantAPP-00563@example.com,CA,5197 Street St,City,94466,Owner-occupied,2013,5,Architectural Shingle,Good,451357,501508,0,0,0,0,0.0,18,24,X,No,Yes
+APP-00687,Amanda Rogers,applicantAPP-00687@example.com,NE,649 Lake St,City,64380,Owner-occupied,2020,5,Metal,Good,433082,481203,0,0,0,0,0.0,18,30,X,No,Yes
+APP-00190,Kenneth Morgan,applicantAPP-00190@example.com,FL,6376 Garden St,City,80852,Owner-occupied,2010,14,Tile,Good,422009,468899,0,0,0,0,0.0,17,37,X,No,Yes
+APP-00783,Gary Young,applicantAPP-00783@example.com,FL,2039 Walnut St,City,70810,Owner-occupied,2010,23,Asphalt,Fair,550000,650000,2,0,166409,0,0.31625689161375414,16,52,X,No,Yes
+APP-00700,Sandra Hernandez,applicantAPP-00700@example.com,MI,2891 Walnut St,City,34431,Owner-occupied,2022,6,3-tab Shingle,Good,413238,459154,0,0,0,0,0.0,19,43,X,No,Yes
+APP-00476,Steven Thompson,applicantAPP-00476@example.com,WI,3595 Drive St,City,47132,Owner-occupied,2008,5,3-tab Shingle,Good,484366,538185,0,0,0,0,0.0,13,41,X,No,Yes
+APP-00682,Mark Wilson,applicantAPP-00682@example.com,FL,7517 Ash St,City,18652,Owner-occupied,2021,8,Metal,Good,417490,463878,0,0,0,0,0.0,10,35,X,No,Yes
+APP-00511,Michelle Collins,applicantAPP-00511@example.com,NV,8687 Avenue St,City,81888,Owner-occupied,2014,13,Tile,Good,481048,534498,0,0,0,0,0.0,20,35,X,No,Yes
+APP-00059,Stephanie Miller,applicantAPP-00059@example.com,AZ,3405 Park St,City,37659,Owner-occupied,2008,11,Asphalt,Good,458144,509049,0,0,0,0,0.0,11,39,X,No,Yes
+APP-00475,Joseph Wright,applicantAPP-00475@example.com,MS,5529 Garden St,City,33582,Owner-occupied,2010,9,Wood Shake,Good,482189,535766,0,0,0,0,0.0,28,44,X,No,Yes
+APP-00561,Nancy Johnson,applicantAPP-00561@example.com,OH,9926 Oak St,City,96798,Owner-occupied,2001,15,Asphalt,Good,434060,482289,0,0,0,0,0.0,21,46,X,No,Yes
+APP-00857,Linda Garcia,applicantAPP-00857@example.com,AZ,6693 Mountain St,City,76194,Owner-occupied,2008,24,Tile,Fair,550000,650000,2,0,220349,0,0.4233686734580165,40,45,X,No,Yes
+APP-00748,Ryan Wilson,applicantAPP-00748@example.com,NC,8759 Maple St,City,10183,Seasonal,2001,24,Asphalt,Fair,550000,650000,2,0,156722,0,0.3209858843384154,50,42,X,No,Yes
+APP-00253,Frank Ortiz,applicantAPP-00253@example.com,TX,917 Lane St,City,38758,Owner-occupied,2018,14,Tile,Good,432457,480508,0,0,0,0,0.0,22,58,X,No,Yes
+APP-00022,Charles Wilson,applicantAPP-00022@example.com,CA,5148 Ash St,City,44814,Owner-occupied,2012,14,3-tab Shingle,Good,475131,527924,0,0,0,0,0.0,11,34,X,No,Yes
+APP-00314,Melissa Rodriguez,applicantAPP-00314@example.com,WA,2914 Lake St,City,81105,Owner-occupied,2022,13,Asphalt,Good,479621,532913,0,0,0,0,0.0,21,49,X,No,Yes
+APP-00460,Margaret Peterson,applicantAPP-00460@example.com,CA,2090 Boulevard St,City,48559,Owner-occupied,2001,14,Metal,Good,485163,539071,0,0,0,0,0.0,19,28,X,No,Yes
+APP-00161,Sharon Davis,applicantAPP-00161@example.com,IN,5418 Cedar St,City,70150,Owner-occupied,2020,9,Metal,Good,458596,509552,0,0,0,0,0.0,18,26,X,No,Yes
+APP-00277,Betty Ortega,applicantAPP-00277@example.com,SC,7606 Lake St,City,62028,Owner-occupied,2020,8,Architectural Shingle,Good,411797,457553,0,0,0,0,0.0,16,28,X,No,Yes
+APP-00956,Jessica Davis,applicantAPP-00956@example.com,KY,8014 Drive St,City,89278,Owner-occupied,1997,11,Asphalt,Good,400000,700000,3,0,481308,0,1.0091329945151712,55,74,X,No,Yes
+APP-00192,Mark Ramirez,applicantAPP-00192@example.com,TX,3044 Garden St,City,86791,Owner-occupied,2021,10,Tile,Good,408494,453883,0,0,0,0,0.0,22,61,X,No,Yes
+APP-00386,Karen Cook,applicantAPP-00386@example.com,SD,6430 Elm St,City,81197,Owner-occupied,2015,10,3-tab Shingle,Good,459698,510776,0,0,0,0,0.0,14,21,X,No,Yes
+APP-00806,Mary Robinson,applicantAPP-00806@example.com,OR,3065 Willow St,City,13746,Owner-occupied,2006,23,Tile,Fair,550000,650000,2,0,242501,0,0.4491175108806371,33,42,X,No,Yes
+APP-00414,George Wright,applicantAPP-00414@example.com,NE,713 Willow St,City,32324,Owner-occupied,2001,9,Metal,Good,469738,521932,0,0,0,0,0.0,28,48,X,No,Yes
+APP-00492,Susan Parker,applicantAPP-00492@example.com,NV,617 Hill St,City,33593,Owner-occupied,2022,7,Tile,Good,429318,477021,0,0,0,0,0.0,17,50,X,No,Yes
+APP-00344,Thomas Clark,applicantAPP-00344@example.com,MD,5411 Drive St,City,24855,Owner-occupied,2015,9,Asphalt,Good,429950,477723,0,0,0,0,0.0,13,41,X,No,Yes
+APP-00770,James Martinez,applicantAPP-00770@example.com,TN,5072 Creek St,City,21425,Owner-occupied,1993,25,Tile,Fair,550000,650000,2,0,199143,0,0.41372626417916647,33,60,X,No,Yes
+APP-00309,Deborah Ortiz,applicantAPP-00309@example.com,SC,6705 Maple St,City,43330,Owner-occupied,2019,9,3-tab Shingle,Good,469607,521786,0,0,0,0,0.0,14,46,X,No,Yes
+APP-00662,Margaret Sanchez,applicantAPP-00662@example.com,WI,9502 Lane St,City,95892,Owner-occupied,2000,8,Tile,Good,488240,542489,0,0,0,0,0.0,21,45,X,No,Yes
+APP-00131,Mary Martinez,applicantAPP-00131@example.com,MA,9955 Garden St,City,67432,Owner-occupied,2001,5,3-tab Shingle,Good,413851,459835,0,0,0,0,0.0,15,50,X,No,Yes
+APP-00664,Steven Lewis,applicantAPP-00664@example.com,FL,9150 Main St,City,59112,Owner-occupied,2004,12,Wood Shake,Good,445185,494650,0,0,0,0,0.0,15,41,X,No,Yes
+APP-00872,Joshua Johnson,applicantAPP-00872@example.com,GA,346 Street St,City,59700,Owner-occupied,2000,21,Metal,Fair,550000,650000,2,0,282060,0,0.5978025890790711,34,54,X,No,Yes
+APP-00100,Melissa Garcia,applicantAPP-00100@example.com,CA,4459 Forest St,City,96761,Owner-occupied,2013,10,Tile,Good,441761,490846,0,0,0,0,0.0,33,25,X,No,Yes
+APP-00373,Andrew Allen,applicantAPP-00373@example.com,CA,7323 Elm St,City,59947,Owner-occupied,2019,10,Metal,Good,485166,539074,0,0,0,0,0.0,29,21,X,No,Yes
+APP-00088,Michael Morgan,applicantAPP-00088@example.com,NY,9081 Birch St,City,86858,Owner-occupied,2006,15,3-tab Shingle,Good,475442,528269,0,0,0,0,0.0,28,26,X,No,Yes
+APP-00459,Kenneth Lewis,applicantAPP-00459@example.com,CA,3206 Birch St,City,99327,Owner-occupied,2010,15,Metal,Good,405021,450024,0,0,0,0,0.0,34,19,X,No,Yes
+APP-00331,Robert Smith,applicantAPP-00331@example.com,IN,9384 Hill St,City,61653,Owner-occupied,2017,7,Wood Shake,Good,440159,489066,0,0,0,0,0.0,14,23,X,No,Yes
+APP-00215,Laura Edwards,applicantAPP-00215@example.com,OH,4056 Cherry St,City,14224,Owner-occupied,2014,13,Metal,Good,494273,549193,0,0,0,0,0.0,13,43,X,No,Yes
+APP-00467,James Young,applicantAPP-00467@example.com,GA,7439 Lake St,City,71503,Owner-occupied,2018,6,Asphalt,Good,485695,539662,0,0,0,0,0.0,27,44,X,No,Yes
+APP-00122,Patricia Thomas,applicantAPP-00122@example.com,TX,6879 Park St,City,91633,Owner-occupied,2014,5,Architectural Shingle,Good,435189,483544,0,0,0,0,0.0,24,57,X,No,Yes
+APP-00615,Jessica Robinson,applicantAPP-00615@example.com,TX,7756 Oak St,City,30557,Owner-occupied,2017,13,Metal,Good,419995,466662,0,0,0,0,0.0,31,66,X,No,Yes
+APP-00021,Kevin Jones,applicantAPP-00021@example.com,NM,3854 Beach St,City,25713,Owner-occupied,2018,14,3-tab Shingle,Good,461243,512493,0,0,0,0,0.0,15,22,X,No,Yes
+APP-00701,Anthony Gonzalez,applicantAPP-00701@example.com,MT,4250 Boulevard St,City,63581,Owner-occupied,2010,21,Wood Shake,Fair,550000,650000,2,0,273912,0,0.5780526872257852,35,60,X,No,Yes
+APP-00072,Robert Rodriguez,applicantAPP-00072@example.com,DE,8230 Valley St,City,53515,Owner-occupied,2003,5,Tile,Good,442533,491704,0,0,0,0,0.0,25,50,X,No,Yes
+APP-00107,Kenneth Murphy,applicantAPP-00107@example.com,MA,9495 Forest St,City,99277,Owner-occupied,2018,8,Asphalt,Good,425466,472740,0,0,0,0,0.0,24,44,X,No,Yes
+APP-00271,Cynthia Smith,applicantAPP-00271@example.com,TN,9627 Lake St,City,64997,Owner-occupied,2003,6,Tile,Good,415265,461406,0,0,0,0,0.0,26,34,X,No,Yes
+APP-00861,Emily Wright,applicantAPP-00861@example.com,PA,9500 Lake St,City,65927,Owner-occupied,2000,23,Tile,Fair,550000,650000,2,0,309162,0,0.5983718877740617,31,53,X,No,Yes
+APP-00436,Rebecca Martin,applicantAPP-00436@example.com,OH,5290 Walnut St,City,59668,Owner-occupied,2002,14,Tile,Good,472509,525010,0,0,0,0,0.0,11,22,X,No,Yes
+APP-00103,Donna Morgan,applicantAPP-00103@example.com,IL,5803 Elm St,City,62044,Owner-occupied,2001,12,Tile,Good,493120,547912,0,0,0,0,0.0,17,36,X,No,Yes

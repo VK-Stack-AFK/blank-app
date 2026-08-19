@@ -1,0 +1,320 @@
+================================================================================
+HOMEGUARD UW VALIDATOR - VALIDATION RULES MATRIX
+================================================================================
+Generated: 2026-08-18
+Version: 1.0
+Coverage: All 50 US States
+
+This document outlines all validation rules used in the HomeGuard UW Validator
+system. Rules are applied consistently across all states and regions.
+
+================================================================================
+OVERVIEW
+================================================================================
+
+The validator routes applications into three categories:
+
+  🟢 CATEGORY A (GREEN LIGHT) - Auto-Pass for Pricing
+     Complete, low-risk applications ready for downstream processing
+     Target: 70% of portfolio
+
+  🟡 CATEGORY B (NEEDS UNDERWRITER) - Manual Review Required
+     Moderate-risk or complexity requiring human judgment
+     Target: 20% of portfolio
+
+  🔴 CATEGORY F (AUTO REJECT) - Blocked for Compliance/Risk
+     Applications blocked for regulatory, risk, or governance reasons
+     Target: 10% of portfolio
+
+================================================================================
+LOSS RATIO RULES
+================================================================================
+
+Loss Ratio = Total Claims Paid (5 years) / Estimated Replacement Cost
+
+Rule: Loss Ratio Threshold for Auto-Pass
+  Condition: Loss Ratio < 0.25 (25%)
+  Action: Contributes to CATEGORY A (no rejection trigger)
+  Rationale: Minimal historical claims indicate low loss exposure
+
+Rule: Loss Ratio Threshold for Review
+  Condition: Loss Ratio >= 0.25 AND Loss Ratio <= 0.75 (25-75%)
+  Action: Contributes to CATEGORY B (flag for underwriter review)
+  Rationale: Moderate claims activity warrants judgment call
+
+Rule: Loss Ratio Threshold for Auto-Reject
+  Condition: Loss Ratio > 0.75 (75%+)
+  Action: TRIGGERS AUTO-REJECT to CATEGORY F
+  Rationale: Excessive historical claims indicate unacceptable risk profile
+  Legal: Basis for adverse action notice to applicant
+
+================================================================================
+CLAIMS HISTORY RULES
+================================================================================
+
+Rule: Excessive Claims Count (Auto-Reject)
+  Condition: Prior Claims in Last 5 Years >= 3
+  Action: TRIGGERS AUTO-REJECT to CATEGORY F
+  Rationale: Three or more claims indicate pattern of loss
+  Legal: Objective risk metric across all states
+
+Rule: Moderate Claims (Review Flag)
+  Condition: Prior Claims in Last 5 Years = 2
+  Action: Contributes to CATEGORY B (flag for underwriter review)
+  Rationale: Two claims warrant attention but not automatic rejection
+
+Rule: Single Claim (Auto-Pass Eligible)
+  Condition: Prior Claims in Last 5 Years <= 1
+  Action: Does not trigger rejection; may support CATEGORY A
+  Rationale: Single claim not indicator of pattern
+
+Rule: Water Claim Pattern (Review Flag)
+  Condition: Water Claims in Last 5 Years >= 1
+  Action: Contributes to CATEGORY B
+  Rationale: Water loss (roof leaks, burst pipes, etc.) may indicate maintenance
+  Note: Combined with other factors to assess underwriter review need
+
+Rule: Open Claims (Auto-Reject)
+  Condition: Open/Pending Claims > 0
+  Action: TRIGGERS AUTO-REJECT to CATEGORY F
+  Rationale: Unresolved claims present legal/liability risk
+  Legal: Cannot underwrite while claim is open
+
+================================================================================
+ROOF RULES
+================================================================================
+
+Rule: Roof Age (Auto-Pass Threshold)
+  Condition: Roof Age < 20 years
+  Action: Does not trigger rejection; supports CATEGORY A
+  Rationale: Most roofs last 20-25 years; younger roofs indicate lower risk
+
+Rule: Roof Age (Review Threshold)
+  Condition: Roof Age >= 20 years AND Roof Age <= 25 years
+  Action: Contributes to CATEGORY B
+  Rationale: Approaching end-of-life; requires underwriter assessment
+
+Rule: Roof Age (Auto-Reject Threshold)
+  Condition: Roof Age > 25 years AND Roof Condition = "Poor"
+  Action: Contributes to CATEGORY F (when combined with other risk)
+  Rationale: Very old + poor condition = high replacement risk
+
+Rule: Roof Condition (Review Flag)
+  Condition: Roof Condition = "Poor" OR Confidence < 60%
+  Action: Contributes to CATEGORY B
+  Rationale: Poor condition or low-confidence assessment warrants review
+
+================================================================================
+HAZARD EXPOSURE RULES
+================================================================================
+
+Hazard scores range 0-100, where higher = more exposure.
+
+Rule: Wildfire Exposure (Review Threshold)
+  Condition: Wildfire Score >= 50 AND < 85
+  Action: Contributes to CATEGORY B (flag for underwriter review)
+  Rationale: Elevated wildfire risk requires judgment on acceptability
+  States: CA, OR, WA, CO, NM, MT, NV, UT, ID, WY
+
+Rule: Wildfire Exposure (Auto-Reject Candidate)
+  Condition: Wildfire Score >= 85
+  Action: Contributes to CATEGORY F (when combined with other risk)
+  Rationale: Severe wildfire exposure may exceed carrier appetite
+  Legal: Requires underwriter sign-off even on complete applications
+
+Rule: Wind/Hail Exposure (Review Threshold)
+  Condition: Wind/Hail Score >= 50 AND < 80
+  Action: Contributes to CATEGORY B
+  Rationale: Moderate wind/hail exposure warrants review
+  States: TX, OK, KS, NE, SD, ND, LA (tornado/hail belt)
+
+Rule: Wind/Hail Exposure (High Risk)
+  Condition: Wind/Hail Score >= 80
+  Action: Contributes to CATEGORY B (underwriter review recommended)
+  Rationale: High exposure warrants manual assessment
+
+Rule: Flood Zone (Review Threshold)
+  Condition: Flood Zone = "A" OR "AE" OR "V" OR "VE"
+  Action: Contributes to CATEGORY B
+  Rationale: Special flood hazard zones require coverage decisions
+  Legal: Standard homeowners excludes flood; separate NFIP coverage needed
+  States: FL, LA, TX, NJ, NY, NC, SC (high flood exposure)
+
+================================================================================
+COMPLIANCE & GOVERNANCE RULES
+================================================================================
+
+Rule: Blocked Behavioral Factors (Auto-Reject)
+  Blocked Factors: social_media_used, device_data_used, biometric_used
+  Condition: Any blocked factor = "Yes"
+  Action: TRIGGERS AUTO-REJECT to CATEGORY F
+  Rationale: Privacy/proxy-discrimination risk; not allowed in this POC
+  Legal: May violate fair lending laws; not supported by carrier
+
+Rule: Maryland Credit Score (Auto-Reject)
+  Condition: State = "MD" AND credit_score_used = "Yes"
+  Action: TRIGGERS AUTO-REJECT to CATEGORY F
+  Rationale: MD law prohibits credit-score-only refusal to underwrite
+  Legal: State-specific compliance requirement (MD Ins. Code § 19-710.1)
+
+Rule: NY External Consumer Data (Review Flag)
+  Condition: State = "NY" AND external_consumer_data_used = "Yes" AND ai_governance_docs_ready != "Yes"
+  Action: Contributes to CATEGORY B
+  Rationale: NY AIS/ECDIS use requires documentation showing no unlawful discrimination
+  Legal: NY Insurance Department guidance
+
+Rule: Colorado External Consumer Data (Review Flag)
+  Condition: State = "CO" AND external_consumer_data_used = "Yes" AND ai_governance_docs_ready != "Yes"
+  Action: Contributes to CATEGORY B
+  Rationale: SB21-169 requires controls against discrimination in algorithms
+  Legal: Colorado state law
+
+Rule: California External Consumer Data (Review Flag)
+  Condition: State = "CA" AND external_consumer_data_used = "Yes" AND ai_governance_docs_ready != "Yes"
+  Action: Contributes to CATEGORY B
+  Rationale: CDI has warned on proxy discrimination/actuarial-nexus concerns
+  Legal: California Insurance Commissioner guidance
+
+================================================================================
+DATA COMPLETENESS RULES
+================================================================================
+
+Rule: Critical Fields Required
+  Condition: All QUESTIONNAIRE_FIELDS present and non-null
+  Action: Application is eligible for routing
+  Rationale: Complete applications can be evaluated consistently
+
+Required Fields:
+  - applicant_name, state, address, city, zip_code
+  - occupancy, year_built, roof_age, roof_material, roof_condition_ai
+  - requested_dwelling_limit, estimated_replacement_cost
+  - prior_claim_count_5y, water_claim_count_5y, claim_total_paid_5y, open_claims
+  - wildfire_score, flood_zone, wind_hail_score
+  - external_consumer_data_used, ai_governance_docs_ready
+
+Rule: Missing Critical Fields (Auto-Reject)
+  Condition: Any required field is missing or null
+  Action: CONTRIBUTES TO AUTO-REJECT (category F)
+  Rationale: Cannot route application without complete data
+
+================================================================================
+OCCUPANCY RULES
+================================================================================
+
+Rule: Owner-Occupied Preferred
+  Condition: Occupancy = "Owner-occupied"
+  Action: No rejection trigger; supports CATEGORY A eligibility
+  Rationale: Standard homeowners coverage scope
+
+Rule: Non-Owner-Occupied (Review Flag)
+  Condition: Occupancy = "Seasonal" OR Occupancy = "Investment"
+  Action: Contributes to CATEGORY B
+  Rationale: Seasonal/investment properties require special underwriting
+  Note: Standard policy may not apply; endorsements or different coverage needed
+
+================================================================================
+CATEGORY ROUTING LOGIC
+================================================================================
+
+CATEGORY A (GREEN LIGHT) - Requirements:
+  ✓ All required fields present
+  ✓ Loss ratio < 0.25
+  ✓ Prior claims <= 1
+  ✓ No open claims
+  ✓ Roof age < 20 years
+  ✓ Roof condition != "Poor"
+  ✓ No compliance violations
+  ✓ Owner-occupied
+  ✓ No blocked behavioral factors
+  ✓ No high-severity hazard exposure (wildfire <50, wind/hail <50, etc.)
+
+CATEGORY B (NEEDS UNDERWRITER) - Criteria:
+  • Loss ratio 0.25 - 0.75
+  • Roof age 20-25 years
+  • 2 prior claims (not 3+)
+  • Water claim pattern
+  • Moderate hazard exposure (wildfire 50-85, wind/hail 50-80, flood zones A/AE/V/VE)
+  • Non-owner-occupied
+  • Governance documentation missing (external data used)
+  • Any other risk factors requiring human judgment
+
+CATEGORY F (AUTO REJECT) - Triggers:
+  ✗ Loss ratio > 0.75
+  ✗ Prior claims >= 3
+  ✗ Open claims present
+  ✗ Blocked behavioral factors present
+  ✗ State-specific compliance violations (MD credit score, etc.)
+  ✗ Critical missing fields
+  ✗ Very old roof (>25 years) + poor condition
+  ✗ Severe hazard exposure (wildfire >=85, wind/hail >=80)
+  [Any single trigger can auto-reject an application]
+
+================================================================================
+STATE-SPECIFIC CONSIDERATIONS
+================================================================================
+
+CALIFORNIA (CA)
+  • High wildfire exposure (scores 50-100 typical)
+  • Coastal flood risk in certain zones
+  • External consumer data governance required (CA CDI guidance)
+  • Applications with high wildfire often route to CATEGORY B or F
+
+FLORIDA (FL)
+  • Very high flood zone overlap (many properties in A/AE/V/VE zones)
+  • High wind/hail exposure (hurricane risk)
+  • Most applications have flood zone = not "X"
+  • Special flood zone handling required
+
+TEXAS (TX)
+  • High wind/hail exposure (tornado/hail belt)
+  • Diverse geography: west = wildfire, south = flood, north = hail
+  • Large state with high volume
+
+NEW YORK (NY)
+  • Moderate hazard exposure (balanced)
+  • AIS/ECDIS governance requirements (NY Insurance Department)
+  • Significant application volume
+
+MARYLAND (MD)
+  • State-specific credit score prohibition (§19-710.1)
+  • Credit score + any other risk = AUTO REJECT
+  • Compliance requirement unique to MD
+
+COLORADO (CO)
+  • SB21-169 algorithm discrimination control requirement
+  • Moderate hazard exposure (wildfire in western counties)
+  • Governance documentation important
+
+All Other States:
+  • Apply consistent national rules
+  • Adjust hazard exposure based on geography (see STATE_POPULATIONS data)
+  • Use state-specific compliance rules only when applicable
+
+================================================================================
+IMPLEMENTATION NOTES
+================================================================================
+
+1. Rules are applied deterministically - same application always routes to same category
+2. Rules are applied consistently across all 50 states (with state-specific compliance overlays)
+3. Loss ratio is the primary driver of auto-reject decisions (>75% threshold)
+4. Multiple moderate flags trigger category B, not auto-reject
+5. Auto-reject triggers (loss ratio >75%, claims >=3, open claims, blocked factors)
+   are sufficient on their own to reject, regardless of other factors
+6. Governance flags (external data + no docs) contribute to category B, not auto-reject
+7. This system is designed to be compliant with FCRA, ECOA, and state insurance laws
+8. All adverse action decisions (category F rejections) should be communicated via formal
+   adverse action notice within required timeframes
+
+================================================================================
+VERSION HISTORY
+================================================================================
+
+v1.0 (2026-08-18) - Initial rule matrix
+  • Defined 3-category routing (A/B/F with 70/20/10 distribution)
+  • All 50 states with population-weighted distribution
+  • State-specific compliance rules (MD, NY, CO, CA)
+  • Comprehensive hazard exposure rules
+  • Loss ratio as primary auto-reject threshold
+  • Blocking of behavioral/sensitive factors
+
+================================================================================

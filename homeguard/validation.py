@@ -1,12 +1,13 @@
-"""Validation and routing engine for the HomeGuard UW Validator demo.
+"""Simplified routing engine for HomeGuard UW Validator.
 
-This is intentionally deterministic. It is a POC pre-pricing validator, not a
-premium model and not a final underwriting authority system.
+Three outcomes: GREEN LIGHT (auto-proceed), NEEDS UNDERWRITER (manual review),
+REJECT (blocked/critical issues).
 """
 from __future__ import annotations
 
 import math
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import numpy as np
@@ -14,10 +15,20 @@ import pandas as pd
 
 from .config import (
     BLOCKED_BEHAVIORAL_FACTORS,
-    CRITICAL_FIELDS,
-    REQUIRED_FIELDS,
-    VERIFICATION_TOOLS,
+    QUESTIONNAIRE_FIELDS,
+    ROUTING_STATUSES,
+    STATE_COMPLIANCE_RULES,
+    LOSS_RATIO_THRESHOLDS,
+    FEATURE_FLAGS,
 )
+
+BASE_DIR = Path(__file__).parent.parent
+DATA_DIR = BASE_DIR / "data"
+
+
+def load_csv(name: str) -> pd.DataFrame:
+    """Load a CSV from the data directory."""
+    return pd.read_csv(DATA_DIR / name)
 
 
 def _is_missing(value: Any) -> bool:
@@ -52,42 +63,25 @@ def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """Add calculated fields used by validation and dashboards."""
     out = df.copy()
 
-    for col in ["requested_dwelling_limit", "estimated_replacement_cost", "square_feet_reported", "square_feet_public"]:
+    for col in ["requested_dwelling_limit", "estimated_replacement_cost"]:
         if col in out.columns:
             out[col] = pd.to_numeric(out[col], errors="coerce")
-
-    out["coverage_to_rc_ratio"] = out["requested_dwelling_limit"] / out["estimated_replacement_cost"]
-    out["sqft_variance_pct"] = (
-        (out["square_feet_reported"] - out["square_feet_public"]).abs() / out["square_feet_public"]
-    )
-    out.loc[out["square_feet_public"].isna(), "sqft_variance_pct"] = np.nan
 
     for col in [
         "year_built",
         "roof_age",
         "roof_condition_confidence",
-        "electrical_age",
-        "plumbing_age",
-        "heating_age",
-        "protection_class",
-        "distance_fire_station_miles",
-        "distance_hydrant_ft",
         "prior_claim_count_5y",
         "water_claim_count_5y",
         "claim_total_paid_5y",
         "open_claims",
         "wildfire_score",
         "wind_hail_score",
-        "coastal_distance_miles",
     ]:
         if col in out.columns:
             out[col] = pd.to_numeric(out[col], errors="coerce")
 
     for col in [
-        "pool",
-        "trampoline",
-        "dog_declared",
-        "credit_score_used",
         "social_media_used",
         "device_data_used",
         "biometric_used",
@@ -97,252 +91,224 @@ def enrich_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         if col in out.columns:
             out[col] = out[col].apply(normalize_yes_no)
 
+    out["coverage_to_rc_ratio"] = (
+        out["requested_dwelling_limit"] / out["estimated_replacement_cost"]
+        if "requested_dwelling_limit" in out.columns and "estimated_replacement_cost" in out.columns
+        else np.nan
+    )
+
     return out
 
 
-def completeness_score(row: pd.Series) -> Tuple[float, List[str], List[str]]:
-    missing_required = [field for field in REQUIRED_FIELDS if field in row.index and _is_missing(row[field])]
-    missing_critical = [field for field in CRITICAL_FIELDS if field in row.index and _is_missing(row[field])]
-    present = len(REQUIRED_FIELDS) - len(missing_required)
-    score = present / len(REQUIRED_FIELDS) if REQUIRED_FIELDS else 1.0
-    return score, missing_required, missing_critical
+def get_missing_fields(row: pd.Series) -> List[str]:
+    """Return list of missing required questionnaire fields."""
+    return [field for field in QUESTIONNAIRE_FIELDS if field in row.index and _is_missing(row[field])]
 
 
-def compliance_flags(row: pd.Series) -> List[Dict[str, str]]:
-    flags: List[Dict[str, str]] = []
+def get_reject_reasons(row: pd.Series) -> List[str]:
+    """Check for REJECT conditions. Returns list of rejection reasons."""
+    reasons = []
     state = str(row.get("state", "")).upper().strip()
 
+    # Check blocked behavioral factors
     for factor in BLOCKED_BEHAVIORAL_FACTORS:
         if normalize_yes_no(row.get(factor)) == "Yes":
-            flags.append(
-                {
-                    "severity": "blocked",
-                    "factor": factor,
-                    "reason": "Behavioral/sensitive data is blocked in this POC because it creates privacy, proxy-discrimination, and actuarial-nexus risk.",
-                }
-            )
+            reasons.append(f"Declined: {factor.replace('_', ' ')} not permitted in underwriting")
 
-    if state == "MD" and normalize_yes_no(row.get("credit_score_used")) == "Yes":
-        flags.append(
-            {
-                "severity": "blocked",
-                "factor": "credit_score_used",
-                "reason": "Maryland homeowners rule: credit history cannot be used to refuse to underwrite, cancel, or refuse to renew based wholly or partly on credit history.",
-            }
-        )
+    # State-specific compliance issues
+    if state in STATE_COMPLIANCE_RULES:
+        rule = STATE_COMPLIANCE_RULES[state]
+        if "blocked_factors" in rule:
+            for blocked_factor in rule["blocked_factors"]:
+                if normalize_yes_no(row.get(blocked_factor)) == "Yes":
+                    reasons.append(f"Declined ({state} compliance): {rule['rule']}")
 
-    if state == "NY" and normalize_yes_no(row.get("external_consumer_data_used")) == "Yes" and normalize_yes_no(row.get("ai_governance_docs_ready")) != "Yes":
-        flags.append(
-            {
-                "severity": "caution",
-                "factor": "external_consumer_data_used",
-                "reason": "New York AIS/ECDIS use needs documentation showing no unfair or unlawful discrimination.",
-            }
-        )
+    # Missing critical fields
+    missing = get_missing_fields(row)
+    if missing:
+        reasons.append(f"Incomplete application: Missing {', '.join(missing[:3])}")
 
-    if state == "CO" and normalize_yes_no(row.get("external_consumer_data_used")) == "Yes" and normalize_yes_no(row.get("ai_governance_docs_ready")) != "Yes":
-        flags.append(
-            {
-                "severity": "caution",
-                "factor": "external_consumer_data_used",
-                "reason": "Colorado SB21-169 requires controls against unfair discrimination in external consumer data, algorithms, and predictive models.",
-            }
-        )
+    # Loss ratio check (if enabled)
+    if FEATURE_FLAGS.get("use_loss_ratio", True):
+        loss_ratio = _to_float(row.get("loss_ratio"), default=0)
+        if loss_ratio > LOSS_RATIO_THRESHOLDS.get("underwriter_max", 0.75):
+            reasons.append(f"Declined: Loss ratio of {loss_ratio:.1%} exceeds underwriting guidelines")
 
-    if state == "CA" and normalize_yes_no(row.get("external_consumer_data_used")) == "Yes" and normalize_yes_no(row.get("ai_governance_docs_ready")) != "Yes":
-        flags.append(
-            {
-                "severity": "caution",
-                "factor": "external_consumer_data_used",
-                "reason": "California CDI has warned that AI/big data and certain external inputs can create proxy discrimination and actuarial-nexus concerns.",
-            }
-        )
+    # Auto-reject high-severity underwriting flags
+    if FEATURE_FLAGS.get("check_claims_count", True):
+        open_claims = _to_float(row.get("open_claims"), default=0)
+        if open_claims > 0:
+            reasons.append("Declined: Active claim on record—cannot underwrite")
 
-    return flags
+        claims = _to_float(row.get("prior_claim_count_5y"), default=0)
+        if claims >= 3:
+            reasons.append(f"Declined: Loss frequency of {int(claims)} claims in 5 years exceeds guidelines")
+
+    return reasons
 
 
-def validation_flags(row: pd.Series) -> List[Dict[str, str]]:
-    flags: List[Dict[str, str]] = []
-    score, missing_required, missing_critical = completeness_score(row)
+def get_underwriter_flags(row: pd.Series) -> List[Dict[str, str]]:
+    """Check for NEEDS UNDERWRITER conditions. Returns list of flag details."""
+    flags = []
+    state = str(row.get("state", "")).upper().strip()
 
-    if missing_critical:
-        flags.append(
-            {
-                "severity": "medium",
-                "factor": "missing_critical_fields",
-                "reason": f"Critical field(s) missing: {', '.join(missing_critical)}.",
-            }
-        )
-    elif missing_required:
-        flags.append(
-            {
-                "severity": "low",
-                "factor": "missing_required_fields",
-                "reason": f"Non-critical field(s) missing: {', '.join(missing_required)}.",
-            }
-        )
+    # Loss ratio check (if enabled) - mid-range
+    if FEATURE_FLAGS.get("use_loss_ratio", True):
+        loss_ratio = _to_float(row.get("loss_ratio"), default=0)
+        if (loss_ratio >= LOSS_RATIO_THRESHOLDS.get("green_light_max", 0.25) and
+            loss_ratio <= LOSS_RATIO_THRESHOLDS.get("underwriter_max", 0.75)):
+            flags.append({
+                "factor": "loss_ratio_moderate",
+                "reason": f"Moderate loss ratio ({loss_ratio:.1%})—requires underwriter review",
+            })
 
-    match_status = str(row.get("property_match_status", "")).strip()
-    if match_status == "Unmatched":
-        flags.append({"severity": "medium", "factor": "property_match_status", "reason": "Property address could not be matched to external property records."})
-    elif match_status == "Partial Match":
-        flags.append({"severity": "low", "factor": "property_match_status", "reason": "Partial property match creates data confidence concern."})
+    # Governance requirements
+    if FEATURE_FLAGS.get("check_governance", True):
+        if normalize_yes_no(row.get("external_consumer_data_used")) == "Yes":
+            if normalize_yes_no(row.get("ai_governance_docs_ready")) != "Yes":
+                if state in STATE_COMPLIANCE_RULES and STATE_COMPLIANCE_RULES[state].get("requires_governance"):
+                    flags.append({
+                        "factor": "governance_requirement",
+                        "reason": f"{state} compliance: External data source requires governance documentation",
+                    })
 
-    roof_age = _to_float(row.get("roof_age"))
-    if not np.isnan(roof_age) and roof_age > 25:
-        flags.append({"severity": "high", "factor": "roof_age", "reason": "Roof age exceeds 25-year appetite threshold."})
+    # Roof concerns
+    if FEATURE_FLAGS.get("check_roof_age", True):
+        roof_age = _to_float(row.get("roof_age"))
+        if not np.isnan(roof_age) and roof_age >= 20:
+            flags.append({
+                "factor": "roof_age",
+                "reason": f"Property age: Roof is {int(roof_age)} years old (inspection recommended)",
+            })
 
-    roof_condition = str(row.get("roof_condition_ai", "")).strip().lower()
-    roof_conf = _to_float(row.get("roof_condition_confidence"), default=0)
-    if roof_condition == "poor":
-        flags.append({"severity": "high", "factor": "roof_condition_ai", "reason": "AI/vendor roof condition indicates poor condition; human review required before adverse use."})
-    elif roof_conf < 0.60:
-        flags.append({"severity": "medium", "factor": "roof_condition_confidence", "reason": "Roof condition confidence is low; request photos or inspection."})
+        roof_condition = str(row.get("roof_condition_ai", "")).strip().lower()
+        if roof_condition == "poor":
+            flags.append({
+                "factor": "roof_condition",
+                "reason": "Roof condition: Poor condition assessment requires underwriter review",
+            })
 
+    # Claims concerns (not auto-reject, but flag for review)
+    if FEATURE_FLAGS.get("check_claims_count", True):
+        claims = _to_float(row.get("prior_claim_count_5y"), default=0)
+        if claims == 2:
+            flags.append({
+                "factor": "claims_history",
+                "reason": f"Loss history: {int(claims)} claims filed in last 5 years",
+            })
+
+        water_claims = _to_float(row.get("water_claim_count_5y"), default=0)
+        if water_claims >= 1:
+            flags.append({
+                "factor": "water_claims",
+                "reason": f"Water loss pattern: {int(water_claims)} water-related claim(s)—assess maintenance history",
+            })
+
+    # Hazard exposure
+    if FEATURE_FLAGS.get("check_hazard_exposure", True):
+        wildfire = _to_float(row.get("wildfire_score"), default=0)
+        if wildfire >= 70:
+            flags.append({
+                "factor": "wildfire_exposure",
+                "reason": f"Wildfire exposure: Score {int(wildfire)}/100—requires hazard review",
+            })
+
+        wind_hail = _to_float(row.get("wind_hail_score"), default=0)
+        if wind_hail >= 70:
+            flags.append({
+                "factor": "wind_hail_exposure",
+                "reason": f"Wind/hail exposure: Score {int(wind_hail)}/100—requires hazard review",
+            })
+
+        flood_zone = str(row.get("flood_zone", "")).strip().upper()
+        if flood_zone in {"A", "AE", "V", "VE"}:
+            flags.append({
+                "factor": "flood_zone",
+                "reason": f"Flood zone {flood_zone}: Special hazard designation—verify coverage requirements",
+            })
+
+    # Coverage concerns
     coverage_to_rc_ratio = _to_float(row.get("coverage_to_rc_ratio"))
     if not np.isnan(coverage_to_rc_ratio) and coverage_to_rc_ratio < 0.80:
-        flags.append({"severity": "medium", "factor": "coverage_to_rc_ratio", "reason": "Requested Coverage A appears below 80% of estimated replacement cost."})
-
-    sqft_variance_pct = _to_float(row.get("sqft_variance_pct"))
-    if not np.isnan(sqft_variance_pct) and sqft_variance_pct > 0.15:
-        flags.append({"severity": "medium", "factor": "sqft_variance_pct", "reason": "Reported square footage differs from public/property data by more than 15%."})
-
-    if str(row.get("occupancy", "")).strip() != "Owner-occupied":
-        flags.append({"severity": "medium", "factor": "occupancy", "reason": "POC scope is owner-occupied homeowners; non-owner/seasonal occupancy needs review."})
-
-    claims = _to_float(row.get("prior_claim_count_5y"), default=0)
-    water_claims = _to_float(row.get("water_claim_count_5y"), default=0)
-    paid = _to_float(row.get("claim_total_paid_5y"), default=0)
-    open_claims = _to_float(row.get("open_claims"), default=0)
-
-    if claims >= 3:
-        flags.append({"severity": "high", "factor": "prior_claim_count_5y", "reason": "Three or more claims in the last five years."})
-    if water_claims >= 2:
-        flags.append({"severity": "medium", "factor": "water_claim_count_5y", "reason": "Repeated water claims in the last five years."})
-    if paid >= 25000:
-        flags.append({"severity": "medium", "factor": "claim_total_paid_5y", "reason": "Total paid claims exceed $25,000 in the last five years."})
-    if open_claims > 0:
-        flags.append({"severity": "high", "factor": "open_claims", "reason": "Open claim requires manual review."})
-
-    wildfire = _to_float(row.get("wildfire_score"), default=0)
-    wind_hail = _to_float(row.get("wind_hail_score"), default=0)
-    flood_zone = str(row.get("flood_zone", "")).strip().upper()
-
-    if wildfire >= 85:
-        flags.append({"severity": "high", "factor": "wildfire_score", "reason": "Severe wildfire exposure score."})
-    elif wildfire >= 70:
-        flags.append({"severity": "medium", "factor": "wildfire_score", "reason": "Elevated wildfire exposure score."})
-
-    if wind_hail >= 80:
-        flags.append({"severity": "high", "factor": "wind_hail_score", "reason": "High wind/hail exposure score."})
-    elif wind_hail >= 70:
-        flags.append({"severity": "medium", "factor": "wind_hail_score", "reason": "Elevated wind/hail exposure score."})
-
-    if flood_zone in {"A", "AE", "V", "VE"}:
-        flags.append({"severity": "medium", "factor": "flood_zone", "reason": "Special flood hazard zone; standard homeowners coverage typically excludes flood."})
-
-    if normalize_yes_no(row.get("trampoline")) == "Yes":
-        flags.append({"severity": "low", "factor": "trampoline", "reason": "Trampoline liability exposure requires carrier/state rule check."})
-    if normalize_yes_no(row.get("dog_declared")) == "Yes":
-        flags.append({"severity": "low", "factor": "dog_declared", "reason": "Dog-related liability question requires human/state-rule review."})
+        flags.append({
+            "factor": "underinsurance",
+            "reason": f"Underinsurance: Coverage is {coverage_to_rc_ratio:.0%} of estimated replacement cost",
+        })
 
     return flags
 
 
-def route_application(row: pd.Series) -> Dict[str, Any]:
-    score, missing_required, missing_critical = completeness_score(row)
-    comp_flags = compliance_flags(row)
-    val_flags = validation_flags(row)
+def route_application(row: pd.Series, feature_overrides: Dict[str, bool] = None) -> Dict[str, Any]:
+    """Route application to one of 3 statuses: GREEN LIGHT, NEEDS UNDERWRITER, or REJECT."""
+    # Apply feature flag overrides (from settings)
+    if feature_overrides:
+        for key, value in feature_overrides.items():
+            FEATURE_FLAGS[key] = value
 
-    blocked = [flag for flag in comp_flags if flag["severity"] == "blocked"]
-    caution = [flag for flag in comp_flags if flag["severity"] == "caution"]
-    request_info_factors = {"missing_critical_fields", "property_match_status", "coverage_to_rc_ratio", "sqft_variance_pct", "roof_condition_confidence"}
-    high_val = [flag for flag in val_flags if flag["severity"] == "high"]
-    request_info = [flag for flag in val_flags if flag["factor"] in request_info_factors and flag["severity"] in {"medium", "low"}]
+    enriched = enrich_dataframe(row.to_frame().T).iloc[0]
 
-    if blocked or caution:
-        route = "Compliance Hold"
-    elif missing_critical or request_info:
-        route = "Request Info"
-    elif high_val or val_flags:
-        route = "Refer to Underwriter"
-    else:
-        route = "STP-ready"
+    # Check for REJECT conditions
+    reject_reasons = get_reject_reasons(enriched)
+    if reject_reasons:
+        return {
+            "app_id": enriched.get("app_id"),
+            "status": "F",
+            "reasons": reject_reasons,
+            "flags": [],
+            "evaluated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
 
-    all_flags = comp_flags + val_flags
-    reason_summary = "; ".join([flag["reason"] for flag in all_flags[:5]]) or "No material validation, risk, or compliance flags detected."
+    # Check for NEEDS UNDERWRITER flags
+    underwriter_flags = get_underwriter_flags(enriched)
+    if underwriter_flags:
+        flag_reasons = [f["reason"] for f in underwriter_flags[:3]]
+        return {
+            "app_id": enriched.get("app_id"),
+            "status": "B",
+            "reasons": flag_reasons,
+            "flags": underwriter_flags,
+            "evaluated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
 
+    # Otherwise: A (Auto-Pass)
     return {
-        "app_id": row.get("app_id"),
-        "status": route,
-        "completeness_score": round(score, 3),
-        "missing_required_count": len(missing_required),
-        "missing_critical_count": len(missing_critical),
-        "flag_count": len(all_flags),
-        "high_flag_count": len(high_val),
-        "compliance_flag_count": len(comp_flags),
-        "reason_summary": reason_summary,
-        "flags": all_flags,
+        "app_id": enriched.get("app_id"),
+        "status": "A",
+        "reasons": ["Complete application, meets underwriting criteria"],
+        "flags": [],
         "evaluated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
 
 
 def evaluate_portfolio(df: pd.DataFrame) -> pd.DataFrame:
+    """Route all applications in portfolio."""
     enriched = enrich_dataframe(df)
     records = []
     for _, row in enriched.iterrows():
         routed = route_application(row)
-        records.append({k: v for k, v in routed.items() if k != "flags"})
+        records.append({
+            "app_id": routed["app_id"],
+            "status": routed["status"],
+            "reason_summary": "; ".join(routed["reasons"]),
+            "flag_count": len(routed["flags"]),
+            "evaluated_at": routed["evaluated_at"],
+        })
     return pd.DataFrame(records)
 
 
 def build_audit_log(df: pd.DataFrame) -> pd.DataFrame:
+    """Create audit trail for all applications."""
     enriched = enrich_dataframe(df)
     rows = []
     for _, row in enriched.iterrows():
         routed = route_application(row)
-        data_sources = ["Application", "Mock property record", "Mock hazard score"]
-        if row.get("property_match_status") in {"Matched", "Partial Match"}:
-            data_sources.append("Parcel/property match")
-        if _to_float(row.get("prior_claim_count_5y"), default=0) > 0:
-            data_sources.append("Claims/loss history")
-        if normalize_yes_no(row.get("external_consumer_data_used")) == "Yes":
-            data_sources.append("External consumer data flag")
-
-        rows.append(
-            {
-                "app_id": row.get("app_id"),
-                "state": row.get("state"),
-                "status": routed["status"],
-                "data_sources_used": ", ".join(data_sources),
-                "ai_tools_used": "Completeness checker, property matcher, claims summarizer, hazard checker, factor rules engine",
-                "model_versions": "rule_engine_v0.3; roof_assist_v0.1_mock; hazard_flags_v0.1_mock",
-                "human_review_required": "Yes" if routed["status"] in {"Refer to Underwriter", "Compliance Hold"} else "No",
-                "reason_summary": routed["reason_summary"],
-                "evaluated_at": routed["evaluated_at"],
-            }
-        )
+        rows.append({
+            "app_id": routed["app_id"],
+            "state": row.get("state"),
+            "applicant": row.get("applicant_name"),
+            "status": routed["status"],
+            "routing_reason": "; ".join(routed["reasons"]),
+            "human_review_required": "Yes" if routed["status"] in {"NEEDS UNDERWRITER", "REJECT"} else "No",
+            "evaluated_at": routed["evaluated_at"],
+        })
     return pd.DataFrame(rows)
-
-
-def explode_flags(df: pd.DataFrame) -> pd.DataFrame:
-    enriched = enrich_dataframe(df)
-    rows = []
-    for _, row in enriched.iterrows():
-        routed = route_application(row)
-        for flag in routed["flags"]:
-            rows.append(
-                {
-                    "app_id": row.get("app_id"),
-                    "state": row.get("state"),
-                    "status": routed["status"],
-                    "severity": flag.get("severity"),
-                    "factor": flag.get("factor"),
-                    "reason": flag.get("reason"),
-                }
-            )
-    return pd.DataFrame(rows)
-
-
-def verification_tools_dataframe() -> pd.DataFrame:
-    return pd.DataFrame(VERIFICATION_TOOLS)
