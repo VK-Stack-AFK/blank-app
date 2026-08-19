@@ -9,6 +9,8 @@ from homeguard.validation import route_application, enrich_dataframe
 from homeguard.submissions_manager import save_submission
 from homeguard.test_data_generator import generate_test_data_a, generate_test_data_b, generate_test_data_f
 
+BASE_DIR = Path(__file__).parent.parent
+
 st.set_page_config(page_title="New Application", page_icon="📋", layout="wide")
 
 # Custom styling
