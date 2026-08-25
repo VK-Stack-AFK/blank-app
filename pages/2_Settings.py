@@ -109,29 +109,26 @@ st.markdown("## Sample Data Management")
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("🔄 Regenerate Sample Portfolio", use_container_width=True, type="secondary"):
-        import subprocess
+    if st.button("Regenerate Sample Portfolio", use_container_width=True, type="secondary"):
         from pathlib import Path
+        from homeguard.data_generator_stratified import generate_stratified_dataset
+
         BASE_DIR = Path(__file__).parent.parent
         DATA_DIR = BASE_DIR / "data"
 
-        # Delete old data
-        if (DATA_DIR / "applications.csv").exists():
-            (DATA_DIR / "applications.csv").unlink()
-            st.info("Deleted old dataset")
+        try:
+            # Generate new data
+            with st.spinner("Generating 1000 stratified applications..."):
+                df = generate_stratified_dataset(total=1000, pct_a=0.70, pct_b=0.20, pct_f=0.10)
 
-        # Regenerate
-        result = subprocess.run(
-            ["python", "-m", "homeguard.data_generator_stratified"],
-            cwd=str(BASE_DIR),
-            capture_output=True,
-            text=True
-        )
+            # Save to CSV
+            output_path = DATA_DIR / "applications.csv"
+            df.to_csv(output_path, index=False)
 
-        if result.returncode == 0:
-            st.success("✓ Sample portfolio regenerated! Go to Underwriting Portfolio to view updated statistics.")
-        else:
-            st.error(f"Error regenerating portfolio: {result.stderr}")
+            st.success("✓ Sample portfolio regenerated! Refresh Dashboard to view updated data.")
+            st.balloons()
+        except Exception as e:
+            st.error(f"Error regenerating portfolio: {str(e)}")
 
 with col2:
     if st.button("📊 View Current Distribution", use_container_width=True, type="secondary"):
