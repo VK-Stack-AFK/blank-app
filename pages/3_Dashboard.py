@@ -421,41 +421,71 @@ with tab2:
             elif sort_by == "Status":
                 pending = pending.sort_values(["status", "submission_date"], ascending=[True, False])
 
-        # Display pending applications with clickable rows
-        st.markdown("### Click an application to review details")
+        # Display pending applications as a table
+        st.markdown("### Pending Applications - Click a Row to Select")
 
+        # Table header
+        header_cols = st.columns([0.8, 1.5, 1.5, 0.8, 1, 1.2, 2.2])
+        with header_cols[0]:
+            st.markdown("**App ID**")
+        with header_cols[1]:
+            st.markdown("**Applicant**")
+        with header_cols[2]:
+            st.markdown("**Email**")
+        with header_cols[3]:
+            st.markdown("**State**")
+        with header_cols[4]:
+            st.markdown("**Status**")
+        with header_cols[5]:
+            st.markdown("**Submitted**")
+        with header_cols[6]:
+            st.markdown("**Reason**")
+
+        st.divider()
+
+        # Table rows (clickable)
         for idx, (_, row) in enumerate(pending.iterrows()):
             app_id = row["app_id"]
             is_selected = st.session_state.selected_app_id == app_id
 
-            # Highlight selected row
-            bg_color = "#e3f2fd" if is_selected else "transparent"
-            status_color = "#ef4444" if row["status"] == "F" else "#f59e0b"
+            # Apply light blue background if selected
+            if is_selected:
+                st.markdown('<div style="background-color: rgba(33, 150, 243, 0.15); padding: 8px; border-radius: 4px; margin: 2px 0;">', unsafe_allow_html=True)
 
-            col1, col2, col3, col4, col5, col6 = st.columns([1.5, 2, 1.5, 1.5, 1, 1.5])
+            # Clickable row in columns
+            row_cols = st.columns([0.8, 1.5, 1.5, 0.8, 1, 1.2, 2.2])
 
-            with col1:
-                if st.button(app_id, key=f"select_{idx}", use_container_width=True):
+            with row_cols[0]:
+                if st.button(f"`{app_id}`", key=f"row_id_{idx}", use_container_width=True):
                     st.session_state.selected_app_id = app_id
                     st.rerun()
 
-            with col2:
-                st.write(row.get("applicant_name", "N/A"))
+            with row_cols[1]:
+                st.write(row.get("applicant_name", "N/A")[:20])
 
-            with col3:
+            with row_cols[2]:
+                st.write(row.get("applicant_email", "N/A")[:20])
+
+            with row_cols[3]:
                 st.write(row.get("state", "N/A"))
 
-            with col4:
-                status_label = "DENY" if row["status"] == "F" else "REVIEW"
+            with row_cols[4]:
+                status_label = "DECLINED" if row["status"] == "F" else "REVIEW"
                 st.write(f"**{status_label}**")
 
-            with col5:
-                if is_selected:
-                    st.write("✓ Selected")
+            with row_cols[5]:
+                submitted = row.get("submission_date", "Test Data")
+                if isinstance(submitted, str):
+                    submitted = submitted[:10]
+                st.write(submitted)
 
-            with col6:
-                if is_selected:
-                    st.write(row.get("applicant_email", "N/A")[:15] + "...")
+            with row_cols[6]:
+                reason = row.get("reason_summary", "N/A")
+                reason_text = reason[:50] + "..." if len(str(reason)) > 50 else reason
+                st.write(reason_text)
+
+            if is_selected:
+                st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown("---")
 
