@@ -493,26 +493,26 @@ with tab2:
             st.markdown("---")
 
             # Action buttons
-            st.markdown("### Take Action")
+            st.markdown("### Underwriting Decision")
 
-            col_accept, col_deny, col_review = st.columns(3)
+            col_approve, col_refer, col_deny = st.columns([1.2, 1.2, 1.5])
 
-            with col_accept:
+            with col_approve:
                 if st.button("APPROVE", use_container_width=True, type="primary"):
                     st.session_state.app_status_updates[selected_app] = "A"
                     st.success(f"Updated {selected_app} to APPROVED")
                     st.rerun()
 
-            with col_deny:
-                if st.button("DENY", use_container_width=True):
-                    st.session_state.app_status_updates[selected_app] = "F"
-                    st.success(f"Updated {selected_app} to DENIED")
-                    st.rerun()
-
-            with col_review:
+            with col_refer:
                 if st.button("REFER FOR REVIEW", use_container_width=True):
                     st.session_state.app_status_updates[selected_app] = "B"
                     st.info(f"Updated {selected_app} to REFERRED FOR REVIEW")
+                    st.rerun()
+
+            with col_deny:
+                if st.button("REJECT AND DECLINE", use_container_width=True):
+                    st.session_state.app_status_updates[selected_app] = "F"
+                    st.error(f"Updated {selected_app} to DECLINED")
                     st.rerun()
 
             st.markdown("---")
@@ -554,7 +554,7 @@ HomeGuard Underwriting Team"""
                 email_subject = st.text_input("Subject:", value=email_subject)
                 email_body = st.text_area("Message:", value=email_body, height=200)
 
-            col1, col2, col3 = st.columns(3)
+            col1, col2, col3, col4 = st.columns(4)
 
             with col1:
                 if st.button("Send Email", use_container_width=True, type="primary"):
@@ -570,6 +570,10 @@ HomeGuard Underwriting Team"""
                         st.write(email_body)
 
             with col3:
+                if st.button("View in Queue", use_container_width=True):
+                    st.info(f"Scroll up to find {selected_app} in the review queue above")
+
+            with col4:
                 if st.button("Clear Selection", use_container_width=True):
                     st.session_state.selected_app_id = None
                     st.rerun()

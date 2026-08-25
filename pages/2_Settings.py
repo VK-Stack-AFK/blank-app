@@ -126,7 +126,6 @@ with col1:
             df.to_csv(output_path, index=False)
 
             st.success("✓ Sample portfolio regenerated! Refresh Dashboard to view updated data.")
-            st.balloons()
         except Exception as e:
             st.error(f"Error regenerating portfolio: {str(e)}")
 
