@@ -66,6 +66,10 @@ try:
         st.session_state.include_archived_submissions = False
     if "include_test_applications" not in st.session_state:
         st.session_state.include_test_applications = True
+    if "selected_app_id" not in st.session_state:
+        st.session_state.selected_app_id = None
+    if "app_status_updates" not in st.session_state:
+        st.session_state.app_status_updates = {}
 
     # Load test data
     apps_raw = pd.read_csv(DATA_DIR / "applications.csv") if st.session_state.include_test_data else pd.DataFrame()
@@ -76,13 +80,13 @@ try:
         include_older=st.session_state.include_archived_submissions
     )
 
-    # Load test applications
+    # Load test applications - ensure directory exists
     test_apps = pd.DataFrame()
     if st.session_state.include_test_applications:
         test_apps_dir = DATA_DIR / "test_applications"
-        if test_apps_dir.exists():
-            for file in test_apps_dir.glob("applications_*.csv"):
-                test_apps = pd.concat([test_apps, pd.read_csv(file)], ignore_index=True)
+        test_apps_dir.mkdir(parents=True, exist_ok=True)
+        for file in test_apps_dir.glob("applications_*.csv"):
+            test_apps = pd.concat([test_apps, pd.read_csv(file)], ignore_index=True)
 
     # Combine all data
     all_data = [apps_raw, submissions, test_apps]
@@ -369,15 +373,15 @@ with tab1:
 
 # ===== TAB 2: Review Queue =====
 with tab2:
-    # Initialize session state for processed applications
-    if "processed_apps" not in st.session_state:
-        st.session_state.processed_apps = set()
-
     # Combine both queues
     all_queue = pd.concat([needs_review, needs_rejection]).drop_duplicates(subset=["app_id"])
 
-    # Filter out already processed
-    pending = all_queue[~all_queue["app_id"].isin(st.session_state.processed_apps)]
+    # Apply any status updates from previous actions
+    for app_id, new_status in st.session_state.app_status_updates.items():
+        all_queue.loc[all_queue["app_id"] == app_id, "status"] = new_status
+
+    # Filter pending (B status) and rejected (F status) - both need review
+    pending = all_queue[all_queue["status"].isin(["B", "F"])]
 
     st.markdown("## 📋 Pending Underwriter Review")
 
@@ -417,82 +421,162 @@ with tab2:
             elif sort_by == "Status":
                 pending = pending.sort_values(["status", "submission_date"], ascending=[True, False])
 
-        # Simple unified table
-        table_data = pending[["app_id", "applicant_name", "applicant_email", "state", "status", "reason_summary"]].copy()
+        # Display pending applications with clickable rows
+        st.markdown("### Click an application to review details")
 
-        # Add submission date if available
-        if "submission_date" in pending.columns:
-            table_data["submission_date"] = pending["submission_date"].dt.strftime("%Y-%m-%d %H:%M:%S").fillna("Test Data")
-            table_data = table_data[["app_id", "applicant_name", "applicant_email", "state", "status", "submission_date", "reason_summary"]]
-            table_data.columns = ["App ID", "Applicant", "Email", "State", "Status", "Submitted", "Reason"]
-        else:
-            table_data.columns = ["App ID", "Applicant", "Email", "State", "Status", "Reason"]
+        for idx, (_, row) in enumerate(pending.iterrows()):
+            app_id = row["app_id"]
+            is_selected = st.session_state.selected_app_id == app_id
 
-        st.dataframe(table_data, use_container_width=True, hide_index=True)
+            # Highlight selected row
+            bg_color = "#e3f2fd" if is_selected else "transparent"
+            status_color = "#ef4444" if row["status"] == "F" else "#f59e0b"
 
-        st.markdown("---")
-
-        # Email generator
-        st.markdown("## ✉️ Generate & Send Notification")
-
-        selected_app = st.selectbox(
-            "Select application",
-            pending["app_id"].tolist() if not pending.empty else [],
-            format_func=lambda app_id: f"{app_id} — {pending.loc[pending['app_id'] == app_id, 'applicant_name'].iloc[0]}"
-        )
-
-        if selected_app and not pending.empty:
-            app_row = pending[pending["app_id"] == selected_app].iloc[0]
-            is_rejection = app_row["status"] == "REJECT"
-
-            # Generate email based on validation reasons
-            if is_rejection:
-                email_subject = "Application Decision"
-                email_body = f"""Dear {app_row.get('applicant_name', 'Applicant')},
-
-Thank you for submitting your homeowners insurance application. After careful review, we are unable to provide coverage at this time.
-
-Reason: {app_row.get('reason_summary', 'Application does not meet underwriting requirements.')}
-
-If you have questions or would like to provide additional information, please contact us within 30 days.
-
-Sincerely,
-Your Insurance Company"""
-            else:
-                email_subject = "Application Under Review"
-                email_body = f"""Dear {app_row.get('applicant_name', 'Applicant')},
-
-Thank you for submitting your homeowners insurance application. Your application is currently under review by our underwriting team.
-
-Details: {app_row.get('reason_summary', 'Application requires underwriting review.')}
-
-We will contact you shortly with next steps.
-
-Sincerely,
-Your Insurance Company"""
-
-            email_to = st.text_input("Send To:", value=app_row.get("applicant_email", ""))
-
-            with st.expander("📝 Edit Email", expanded=False):
-                email_subject = st.text_input("Subject:", value=email_subject)
-                email_body = st.text_area("Message:", value=email_body, height=200)
-
-            col1, col2 = st.columns(2)
+            col1, col2, col3, col4, col5, col6 = st.columns([1.5, 2, 1.5, 1.5, 1, 1.5])
 
             with col1:
-                if st.button("📧 Send & Mark Complete", use_container_width=True, type="primary"):
-                    st.session_state.processed_apps.add(selected_app)
-                    st.success(f"✓ {selected_app} marked as complete and removed from list")
-                    st.info(f"Email sent to: {email_to}")
+                if st.button(app_id, key=f"select_{idx}", use_container_width=True):
+                    st.session_state.selected_app_id = app_id
                     st.rerun()
 
             with col2:
-                if st.button("👁️ Preview", use_container_width=True):
+                st.write(row.get("applicant_name", "N/A"))
+
+            with col3:
+                st.write(row.get("state", "N/A"))
+
+            with col4:
+                status_label = "DENY" if row["status"] == "F" else "REVIEW"
+                st.write(f"**{status_label}**")
+
+            with col5:
+                if is_selected:
+                    st.write("✓ Selected")
+
+            with col6:
+                if is_selected:
+                    st.write(row.get("applicant_email", "N/A")[:15] + "...")
+
+        st.markdown("---")
+
+        # Show selected application details and action options
+        if st.session_state.selected_app_id and st.session_state.selected_app_id in pending["app_id"].values:
+            st.markdown("## 📋 Application Details & Decision")
+
+            app_row = pending[pending["app_id"] == st.session_state.selected_app_id].iloc[0]
+            selected_app = st.session_state.selected_app_id
+            is_rejection = app_row["status"] == "F"
+
+            # Display application details
+            with st.expander("Full Application Details", expanded=True):
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.write(f"**App ID:** {app_row.get('app_id', 'N/A')}")
+                    st.write(f"**Applicant:** {app_row.get('applicant_name', 'N/A')}")
+                    st.write(f"**Email:** {app_row.get('applicant_email', 'N/A')}")
+                    st.write(f"**State:** {app_row.get('state', 'N/A')}")
+
+                with col2:
+                    st.write(f"**Roof Age:** {app_row.get('roof_age', 'N/A')} years")
+                    st.write(f"**Prior Claims:** {app_row.get('prior_claim_count_5y', 'N/A')}")
+                    st.write(f"**Water Claims:** {app_row.get('water_claim_count_5y', 'N/A')}")
+                    st.write(f"**Wildfire Score:** {app_row.get('wildfire_score', 'N/A')}/100")
+
+                with col3:
+                    st.write(f"**Status:** {app_row.get('status', 'N/A')}")
+                    st.write(f"**Submitted:** {app_row.get('submission_date', 'Test Data')}")
+                    st.write(f"**Flood Zone:** {app_row.get('flood_zone', 'N/A')}")
+                    st.write(f"**Wind/Hail Score:** {app_row.get('wind_hail_score', 'N/A')}/100")
+
+                st.write(f"**Reason:** {app_row.get('reason_summary', 'N/A')}")
+
+            st.markdown("---")
+
+            # Action buttons
+            st.markdown("### Take Action")
+
+            col_accept, col_deny, col_review = st.columns(3)
+
+            with col_accept:
+                if st.button("APPROVE", use_container_width=True, type="primary"):
+                    st.session_state.app_status_updates[selected_app] = "A"
+                    st.success(f"Updated {selected_app} to APPROVED")
+                    st.rerun()
+
+            with col_deny:
+                if st.button("DENY", use_container_width=True):
+                    st.session_state.app_status_updates[selected_app] = "F"
+                    st.success(f"Updated {selected_app} to DENIED")
+                    st.rerun()
+
+            with col_review:
+                if st.button("REFER FOR REVIEW", use_container_width=True):
+                    st.session_state.app_status_updates[selected_app] = "B"
+                    st.info(f"Updated {selected_app} to REFERRED FOR REVIEW")
+                    st.rerun()
+
+            st.markdown("---")
+
+            # Email generator
+            st.markdown("## ✉️ Send Notification")
+
+            # Generate email based on current status
+            if is_rejection:
+                email_subject = "Application Decision - Unable to Provide Coverage"
+                email_body = f"""Dear {app_row.get('applicant_name', 'Applicant')},
+
+Thank you for submitting your homeowners insurance application. After careful review by our underwriting team, we are unable to provide coverage at this time.
+
+Reason for Decision:
+{app_row.get('reason_summary', 'Application does not meet our underwriting guidelines.')}
+
+If you have questions about this decision or would like to provide additional information, please contact us within 30 days.
+
+Sincerely,
+HomeGuard Underwriting Team"""
+            else:
+                email_subject = "Application Status Update - Under Review"
+                email_body = f"""Dear {app_row.get('applicant_name', 'Applicant')},
+
+Thank you for submitting your homeowners insurance application. Our underwriting team is currently reviewing your application.
+
+Review Notes:
+{app_row.get('reason_summary', 'Your application requires underwriting review.')}
+
+We will contact you within 2-3 business days with next steps and a final decision.
+
+Sincerely,
+HomeGuard Underwriting Team"""
+
+            email_to = st.text_input("Send To:", value=app_row.get("applicant_email", ""))
+
+            with st.expander("Edit Email Before Sending", expanded=False):
+                email_subject = st.text_input("Subject:", value=email_subject)
+                email_body = st.text_area("Message:", value=email_body, height=200)
+
+            col1, col2, col3 = st.columns(3)
+
+            with col1:
+                if st.button("Send Email", use_container_width=True, type="primary"):
+                    st.success(f"Email sent to {email_to}")
+                    st.info(f"Subject: {email_subject}")
+
+            with col2:
+                if st.button("Preview Email", use_container_width=True):
                     with st.expander("Email Preview", expanded=True):
                         st.markdown(f"**To:** {email_to}")
                         st.markdown(f"**Subject:** {email_subject}")
                         st.markdown("---")
                         st.write(email_body)
+
+            with col3:
+                if st.button("Clear Selection", use_container_width=True):
+                    st.session_state.selected_app_id = None
+                    st.rerun()
+
+        else:
+            if not pending.empty:
+                st.info("Click an application above to view details and take action")
 
 st.markdown("---")
 
