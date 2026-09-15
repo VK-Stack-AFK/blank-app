@@ -1,674 +1,146 @@
-"""Dashboard with macro data and analytics for HomeGuard UW Validator."""
-import streamlit as st
+"""Persistent homeowners portfolio and evidence-led underwriting workbench."""
+import json
 import pandas as pd
 import plotly.express as px
-import numpy as np
-from pathlib import Path
+import streamlit as st
+from homeguard.config import STATUS_LABELS,STATUS_COLORS
+from homeguard.portfolio import SOURCES,load_portfolio,evaluate_records,portfolio_metrics,summary_frame
+from homeguard.prediction import assess_application
+from homeguard.schema import FIELDS,TABS,label
+from homeguard.storage import get_settings,save_application,save_decision,load_events,safe_csv,RevisionConflict
+from homeguard.validation import normalize_record,input_issues
+from homeguard.ui import require_staff,heading,show_assessment,render_questionnaire,clear_widgets
 
-from homeguard.config import STATUS_DESCRIPTIONS, STATUS_COLORS, STATUS_LABELS
-from homeguard.validation import evaluate_portfolio, enrich_dataframe
-from homeguard.submissions_manager import load_submissions, get_available_dates, get_recent_submission_count
-
-st.set_page_config(page_title="Dashboard", page_icon="📊", layout="wide")
-
-# Auth check
-require_auth = st.session_state.get("require_dashboard_auth", True)
-is_authenticated = st.session_state.get("staff_authenticated", False)
-
-if require_auth and not is_authenticated:
-    st.error("🔒 Access Denied: Authentication required")
-    st.markdown("""
-    This is a staff-only dashboard. Please authenticate first.
-
-    To access this page, go to **Settings** and log in with your staff credentials.
-    """)
-    if st.button("Go to Settings"):
-        st.switch_page("pages/2_Settings.py")
+require_staff()
+heading('Underwriting workbench','Review the home, resolve the evidence, and document the next step.','Personal lines operations')
+settings=get_settings()
+with st.expander('Portfolio filters',expanded=True):
+    selected=st.multiselect('Application sources',SOURCES,default=list(SOURCES),key='portfolio_sources')
+    c1,c2=st.columns(2)
+    start=c1.date_input('Submitted on or after',value=None,key='portfolio_start')
+    end=c2.date_input('Submitted on or before',value=None,key='portfolio_end')
+    if st.button('Refresh portfolio'): st.rerun()
+if start and end and start>end:
+    st.error('The end date must be on or after the start date.'); st.stop()
+records=load_portfolio(selected,start,end)
+rows=evaluate_records(records,settings['model_confidence_threshold'])
+if not rows:
+    st.info('No applications match these filters. Choose another source or date range, or create a homeowners application.')
+    st.page_link('pages/1_New_Application.py',label='Create an application',icon=':material/add_home:')
     st.stop()
-
-st.markdown("""
-<style>
-.metric-card {
-    padding: 1.5rem;
-    border-radius: 1rem;
-    background: rgba(255,255,255,0.7);
-    border: 1px solid rgba(0,0,0,0.08);
-    text-align: center;
-}
-.metric-value {
-    font-size: 2.5rem;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 0.5rem;
-}
-.metric-label {
-    font-size: 0.9rem;
-    color: #667085;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("# 📊 Underwriting Portfolio & Analytics")
-
-# Load data
-BASE_DIR = Path(__file__).parent.parent
-DATA_DIR = BASE_DIR / "data"
-
-try:
-    # Initialize session state for data filters
-    if "include_test_data" not in st.session_state:
-        st.session_state.include_test_data = True
-    if "include_recent_submissions" not in st.session_state:
-        st.session_state.include_recent_submissions = True
-    if "include_archived_submissions" not in st.session_state:
-        st.session_state.include_archived_submissions = False
-    if "include_test_applications" not in st.session_state:
-        st.session_state.include_test_applications = True
-    if "selected_app_id" not in st.session_state:
-        st.session_state.selected_app_id = None
-    if "app_status_updates" not in st.session_state:
-        st.session_state.app_status_updates = {}
-
-    # Load test data
-    apps_raw = pd.read_csv(DATA_DIR / "applications.csv") if st.session_state.include_test_data else pd.DataFrame()
-
-    # Load submissions based on filters
-    submissions = load_submissions(
-        include_recent=st.session_state.include_recent_submissions,
-        include_older=st.session_state.include_archived_submissions
-    )
-
-    # Load test applications - ensure directory exists
-    test_apps = pd.DataFrame()
-    if st.session_state.include_test_applications:
-        test_apps_dir = DATA_DIR / "test_applications"
-        test_apps_dir.mkdir(parents=True, exist_ok=True)
-        for file in test_apps_dir.glob("applications_*.csv"):
-            test_apps = pd.concat([test_apps, pd.read_csv(file)], ignore_index=True)
-
-    # Combine all data
-    all_data = [apps_raw, submissions, test_apps]
-    apps_raw = pd.concat([df for df in all_data if not df.empty], ignore_index=True) if any(not df.empty for df in all_data) else pd.DataFrame()
-
-    apps = enrich_dataframe(apps_raw)
-    evaluated = evaluate_portfolio(apps)
-    portfolio = apps.merge(evaluated, on="app_id", how="left")
-
-    # Count new submissions
-    new_count = get_recent_submission_count()
-except Exception as e:
-    st.error(f"Error loading data: {e}")
-    st.stop()
-
-# Split into queues
-needs_review = portfolio[portfolio["status"] == "B"]
-needs_rejection = portfolio[portfolio["status"] == "F"]
-
-# Create tabs
-tab1, tab2 = st.tabs(["📈 Underwriting Portfolio", "📬 Manual Review Queue"])
-
-# ===== TAB 1: Portfolio Overview =====
-with tab1:
-    col_title, col_badge, col_refresh = st.columns([0.75, 0.15, 0.1])
-    with col_title:
-        st.markdown("## Overview")
-    with col_badge:
-        if new_count > 0:
-            st.metric("🆕 New Applications", new_count)
-    with col_refresh:
-        if st.button("🔄 Refresh", key="refresh_data", use_container_width=True):
-            st.cache_data.clear()
-            st.rerun()
-
-    # Data source checkboxes
-    st.markdown("### 📊 Data Sources")
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.session_state.include_test_data = st.checkbox(
-            "☑ Test Data (1000 apps)",
-            value=st.session_state.include_test_data,
-            key="cb_test_data"
-        )
-    with col2:
-        st.session_state.include_recent_submissions = st.checkbox(
-            "☑ Recent Submissions",
-            value=st.session_state.include_recent_submissions,
-            key="cb_recent"
-        )
-    with col3:
-        st.session_state.include_archived_submissions = st.checkbox(
-            "☑ Archived Submissions",
-            value=st.session_state.include_archived_submissions,
-            key="cb_archived"
-        )
-    with col4:
-        st.session_state.include_test_applications = st.checkbox(
-            "🧪 Test Applications",
-            value=st.session_state.include_test_applications,
-            key="cb_test_apps"
-        )
-
-    # Reload data if checkboxes changed
-    if (st.session_state.get("last_include_test_data", True) != st.session_state.include_test_data or
-        st.session_state.get("last_include_recent", True) != st.session_state.include_recent_submissions or
-        st.session_state.get("last_include_archived", False) != st.session_state.include_archived_submissions or
-        st.session_state.get("last_include_test_apps", True) != st.session_state.include_test_applications):
-        st.session_state.last_include_test_data = st.session_state.include_test_data
-        st.session_state.last_include_recent = st.session_state.include_recent_submissions
-        st.session_state.last_include_archived = st.session_state.include_archived_submissions
-        st.session_state.last_include_test_apps = st.session_state.include_test_applications
-        st.rerun()
-
-    # Filter by specific date (optional)
-    st.markdown("### 📅 Filter by Date")
-    col1, col2 = st.columns([0.3, 0.7])
-    with col1:
-        available_dates = get_available_dates()
-        if available_dates:
-            selected_date = st.selectbox(
-                "Specific Date (optional)",
-                ["All"] + available_dates,
-                key="date_filter"
-            )
-
-            if selected_date != "All":
-                from homeguard.submissions_manager import load_submissions
-                submissions = load_submissions(specific_date=selected_date)
-                if not submissions.empty:
-                    apps_raw = pd.concat([apps_raw, submissions], ignore_index=True) if not apps_raw.empty else submissions
-                    apps = enrich_dataframe(apps_raw)
-                    evaluated = evaluate_portfolio(apps)
-                    portfolio = apps.merge(evaluated, on="app_id", how="left")
-
-    total = len(portfolio)
-    a_count = (portfolio["status"] == "A").sum()
-    b_count = (portfolio["status"] == "B").sum()
-    f_count = (portfolio["status"] == "F").sum()
-
-    a_pct = (a_count / total * 100) if total else 0
-    b_pct = (b_count / total * 100) if total else 0
-    f_pct = (f_count / total * 100) if total else 0
-
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-value">📋 {total}</div>
-            <div class="metric-label">Total Applications</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.markdown(f"""
-        <div class="metric-card" style="background: #dcfce7;">
-            <div class="metric-value">✅ {a_count}</div>
-            <div class="metric-label">Approved for Pricing ({a_pct:.0f}%)</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col3:
-        st.markdown(f"""
-        <div class="metric-card" style="background: #fef3c7;">
-            <div class="metric-value">⏳ {b_count}</div>
-            <div class="metric-label">Referred for Review ({b_pct:.0f}%)</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col4:
-        st.markdown(f"""
-        <div class="metric-card" style="background: #fee2e2;">
-            <div class="metric-value">❌ {f_count}</div>
-            <div class="metric-label">Declined ({f_pct:.0f}%)</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("---")
-
-    # Charts
-    st.markdown("## 📉 Portfolio Analytics")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown("### Decision Distribution")
-        status_counts = portfolio["status"].value_counts().reindex(["A", "B", "F"], fill_value=0)
-        fig_pie = px.pie(
-            values=status_counts.values,
-            names=status_counts.index,
-            color=status_counts.index,
-            color_discrete_map={
-                "A": "#10b981",
-                "B": "#f59e0b",
-                "F": "#ef4444",
-            },
-            hole=0.4,
-        )
-        fig_pie.update_layout(height=400, margin=dict(l=0, r=0, t=0, b=0))
-        st.plotly_chart(fig_pie, use_container_width=True)
-
-    with col2:
-        st.markdown("### Status by State")
-        state_status = portfolio.groupby(["state", "status"]).size().unstack(fill_value=0)
-        if not state_status.empty:
-            fig_bar = px.bar(
-                state_status.reset_index().melt(id_vars="state", var_name="status", value_name="count"),
-                x="state",
-                y="count",
-                color="status",
-                color_discrete_map={
-                    "A": "#10b981",
-                    "B": "#f59e0b",
-                    "F": "#ef4444",
-                },
-                title="Applications by State and Status",
-            )
-            fig_bar.update_layout(height=400, xaxis_tickangle=-45, margin=dict(b=100))
-            st.plotly_chart(fig_bar, use_container_width=True)
-
-    st.markdown("---")
-
-    # Risk factors analysis
-    st.markdown("## 🚨 Key Risk Indicators")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown("### Roof Age Distribution")
-        if "roof_age" in portfolio.columns:
-            roof_age_data = portfolio["roof_age"].dropna()
-            fig_roof = px.histogram(
-                x=roof_age_data,
-                nbins=15,
-                title="Roof Age Distribution (Years)",
-                labels={"x": "Roof Age", "count": "Count"},
-            )
-            fig_roof.update_traces(marker_color="#6366f1")
-            fig_roof.update_layout(height=350, showlegend=False)
-            st.plotly_chart(fig_roof, use_container_width=True)
-
-    with col2:
-        st.markdown("### Loss History (5 Years)")
-        if "prior_claim_count_5y" in portfolio.columns:
-            claims_dist = portfolio["prior_claim_count_5y"].value_counts().sort_index()
-            fig_claims = px.bar(
-                x=claims_dist.index,
-                y=claims_dist.values,
-                title="Prior Claims Distribution (5 years)",
-                labels={"x": "Number of Claims", "y": "Count"},
-            )
-            fig_claims.update_traces(marker_color="#ec4899")
-            fig_claims.update_layout(height=350, showlegend=False)
-            st.plotly_chart(fig_claims, use_container_width=True)
-
-    st.markdown("---")
-
-    # Detailed application table
-    st.markdown("## 📋 Application Details")
-
-    col1, col2 = st.columns(2)
-    with col1:
-        status_filter = st.multiselect(
-            "Filter by Status",
-            ["A", "B", "F"],
-            default=["A", "B", "F"],
-        )
-    with col2:
-        state_filter = st.multiselect(
-            "Filter by State",
-            sorted(portfolio["state"].dropna().unique()),
-            default=sorted(portfolio["state"].dropna().unique()),
-        )
-
-    filtered = portfolio.copy()
-    if status_filter:
-        filtered = filtered[filtered["status"].isin(status_filter)]
-    if state_filter:
-        filtered = filtered[filtered["state"].isin(state_filter)]
-
-    table_cols = [
-        "app_id",
-        "applicant_name",
-        "state",
-        "status",
-        "roof_age",
-        "prior_claim_count_5y",
-        "wildfire_score",
-        "wind_hail_score",
-        "reason_summary",
-    ]
-
-    display_df = filtered[table_cols].copy()
-    display_df.columns = ["App ID", "Applicant", "State", "Status", "Roof Age", "Claims", "Wildfire", "Wind/Hail", "Reason"]
-
-    st.dataframe(display_df, use_container_width=True, hide_index=True)
-
-    st.markdown("---")
-
-    st.markdown("## 💾 Export")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        csv_all = portfolio.to_csv(index=False)
-        st.download_button(
-            "📥 Download Full Portfolio",
-            csv_all,
-            file_name="portfolio_full.csv",
-            mime="text/csv",
-            use_container_width=True,
-        )
-
-    with col2:
-        csv_filtered = filtered.to_csv(index=False)
-        st.download_button(
-            "📥 Download Filtered Results",
-            csv_filtered,
-            file_name="portfolio_filtered.csv",
-            mime="text/csv",
-            use_container_width=True,
-        )
-
-# ===== TAB 2: Review Queue =====
-with tab2:
-    # Combine both queues
-    all_queue = pd.concat([needs_review, needs_rejection]).drop_duplicates(subset=["app_id"])
-
-    # Apply any status updates from previous actions
-    for app_id, new_status in st.session_state.app_status_updates.items():
-        all_queue.loc[all_queue["app_id"] == app_id, "status"] = new_status
-
-    # Filter pending (B status) and rejected (F status) - both need review
-    pending = all_queue[all_queue["status"].isin(["B", "F"])]
-
-    st.markdown("## 📋 Pending Underwriter Review")
-
-    total_pending = len(pending)
-    st.markdown(f"**{total_pending} applications** awaiting review or action")
-
-    if total_pending == 0:
-        st.success("✓ No pending applications!")
-    else:
-        # Summary metrics
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Total Pending", total_pending)
-        with col2:
-            review_only = len(pending[pending["status"] == "B"])
-            st.metric("Referred for Review", review_only)
-        with col3:
-            reject_only = len(pending[pending["status"] == "F"])
-            st.metric("Declined", reject_only)
-
-        st.markdown("---")
-
-        # Sort options
-        col1, col2 = st.columns(2)
-        with col1:
-            sort_by = st.selectbox("Sort by", ["Newest First", "Oldest First", "Status"], key="review_sort")
-
-        # Sort pending applications
-        if "submission_date" in pending.columns:
-            pending = pending.copy()
-            pending["submission_date"] = pd.to_datetime(pending["submission_date"], errors="coerce")
-
-            if sort_by == "Newest First":
-                pending = pending.sort_values("submission_date", ascending=False, na_position="last")
-            elif sort_by == "Oldest First":
-                pending = pending.sort_values("submission_date", ascending=True, na_position="last")
-            elif sort_by == "Status":
-                pending = pending.sort_values(["status", "submission_date"], ascending=[True, False])
-
-        # Display pending applications as a table
-        st.markdown("### Pending Applications - Click a Row to Select")
-
-        # Table header
-        header_cols = st.columns([0.8, 1.5, 1.5, 0.8, 1, 1.2, 2.2])
-        with header_cols[0]:
-            st.markdown("**App ID**")
-        with header_cols[1]:
-            st.markdown("**Applicant**")
-        with header_cols[2]:
-            st.markdown("**Email**")
-        with header_cols[3]:
-            st.markdown("**State**")
-        with header_cols[4]:
-            st.markdown("**Status**")
-        with header_cols[5]:
-            st.markdown("**Submitted**")
-        with header_cols[6]:
-            st.markdown("**Reason**")
-
-        st.divider()
-
-        # Table rows (clickable)
-        for idx, (_, row) in enumerate(pending.iterrows()):
-            app_id = row["app_id"]
-            is_selected = st.session_state.selected_app_id == app_id
-
-            # Apply light blue background if selected
-            if is_selected:
-                st.markdown('<div style="background-color: rgba(33, 150, 243, 0.15); padding: 8px; border-radius: 4px; margin: 2px 0;">', unsafe_allow_html=True)
-
-            # Clickable row in columns
-            row_cols = st.columns([0.8, 1.5, 1.5, 0.8, 1, 1.2, 2.2])
-
-            with row_cols[0]:
-                if st.button(f"`{app_id}`", key=f"row_id_{idx}", use_container_width=True):
-                    st.session_state.selected_app_id = app_id
-                    st.rerun()
-
-            with row_cols[1]:
-                st.write(row.get("applicant_name", "N/A")[:20])
-
-            with row_cols[2]:
-                st.write(row.get("applicant_email", "N/A")[:20])
-
-            with row_cols[3]:
-                st.write(row.get("state", "N/A"))
-
-            with row_cols[4]:
-                status_label = "DECLINED" if row["status"] == "F" else "REVIEW"
-                st.write(f"**{status_label}**")
-
-            with row_cols[5]:
-                submitted = row.get("submission_date", "Test Data")
-                if isinstance(submitted, str):
-                    submitted = submitted[:10]
-                st.write(submitted)
-
-            with row_cols[6]:
-                reason = row.get("reason_summary", "N/A")
-                reason_text = reason[:50] + "..." if len(str(reason)) > 50 else reason
-                st.write(reason_text)
-
-            if is_selected:
-                st.markdown('</div>', unsafe_allow_html=True)
-
-        st.markdown("---")
-
-        # Show selected application details and action options
-        if st.session_state.selected_app_id and st.session_state.selected_app_id in pending["app_id"].values:
-            st.markdown("## 📋 Application Details & Decision")
-
-            app_row = pending[pending["app_id"] == st.session_state.selected_app_id].iloc[0]
-            selected_app = st.session_state.selected_app_id
-            is_rejection = app_row["status"] == "F"
-
-            # Display application details
-            with st.expander("Full Application Details", expanded=True):
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.write(f"**App ID:** {app_row.get('app_id', 'N/A')}")
-                    st.write(f"**Applicant:** {app_row.get('applicant_name', 'N/A')}")
-                    st.write(f"**Email:** {app_row.get('applicant_email', 'N/A')}")
-                    st.write(f"**State:** {app_row.get('state', 'N/A')}")
-
-                with col2:
-                    st.write(f"**Roof Age:** {app_row.get('roof_age', 'N/A')} years")
-                    st.write(f"**Prior Claims:** {app_row.get('prior_claim_count_5y', 'N/A')}")
-                    st.write(f"**Water Claims:** {app_row.get('water_claim_count_5y', 'N/A')}")
-                    st.write(f"**Wildfire Score:** {app_row.get('wildfire_score', 'N/A')}/100")
-
-                with col3:
-                    st.write(f"**Status:** {app_row.get('status', 'N/A')}")
-                    st.write(f"**Submitted:** {app_row.get('submission_date', 'Test Data')}")
-                    st.write(f"**Flood Zone:** {app_row.get('flood_zone', 'N/A')}")
-                    st.write(f"**Wind/Hail Score:** {app_row.get('wind_hail_score', 'N/A')}/100")
-
-                st.write(f"**Reason:** {app_row.get('reason_summary', 'N/A')}")
-
-            st.markdown("---")
-
-            # Action buttons
-            st.markdown("### Underwriting Decision")
-
-            col_approve, col_refer, col_deny = st.columns([1.2, 1.2, 1.5])
-
-            with col_approve:
-                if st.button("APPROVE", use_container_width=True, type="primary"):
-                    st.session_state.app_status_updates[selected_app] = "A"
-                    st.success(f"Updated {selected_app} to APPROVED")
-                    st.rerun()
-
-            with col_refer:
-                if st.button("REFER FOR REVIEW", use_container_width=True):
-                    st.session_state.app_status_updates[selected_app] = "B"
-                    st.info(f"Updated {selected_app} to REFERRED FOR REVIEW")
-                    st.rerun()
-
-            with col_deny:
-                if st.button("REJECT AND DECLINE", use_container_width=True):
-                    st.session_state.app_status_updates[selected_app] = "F"
-                    st.error(f"Updated {selected_app} to DECLINED")
-                    st.rerun()
-
-            st.markdown("---")
-
-            # Email generator
-            st.markdown("## ✉️ Send Notification")
-
-            # Generate email based on current status
-            if is_rejection:
-                email_subject = "Application Decision - Unable to Provide Coverage"
-                email_body = f"""Dear {app_row.get('applicant_name', 'Applicant')},
-
-Thank you for submitting your homeowners insurance application. After careful review by our underwriting team, we are unable to provide coverage at this time.
-
-Reason for Decision:
-{app_row.get('reason_summary', 'Application does not meet our underwriting guidelines.')}
-
-If you have questions about this decision or would like to provide additional information, please contact us within 30 days.
-
-Sincerely,
-HomeGuard Underwriting Team"""
+metrics=portfolio_metrics(rows)
+cols=st.columns(4)
+cols[0].metric('Applications in view',metrics['applications'])
+cols[1].metric('STP readiness',f'{metrics["stp_rate"]:.1%}',help='Current engine A with no staff decision ÷ all applications in this filtered view. This is readiness, not issued policies.')
+cols[2].metric('Open B reviews',metrics['review'])
+cols[3].metric('B → A after updates',metrics['evidence_recovered'],help='Initially B, now engine A after saved application/evidence updates, with no staff decision.')
+st.caption(f'{metrics["stp_ready"]} model-cleared cases · {metrics["staff_cleared"]} separately cleared by staff · {metrics["rejection_recommendations"]} rejection recommendations awaiting staff action. Metrics follow the selected sources and dates.')
+queue_tab,overview_tab,export_tab,history_tab=st.tabs(['Review a home','Portfolio overview','Application register','Decision history'])
+with overview_tab:
+    counts=pd.DataFrame([{'Outcome':STATUS_LABELS[k],'Applications':sum(r['effective_status']==k for r in rows),'Class':k} for k in STATUS_LABELS])
+    c1,c2=st.columns([1,1])
+    with c1:
+        st.subheader('Current application outcomes')
+        fig=px.bar(counts,x='Outcome',y='Applications',color='Class',color_discrete_map=STATUS_COLORS,text='Applications')
+        fig.update_layout(showlegend=False,plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',margin=dict(l=0,r=0,t=10,b=0),height=320)
+        st.plotly_chart(fig,width='stretch')
+    with c2:
+        st.subheader('Where review work is concentrated')
+        findings={}
+        for r in rows:
+            if r['effective_status']=='B':
+                for factor in set(f['factor'] for f in r['flags']): findings[factor]=findings.get(factor,0)+1
+        if findings: st.dataframe([{'Review topic':label(k),'Applications':v} for k,v in sorted(findings.items(),key=lambda x:x[1],reverse=True)[:8]],hide_index=True,width='stretch')
+        else: st.info('No unresolved B cases in this view.')
+    st.info('To improve STP readiness, complete missing evidence or correct supported facts and reassess. A staff decision is tracked separately and does not increase automated STP readiness.')
+with export_tab:
+    st.subheader('Application register')
+    frame=summary_frame(rows)
+    st.dataframe(frame,hide_index=True,width='stretch',column_config={'Model support':st.column_config.NumberColumn(format='percent')})
+    st.download_button('Download register (CSV)',safe_csv(frame),'homeguard-application-register.csv','text/csv')
+    flat=pd.DataFrame([{k:v for k,v in r.items() if k not in {'flags','reasons','last_assessment','probabilities','decision'}} for r in rows])
+    st.download_button('Download questionnaire & assessments (CSV)',safe_csv(flat),'homeguard-applications.csv','text/csv')
+    st.caption('Exports include the filtered records. Synthetic and submitted sources remain labeled; leading-zero ZIP codes are preserved in the CSV text.')
+with history_tab:
+    st.subheader('Recorded application and decision events')
+    visible_ids={r['app_id'] for r in rows}
+    events=[e for e in load_events() if e['app_id'] in visible_ids]
+    if events:
+        st.dataframe([{'Time (UTC)':e['at'],'Application':e['app_id'],'Action':e['event_type'].replace('_',' '),'Staff / source':e['actor']} for e in events],hide_index=True,width='stretch')
+        st.download_button('Download visible audit events (JSON)',json.dumps(events,indent=2,default=str),'homeguard-audit-events.json','application/json')
+    else: st.info('No saved events for these applications yet. Evidence edits and staff decisions create an audit record.')
+with queue_tab:
+    open_id=st.session_state.pop('open_app_id',None)
+    ids=[r['app_id'] for r in rows]
+    if open_id in ids: st.session_state.review_selected=open_id
+    elif st.session_state.get('review_selected') not in ids: st.session_state.review_selected=ids[0]
+    by_id={r['app_id']:r for r in rows}
+    chosen=st.selectbox('Choose a homeowners application',ids,format_func=lambda k:f'{by_id[k].get("applicant_name",k)} · {k} · {STATUS_LABELS[by_id[k]["effective_status"]]}',key='review_selected')
+    record=next(r for r in records if r['app_id']==chosen)
+    case=by_id[chosen]
+    c1,c2=st.columns([3,1])
+    with c1:
+        st.subheader(record.get('applicant_name','Homeowners application'))
+        st.write(f'{record.get("address") or "Address pending"} · {record.get("city") or ""}, {record.get("state") or ""} {record.get("zip_code") or ""}')
+        st.caption(f'{chosen} · {record["data_source"]} · Application revision {record.get("_revision",0)}')
+    with c2:
+        value=record.get('requested_dwelling_limit')
+        st.metric('Requested dwelling limit',f'${value:,.0f}' if isinstance(value,(float,int)) else 'Pending')
+    show_assessment(case)
+    if case.get('decision'):
+        decision=case['decision']
+        st.info(f'Staff disposition: {STATUS_LABELS[decision["status"]]} · {decision["reviewer"]} · {decision["decided_at"]}\n\n{decision["rationale"]}')
+    details,edit,decide,case_history=st.tabs(['Application details','Update evidence & reassess','Record staff decision','Case history'])
+    with details:
+        for section in TABS:
+            with st.expander(section):
+                st.dataframe([{'Question':f.label,'Response':str(record.get(f.key)) if record.get(f.key) is not None else 'Not provided','Use':f.role} for f in FIELDS if f.section==section],hide_index=True,width='stretch')
+        st.caption('Findings explain the POC reference checks and evidence gaps. They are not causal explanations of the random forest. Model Lab shows global feature importance.')
+    with edit:
+        st.write('Record the source-supported facts. Mark evidence verified only after a staff review. Saving updates runs the model again and retires any earlier staff disposition.')
+        prefix=f'review_{chosen}_{record.get("_revision",0)}_'
+        with st.form('edit_'+chosen):
+            changed=render_questionnaire(record,prefix)
+            updated=st.form_submit_button('Save evidence & reassess',type='primary')
+        if updated:
+            malformed=[x['reason'] for x in input_issues(changed) if x['code'].startswith('invalid_') or x['code'] in {'email_format','zip_format','claims_consistency','paid_without_claim','future_verification'}]
+            if malformed: st.error('Correct before saving: '+' '.join(malformed))
             else:
-                email_subject = "Application Status Update - Under Review"
-                email_body = f"""Dear {app_row.get('applicant_name', 'Applicant')},
-
-Thank you for submitting your homeowners insurance application. Our underwriting team is currently reviewing your application.
-
-Review Notes:
-{app_row.get('reason_summary', 'Your application requires underwriting review.')}
-
-We will contact you within 2-3 business days with next steps and a final decision.
-
-Sincerely,
-HomeGuard Underwriting Team"""
-
-            email_to = st.text_input("Send To:", value=app_row.get("applicant_email", ""))
-
-            with st.expander("Edit Email Before Sending", expanded=False):
-                email_subject = st.text_input("Subject:", value=email_subject)
-                email_body = st.text_area("Message:", value=email_body, height=200)
-
-            col1, col2, col3, col4 = st.columns(4)
-
-            with col1:
-                if st.button("Send Email", use_container_width=True, type="primary"):
-                    st.success(f"Email sent to {email_to}")
-                    st.info(f"Subject: {email_subject}")
-
-            with col2:
-                if st.button("Preview Email", use_container_width=True):
-                    with st.expander("Email Preview", expanded=True):
-                        st.markdown(f"**To:** {email_to}")
-                        st.markdown(f"**Subject:** {email_subject}")
-                        st.markdown("---")
-                        st.write(email_body)
-
-            with col3:
-                if st.button("View in Queue", use_container_width=True):
-                    st.info(f"Scroll up to find {selected_app} in the review queue above")
-
-            with col4:
-                if st.button("Clear Selection", use_container_width=True):
-                    st.session_state.selected_app_id = None
-                    st.rerun()
-
-        else:
-            if not pending.empty:
-                st.info("Click an application above to view details and take action")
-
-st.markdown("---")
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    if st.button("📋 New Application", use_container_width=True):
-        st.switch_page("pages/1_New_Application.py")
-
-with col2:
-    if st.button("⚙️ Settings", use_container_width=True):
-        st.switch_page("pages/2_Settings.py")
-
-with col3:
-    if st.button("🏠 Home", use_container_width=True):
-        st.switch_page("streamlit_app.py")
-
-st.markdown("---")
-
-# Debug: Force verify and recalculate data
-if st.button("🔍 Force Verify & Update Statistics", use_container_width=True, type="secondary"):
-    st.cache_data.clear()
-    st.rerun()
-
-# Debug info
-with st.expander("🐛 Debug: Raw Data vs Routed Status"):
-    raw_a = (apps["prior_claim_count_5y"] == 0).sum()
-    raw_b = (apps["prior_claim_count_5y"] == 2).sum()
-    raw_f = (apps["prior_claim_count_5y"] >= 3).sum()
-
-    routed_a = (portfolio["status"] == "A").sum()
-    routed_b = (portfolio["status"] == "B").sum()
-    routed_f = (portfolio["status"] == "F").sum()
-
-    st.markdown("**Raw Data (by claims count):**")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric("A (0 claims)", f"{raw_a} ({raw_a/len(apps)*100:.1f}%)")
-    with col2:
-        st.metric("B (2 claims)", f"{raw_b} ({raw_b/len(apps)*100:.1f}%)")
-    with col3:
-        st.metric("F (3+ claims)", f"{raw_f} ({raw_f/len(apps)*100:.1f}%)")
-
-    st.markdown("**Routed Status (by validation logic):**")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric("A (Auto-Pass)", f"{routed_a} ({routed_a/len(portfolio)*100:.1f}%)")
-    with col2:
-        st.metric("B (Needs Review)", f"{routed_b} ({routed_b/len(portfolio)*100:.1f}%)")
-    with col3:
-        st.metric("F (Auto-Reject)", f"{routed_f} ({routed_f/len(portfolio)*100:.1f}%)")
-
-    if raw_a != routed_a or raw_b != routed_b or raw_f != routed_f:
-        st.warning("""
-        ⚠️ **Mismatch detected!** Applications are being re-routed by validation logic.
-
-        This means the routing rules are finding additional rejection/review reasons beyond just claims count.
-        Common causes: hazard exposure, flood zones, missing fields, or compliance issues.
-        """)
-    else:
-        st.success("✓ Raw data matches routed status perfectly!")
+                try:
+                    revised=normalize_record(changed)
+                    revised['initial_status']=case['initial_status']
+                    result=assess_application(revised,settings['model_confidence_threshold'])
+                    save_application(revised,record['data_source'],st.session_state.get('staff_name','Demo staff'),result,record.get('_revision',0))
+                    st.session_state.review_notice='Application evidence saved and reassessed.'
+                    clear_widgets(prefix); st.rerun()
+                except RevisionConflict as exc: st.error(str(exc))
+    with decide:
+        st.write('A staff disposition is a recorded review action. It does not bind coverage, issue a policy, or send a notice. F remains a recommendation for rejection.')
+        with st.form('decision_'+chosen):
+            disposition=st.selectbox('Staff disposition',list(STATUS_LABELS),format_func=lambda k:f'{k} · {STATUS_LABELS[k]}',index=1,key='decision_status_'+chosen)
+            reviewer=st.text_input('Reviewing underwriter',value=st.session_state.get('staff_name',''),key='decision_reviewer_'+chosen)
+            rationale=st.text_area('Decision rationale and supporting evidence',key='decision_notes_'+chosen)
+            applied=st.form_submit_button('Record decision',type='primary')
+        if applied:
+            if not reviewer.strip() or not rationale.strip(): st.error('Enter the reviewing underwriter and a decision rationale.')
+            else:
+                try:
+                    revision=record.get('_revision',0)
+                    if not revision:
+                        saved=save_application({**record,'initial_status':case['initial_status']},record['data_source'],reviewer,assess_application(record,settings['model_confidence_threshold']),0)
+                        revision=saved['_revision']
+                    save_decision(chosen,disposition,reviewer,rationale,revision)
+                    st.session_state.review_notice='Staff decision recorded. Portfolio totals now reflect this disposition.'; st.rerun()
+                except (RevisionConflict,ValueError) as exc: st.error(str(exc))
+        note=f'HomeGuard application {chosen}\nNamed insured: {record.get("applicant_name","")}\n\nYour homeowners application is with our underwriting team. We will confirm any additional information needed and communicate the next step. No coverage is bound by this message.\n'
+        st.download_button('Download insured update draft',note,f'{chosen}-insured-update.txt','text/plain')
+        st.caption('Draft only. No email or messaging service is connected.')
+    with case_history:
+        events=load_events(chosen)
+        if not events: st.info('No saved changes or decisions yet.')
+        for event in events[:30]:
+            with st.expander(f'{event["at"]} · {event["event_type"].replace("_"," ")} · {event["actor"]}'):
+                st.json(event['detail'])
+        if len(events)>30: st.caption('Showing the most recent 30 events. The JSON download includes the complete case history.')
+        st.download_button('Download complete case history',json.dumps(events,indent=2,default=str),f'{chosen}-history.json','application/json')
+if st.session_state.get('review_notice'): st.success(st.session_state.pop('review_notice'))
